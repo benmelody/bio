@@ -2,18 +2,13 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>whynotben - Bio</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
-  <!-- FontAwesome Icon -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    html {
-      height: -webkit-fill-available;
-    }
-
     * {
       margin: 0;
       padding: 0;
@@ -21,26 +16,17 @@
       font-family: 'Montserrat', sans-serif;
     }
 
-    /* Hiệu ứng Nền xanh trượt lượn sóng */
     body {
       min-height: 100vh;
-      min-height: -webkit-fill-available;
-      width: 100vw;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #185a9d, #3498db) !important;
-      background-size: 400% 400% !important;
-      animation: gradientBG 12s ease infinite !important;
+      background: linear-gradient(135deg, #185a9d 0%, #2980b9 50%, #6dd5ed 100%);
+      background-size: cover;
+      background-attachment: fixed;
       padding: 20px;
       overflow: hidden;
       position: relative;
-    }
-
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
     }
 
     #enter-screen {
@@ -128,14 +114,13 @@
       margin-bottom: 12px;
     }
 
-    /* Khung chứa Badge */
     .badges-container {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 14px;
-      background: rgba(0, 0, 0, 0.25);
-      padding: 10px 20px;
+      gap: 12px;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 8px 18px;
       border-radius: 20px;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
@@ -143,24 +128,24 @@
       margin-bottom: 22px;
     }
 
-    /* Thiết lập icon badge chắc chắn 100% hiển thị */
-    .badge-icon {
-      font-size: 18px;
-      display: inline-block;
+    .badge-img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
       filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+      display: inline-block;
       animation: floatBadge 3s ease-in-out infinite;
     }
 
-    /* Phối màu chuẩn Discord Badges */
-    .badge-icon:nth-child(1) { color: #9b59b6; animation-delay: 0.0s; } /* Tím Bravery */
-    .badge-icon:nth-child(2) { color: #e67e22; animation-delay: 0.4s; } /* Cam Brilliance */
-    .badge-icon:nth-child(3) { color: #2ecc71; animation-delay: 0.8s; } /* Xanh Balance */
-    .badge-icon:nth-child(4) { color: #5865F2; animation-delay: 1.2s; } /* Active Dev */
-    .badge-icon:nth-child(5) { color: #ff73fa; animation-delay: 1.6s; } /* Nitro Hồng */
+    .badge-img:nth-child(1) { animation-delay: 0.0s; }
+    .badge-img:nth-child(2) { animation-delay: 0.4s; }
+    .badge-img:nth-child(3) { animation-delay: 0.8s; }
+    .badge-img:nth-child(4) { animation-delay: 1.2s; }
+    .badge-img:nth-child(5) { animation-delay: 1.6s; }
 
     @keyframes floatBadge {
       0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-5px) rotate(6deg); }
+      50% { transform: translateY(-5px) rotate(4deg); }
     }
 
     .subtitle {
@@ -236,13 +221,13 @@
 
     <h1 class="username">whynotben</h1>
 
-    <!-- Bộ Badge dạng Icon cực bền không bao giờ chết link -->
+    <!-- 5 Badge chuẩn link không bao giờ lỗi -->
     <div class="badges-container">
-      <i class="fa-solid fa-shield-halved badge-icon"></i>
-      <i class="fa-solid fa-fire badge-icon"></i>
-      <i class="fa-solid fa-gem badge-icon"></i>
-      <i class="fa-solid fa-code badge-icon"></i>
-      <i class="fa-solid fa-bolt badge-icon"></i>
+      <img src="https://raw.githubusercontent.com/lorenzods/discord-badges/main/svg/hypesquad_bravery.svg" class="badge-img" alt="Bravery">
+      <img src="https://raw.githubusercontent.com/lorenzods/discord-badges/main/svg/hypesquad_brilliance.svg" class="badge-img" alt="Brilliance">
+      <img src="https://raw.githubusercontent.com/lorenzods/discord-badges/main/svg/hypesquad_balance.svg" class="badge-img" alt="Balance">
+      <img src="https://raw.githubusercontent.com/lorenzods/discord-badges/main/svg/active_developer.svg" class="badge-img" alt="Active Dev">
+      <img src="https://raw.githubusercontent.com/lorenzods/discord-badges/main/svg/nitro.svg" class="badge-img" alt="Nitro">
     </div>
 
     <div class="subtitle">Owner @benmelody</div>
