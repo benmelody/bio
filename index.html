@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>whynotben - Bio</title>
+  <title>nguyenminhkha - Bio</title>
   
-  <!-- Font chữ & FontAwesome Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -22,7 +21,6 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      /* Nền gradient sóng xanh dương giống ảnh mẫu */
       background: linear-gradient(135deg, #185a9d 0%, #2980b9 50%, #6dd5ed 100%);
       background-size: cover;
       background-attachment: fixed;
@@ -34,7 +32,7 @@
       width: 100%;
       max-width: 380px;
       padding: 40px 25px 35px 25px;
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.18);
       backdrop-filter: blur(25px);
       -webkit-backdrop-filter: blur(25px);
       border-radius: 35px;
@@ -44,7 +42,7 @@
       color: #ffffff;
     }
 
-    /* Ảnh đại diện tròn */
+    /* Avatar tròn */
     .avatar {
       width: 110px;
       height: 110px;
@@ -54,7 +52,6 @@
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
     }
 
-    /* Tên username bo tròn */
     .username {
       font-family: 'Fredoka', sans-serif;
       font-size: 32px;
@@ -63,7 +60,7 @@
       margin-bottom: 12px;
     }
 
-    /* Thanh chứa các Badge / Huy hiệu */
+    /* Khung chứa Huy hiệu có màu */
     .badges-container {
       display: inline-flex;
       align-items: center;
@@ -73,16 +70,19 @@
       padding: 6px 16px;
       border-radius: 20px;
       backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.15);
       margin-bottom: 22px;
     }
 
-    .badges-container i {
-      font-size: 15px;
-      opacity: 0.9;
+    /* Ảnh huy hiệu Discord màu */
+    .badge-img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
     }
 
-    /* Dòng mô tả (Subtitle) */
     .subtitle {
       font-family: 'Fredoka', sans-serif;
       font-size: 17px;
@@ -91,7 +91,6 @@
       margin-bottom: 25px;
     }
 
-    /* Đường gạch ngang chữ Socials */
     .divider {
       display: flex;
       align-items: center;
@@ -112,7 +111,6 @@
       border-radius: 2px;
     }
 
-    /* Nút Icon Mạng xã hội */
     .social-links {
       display: flex;
       justify-content: center;
@@ -136,36 +134,31 @@
 
     .social-icon:active {
       transform: scale(0.9);
-      opacity: 0.8;
     }
   </style>
 </head>
 <body>
 
   <div class="bio-card">
-    <!-- 1. Thay link ảnh avatar vào src dưới đây -->
+    <!-- Link ảnh avatar Catbox của bạn -->
     <img class="avatar" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
 
-    <!-- 2. Thay tên tài khoản -->
     <h1 class="username">whynotben</h1>
 
-    <!-- 3. Các huy hiệu (Badges) -->
+    <!-- Danh sách các Huy hiệu Discord chuẩn màu sắc -->
     <div class="badges-container">
-      <i class="fa-solid fa-dharmachakra"></i>
-      <i class="fa-solid fa-shield-halved"></i>
-      <i class="fa-solid fa-play"></i>
-      <i class="fa-solid fa-hashtag"></i>
-      <i class="fa-solid fa-atom"></i>
-      <i class="fa-solid fa-gem"></i>
+      <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f300.png" class="badge-img" alt="Badge">
+      <img src="https://raw.githubusercontent.com/mezink/discord-badges/main/assets/hypesquad_bravery.png" class="badge-img" alt="Badge">
+      <img src="https://raw.githubusercontent.com/mezink/discord-badges/main/assets/hypesquad_brilliance.png" class="badge-img" alt="Badge">
+      <img src="https://raw.githubusercontent.com/mezink/discord-badges/main/assets/active_developer.png" class="badge-img" alt="Badge">
+      <img src="https://raw.githubusercontent.com/mezink/discord-badges/main/assets/nitro.png" class="badge-img" alt="Badge">
+      <img src="https://raw.githubusercontent.com/mezink/discord-badges/main/assets/boost.png" class="badge-img" alt="Badge">
     </div>
 
-    <!-- 4. Thay dòng tiểu sử -->
-    <div class="subtitle">Owner @ benmelody</div>
+    <div class="subtitle">Owner @benmelody</div>
 
-    <!-- 5. Dòng Socials -->
     <div class="divider">Socials</div>
 
-    <!-- 6. Thay dấu # bằng đường link mạng xã hội của bạn -->
     <div class="social-links">
       <a href="https://discord.com" class="social-icon" target="_blank"><i class="fa-brands fa-discord"></i></a>
       <a href="https://facebook.com" class="social-icon" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
