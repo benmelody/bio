@@ -58,27 +58,33 @@
       margin-bottom: 12px;
     }
 
-    /* Thanh badge cố định kích thước */
+    /* Khung chứa Badges */
     .badges-container {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      background: rgba(0, 0, 0, 0.15);
-      padding: 8px 16px;
+      gap: 12px;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 8px 18px;
       border-radius: 20px;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       margin-bottom: 22px;
     }
 
-    .badge-img {
-      width: 22px;
-      height: 22px;
-      object-fit: contain;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    .badge-icon {
+      font-size: 17px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
     }
+
+    /* Mã màu chuẩn cho từng Badge Discord */
+    .badge-hypesquad { color: #23a55a; }  /* HypeSquad Green */
+    .badge-bravery   { color: #9b59b6; }  /* Bravery Purple */
+    .badge-brilliance{ color: #f1c40f; }  /* Brilliance Yellow */
+    .badge-activedev { color: #5865f2; }  /* Active Dev Blurple */
+    .badge-nitro     { color: #f47fff; }  /* Nitro Pink */
+    .badge-boost     { color: #ff73fa; }  /* Boost Pinkish Red */
 
     .subtitle {
       font-family: 'Fredoka', sans-serif;
@@ -141,14 +147,14 @@
 
     <h1 class="username">whynotben</h1>
 
-    <!-- Link Badge mới chuẩn SVG không lo mất hình -->
+    <!-- Bộ Badge Icon chuẩn màu không bao giờ lỗi link -->
     <div class="badges-container">
-      <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f300.png" class="badge-img" alt="Badge">
-      <img src="https://assets.cdn.discordapp.com/badge-icons/8a88d63823d06ef472a126cb46f0f37d.png" class="badge-img" alt="Badge">
-      <img src="https://assets.cdn.discordapp.com/badge-icons/011940d94db502ee0ae8151a3d62b190.png" class="badge-img" alt="Badge">
-      <img src="https://assets.cdn.discordapp.com/badge-icons/6bdc4dbba300e0d22b40173df07f45b8.png" class="badge-img" alt="Badge">
-      <img src="https://assets.cdn.discordapp.com/badge-icons/eb55106e622416f03d0e2e2a09c25092.png" class="badge-img" alt="Badge">
-      <img src="https://assets.cdn.discordapp.com/badge-icons/7d9ae358c8c5e118768335d613b2b758.png" class="badge-img" alt="Badge">
+      <i class="fa-solid fa-dharmachakra badge-icon badge-hypesquad" title="HypeSquad"></i>
+      <i class="fa-solid fa-shield-halved badge-icon badge-bravery" title="Bravery"></i>
+      <i class="fa-solid fa-play badge-icon badge-brilliance" title="Brilliance"></i>
+      <i class="fa-solid fa-code badge-icon badge-activedev" title="Active Developer"></i>
+      <i class="fa-solid fa-atom badge-icon badge-nitro" title="Nitro"></i>
+      <i class="fa-solid fa-gem badge-icon badge-boost" title="Boost"></i>
     </div>
 
     <div class="subtitle">Owner @benmelody</div>
