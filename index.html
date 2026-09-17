@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>whynotben - Bio</title>
   
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
@@ -13,7 +13,8 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
+      /* Áp dụng Font Montserrat làm font mặc định */
+      font-family: 'Montserrat', sans-serif;
     }
 
     body {
@@ -47,9 +48,11 @@
 
     #enter-screen h1 {
       color: #ffffff;
-      font-family: 'Fredoka', sans-serif;
-      font-size: 30px;
-      font-weight: 700;
+      font-family: 'Outfit', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
       user-select: none;
       animation: pulse 1.5s infinite;
     }
@@ -101,10 +104,11 @@
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
     }
 
+    /* Tên username dùng Font Outfit đậm */
     .username {
-      font-family: 'Fredoka', sans-serif;
+      font-family: 'Outfit', sans-serif;
       font-size: 32px;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 0.5px;
       margin-bottom: 12px;
     }
@@ -131,9 +135,10 @@
     }
 
     .subtitle {
-      font-family: 'Fredoka', sans-serif;
-      font-size: 17px;
-      font-weight: 500;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
       opacity: 0.95;
       margin-bottom: 25px;
     }
@@ -143,8 +148,11 @@
       align-items: center;
       justify-content: center;
       gap: 12px;
-      font-family: 'Fredoka', sans-serif;
-      font-size: 16px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
       opacity: 0.9;
       margin-bottom: 22px;
     }
@@ -191,85 +199,4 @@
   </div>
 
   <audio id="bg-music" loop playsinline preload="auto">
-    <source src="https://files.catbox.moe/pm0gph.mp3" type="audio/mpeg">
-  </audio>
-
-  <div class="bio-card">
-    <img class="avatar" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
-
-    <h1 class="username">whynotben</h1>
-
-    <div class="badges-container">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_bravery.svg" class="badge-img" alt="Bravery">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_brilliance.svg" class="badge-img" alt="Brilliance">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_balance.svg" class="badge-img" alt="Balance">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/active_developer.svg" class="badge-img" alt="Active Dev">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/nitro.svg" class="badge-img" alt="Nitro">
-    </div>
-
-    <div class="subtitle">Owner @benmelody</div>
-
-    <div class="divider">Socials</div>
-
-    <div class="social-links">
-      <a href="https://discord.com" class="social-icon" target="_blank"><i class="fa-brands fa-discord"></i></a>
-      <a href="https://facebook.com" class="social-icon" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
-      <a href="https://instagram.com" class="social-icon" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-      <a href="https://telegram.org" class="social-icon" target="_blank"><i class="fa-brands fa-telegram"></i></a>
-    </div>
-  </div>
-
-  <script>
-    const enterScreen = document.getElementById('enter-screen');
-    const bgMusic = document.getElementById('bg-music');
-
-    function startExperience() {
-      // Ẩn màn hình đen
-      enterScreen.style.opacity = '0';
-      setTimeout(function() {
-        enterScreen.style.visibility = 'hidden';
-      }, 600);
-
-      // Phát nhạc bắt buộc
-      if (bgMusic) {
-        bgMusic.muted = false;
-        bgMusic.volume = 0.8;
-        
-        var promise = bgMusic.play();
-        if (promise !== undefined) {
-          promise.then(function() {
-            console.log("Nhạc đang phát thành công!");
-          }).catch(function(error) {
-            console.log("Lỗi tự động phát nhạc:", error);
-          });
-        }
-      }
-    }
-
-    // Bắt cả sự kiện Chạm màn hình (cho iPhone/Android) và Click chuột
-    enterScreen.addEventListener('touchstart', startExperience, { once: true });
-    enterScreen.addEventListener('click', startExperience, { once: true });
-
-    // Tuyết rơi
-    function createSnowflake() {
-      const snowflake = document.createElement('div');
-      snowflake.classList.add('snowflake');
-      snowflake.innerHTML = '❄';
-      
-      snowflake.style.left = Math.random() * 100 + 'vw';
-      snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
-      snowflake.style.animationDuration = Math.random() * 5 + 3 + 's';
-      snowflake.style.opacity = Math.random();
-
-      document.body.appendChild(snowflake);
-
-      setTimeout(function() {
-        snowflake.remove();
-      }, 8000);
-    }
-
-    setInterval(createSnowflake, 200);
-  </script>
-
-</body>
-</html>
+    <source src="https://
