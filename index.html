@@ -29,6 +29,7 @@
       position: relative;
     }
 
+    /* Màn hình phủ đen Click to enter */
     #enter-screen {
       position: fixed;
       top: 0;
@@ -60,6 +61,7 @@
       50% { opacity: 0.5; transform: scale(0.96); }
     }
 
+    /* Tuyết rơi */
     .snowflake {
       position: absolute;
       top: -10px;
@@ -75,6 +77,7 @@
       100% { transform: translateY(105vh) rotate(360deg); opacity: 0.2; }
     }
 
+    /* Khung Bio chính + Hiệu ứng bồng bềnh tổng thể */
     .bio-card {
       width: 100%;
       max-width: 380px;
@@ -89,6 +92,14 @@
       color: #ffffff;
       z-index: 10;
       position: relative;
+      
+      /* Hiệu ứng bồng bềnh lên xuống nhẹ cho toàn khung */
+      animation: floatCard 5s ease-in-out infinite;
+    }
+
+    @keyframes floatCard {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
     }
 
     .avatar {
@@ -122,11 +133,32 @@
       margin-bottom: 22px;
     }
 
+    /* Hiệu ứng lắc lư & nhún nhảy riêng cho từng Badge */
     .badge-img {
       width: 22px;
       height: 22px;
       object-fit: contain;
       filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+      display: inline-block;
+      
+      /* Gọi animation lắc lư nhún nhảy */
+      animation: floatBadge 3s ease-in-out infinite;
+    }
+
+    /* Tạo độ trễ khác nhau giữa các badge để chúng không lắc lư cùng một lúc */
+    .badge-img:nth-child(1) { animation-delay: 0.0s; }
+    .badge-img:nth-child(2) { animation-delay: 0.4s; }
+    .badge-img:nth-child(3) { animation-delay: 0.8s; }
+    .badge-img:nth-child(4) { animation-delay: 1.2s; }
+    .badge-img:nth-child(5) { animation-delay: 1.6s; }
+
+    @keyframes floatBadge {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-5px) rotate(4deg); /* Nhổm lên và hơi nghiêng nhẹ */
+      }
     }
 
     .subtitle {
@@ -189,19 +221,23 @@
 </head>
 <body>
 
+  <!-- Màn hình đen chờ Click -->
   <div id="enter-screen">
     <h1>Click to enter</h1>
   </div>
 
+  <!-- Nhạc Catbox cá nhân của bạn -->
   <audio id="bg-music" loop playsinline preload="auto">
     <source src="https://files.catbox.moe/pm0gph.mp3" type="audio/mpeg">
   </audio>
 
+  <!-- Thẻ Bio -->
   <div class="bio-card">
     <img class="avatar" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
 
     <h1 class="username">whynotben</h1>
 
+    <!-- Bộ Badge tự động lắc lư bồng bềnh -->
     <div class="badges-container">
       <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_bravery.svg" class="badge-img" alt="Bravery">
       <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_brilliance.svg" class="badge-img" alt="Brilliance">
@@ -242,6 +278,7 @@
     enterScreen.addEventListener('touchstart', startExperience, { once: true });
     enterScreen.addEventListener('click', startExperience, { once: true });
 
+    // Hiệu ứng tuyết rơi
     function createSnowflake() {
       const snowflake = document.createElement('div');
       snowflake.classList.add('snowflake');
