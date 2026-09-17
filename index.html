@@ -29,6 +29,7 @@
       position: relative;
     }
 
+    /* Màn hình phủ đen Click to enter */
     #enter-screen {
       position: fixed;
       top: 0;
@@ -60,6 +61,7 @@
       50% { opacity: 0.5; transform: scale(0.96); }
     }
 
+    /* Tuyết rơi */
     .snowflake {
       position: absolute;
       top: -10px;
@@ -75,6 +77,7 @@
       100% { transform: translateY(105vh) rotate(360deg); opacity: 0.2; }
     }
 
+    /* Khung Bio kính mờ */
     .bio-card {
       width: 100%;
       max-width: 380px;
@@ -89,12 +92,7 @@
       color: #ffffff;
       z-index: 10;
       position: relative;
-      animation: floatCard 5s ease-in-out infinite;
-    }
-
-    @keyframes floatCard {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-8px); }
+      transition: transform 0.05s ease;
     }
 
     .avatar {
@@ -104,6 +102,7 @@
       object-fit: cover;
       margin-bottom: 12px;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      transition: transform 0.05s ease;
     }
 
     .username {
@@ -114,13 +113,14 @@
       margin-bottom: 12px;
     }
 
+    /* Khung chứa các Badge */
     .badges-container {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 12px;
-      background: rgba(0, 0, 0, 0.2);
-      padding: 8px 18px;
+      background: rgba(0, 0, 0, 0.18);
+      padding: 8px 16px;
       border-radius: 20px;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
@@ -128,24 +128,14 @@
       margin-bottom: 22px;
     }
 
+    /* Badge hiệu ứng nhảy theo nhạc */
     .badge-img {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       object-fit: contain;
       filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-      display: inline-block;
-      animation: floatBadge 3s ease-in-out infinite;
-    }
-
-    .badge-img:nth-child(1) { animation-delay: 0.0s; }
-    .badge-img:nth-child(2) { animation-delay: 0.4s; }
-    .badge-img:nth-child(3) { animation-delay: 0.8s; }
-    .badge-img:nth-child(4) { animation-delay: 1.2s; }
-    .badge-img:nth-child(5) { animation-delay: 1.6s; }
-
-    @keyframes floatBadge {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-5px) rotate(4deg); }
+      transition: transform 0.05s ease;
+      will-change: transform;
     }
 
     .subtitle {
@@ -212,22 +202,21 @@
     <h1>Click to enter</h1>
   </div>
 
-  <audio id="bg-music" loop playsinline preload="auto">
+  <audio id="bg-music" loop crossorigin="anonymous" playsinline preload="auto">
     <source src="https://files.catbox.moe/pm0gph.mp3" type="audio/mpeg">
   </audio>
 
-  <div class="bio-card">
-    <img class="avatar" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
+  <div class="bio-card" id="bioCard">
+    <img class="avatar" id="avatarImg" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
 
     <h1 class="username">whynotben</h1>
 
-    <!-- 5 Badge chuẩn link không bao giờ lỗi -->
     <div class="badges-container">
-      <img src="https://raw.githubusercontent.com/lorenzods/discord-badges/main/svg/hypesquad_bravery.svg" class="badge-img" alt="Bravery">
-      <img src="https://raw.githubusercontent.com/lorenzods/discord-badges/main/svg/hypesquad_brilliance.svg" class="badge-img" alt="Brilliance">
-      <img src="https://raw.githubusercontent.com/lorenzods/discord-badges/main/svg/hypesquad_balance.svg" class="badge-img" alt="Balance">
-      <img src="https://raw.githubusercontent.com/lorenzods/discord-badges/main/svg/active_developer.svg" class="badge-img" alt="Active Dev">
-      <img src="https://raw.githubusercontent.com/lorenzods/discord-badges/main/svg/nitro.svg" class="badge-img" alt="Nitro">
+      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_bravery.svg" class="badge-img" alt="Bravery">
+      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_brilliance.svg" class="badge-img" alt="Brilliance">
+      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_balance.svg" class="badge-img" alt="Balance">
+      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/active_developer.svg" class="badge-img" alt="Active Dev">
+      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/nitro.svg" class="badge-img" alt="Nitro">
     </div>
 
     <div class="subtitle">Owner @benmelody</div>
@@ -245,6 +234,52 @@
   <script>
     const enterScreen = document.getElementById('enter-screen');
     const bgMusic = document.getElementById('bg-music');
+    const badgeElements = document.querySelectorAll('.badge-img');
+    const avatarImg = document.getElementById('avatarImg');
+
+    let audioCtx, analyser, source, dataArray;
+
+    function initAudioVisualizer() {
+      // Phân tích tần số nhạc bằng Web Audio API
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 64; // Chia dải tần số âm thanh
+
+      source = audioCtx.createMediaElementSource(bgMusic);
+      source.connect(analyser);
+      analyser.connect(audioCtx.destination);
+
+      dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+      // Chạy vòng lặp nhảy theo nhịp nhạc
+      renderVisualizer();
+    }
+
+    function renderVisualizer() {
+      requestAnimationFrame(renderVisualizer);
+      if (!analyser) return;
+
+      analyser.getByteFrequencyData(dataArray);
+
+      // Phân tích nhịp Bass âm thanh
+      let sum = 0;
+      for (let i = 0; i < 8; i++) {
+        sum += dataArray[i];
+      }
+      let averageBass = sum / 8; // Giá trị Bass trung bình
+
+      // Tạo hiệu ứng nhảy nảy cho các badge theo từng tần số
+      badgeElements.forEach((badge, index) => {
+        let value = dataArray[index * 2] || 0;
+        let scale = 1 + (value / 255) * 0.45; // Tỷ lệ phóng to khi có nhịp
+        let translateY = -(value / 255) * 8;   // Đẩy nảy lên trên
+        badge.style.transform = `scale(${scale}) translateY(${translateY}px)`;
+      });
+
+      // Nhảy nhẹ cả Avatar theo beat Bass
+      let avatarScale = 1 + (averageBass / 255) * 0.08;
+      avatarImg.style.transform = `scale(${avatarScale})`;
+    }
 
     function startExperience() {
       enterScreen.style.opacity = '0';
@@ -255,13 +290,16 @@
       if (bgMusic) {
         bgMusic.muted = false;
         bgMusic.volume = 0.8;
-        bgMusic.play().catch(e => console.log(e));
+        bgMusic.play().then(() => {
+          initAudioVisualizer();
+        }).catch(e => console.log(e));
       }
     }
 
     enterScreen.addEventListener('touchstart', startExperience, { once: true });
     enterScreen.addEventListener('click', startExperience, { once: true });
 
+    // Tuyết rơi
     function createSnowflake() {
       const snowflake = document.createElement('div');
       snowflake.classList.add('snowflake');
