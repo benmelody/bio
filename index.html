@@ -13,7 +13,6 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      /* Áp dụng Font Montserrat làm font mặc định */
       font-family: 'Montserrat', sans-serif;
     }
 
@@ -30,7 +29,6 @@
       position: relative;
     }
 
-    /* Màn hình phủ đen Click to enter */
     #enter-screen {
       position: fixed;
       top: 0;
@@ -62,7 +60,6 @@
       50% { opacity: 0.5; transform: scale(0.96); }
     }
 
-    /* Tuyết rơi */
     .snowflake {
       position: absolute;
       top: -10px;
@@ -78,7 +75,6 @@
       100% { transform: translateY(105vh) rotate(360deg); opacity: 0.2; }
     }
 
-    /* Khung Bio */
     .bio-card {
       width: 100%;
       max-width: 380px;
@@ -104,7 +100,6 @@
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
     }
 
-    /* Tên username dùng Font Outfit đậm */
     .username {
       font-family: 'Outfit', sans-serif;
       font-size: 32px;
@@ -200,4 +195,72 @@
 
   <audio id="bg-music" loop playsinline preload="auto">
     <source src="https://files.catbox.moe/pm0gph.mp3" type="audio/mpeg">
+  </audio>
 
+  <div class="bio-card">
+    <img class="avatar" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
+
+    <h1 class="username">whynotben</h1>
+
+    <div class="badges-container">
+      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_bravery.svg" class="badge-img" alt="Bravery">
+      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_brilliance.svg" class="badge-img" alt="Brilliance">
+      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_balance.svg" class="badge-img" alt="Balance">
+      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/active_developer.svg" class="badge-img" alt="Active Dev">
+      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/nitro.svg" class="badge-img" alt="Nitro">
+    </div>
+
+    <div class="subtitle">Owner @benmelody</div>
+
+    <div class="divider">Socials</div>
+
+    <div class="social-links">
+      <a href="https://discord.com" class="social-icon" target="_blank"><i class="fa-brands fa-discord"></i></a>
+      <a href="https://facebook.com" class="social-icon" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+      <a href="https://instagram.com" class="social-icon" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+      <a href="https://telegram.org" class="social-icon" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+    </div>
+  </div>
+
+  <script>
+    const enterScreen = document.getElementById('enter-screen');
+    const bgMusic = document.getElementById('bg-music');
+
+    function startExperience() {
+      enterScreen.style.opacity = '0';
+      setTimeout(function() {
+        enterScreen.style.visibility = 'hidden';
+      }, 600);
+
+      if (bgMusic) {
+        bgMusic.muted = false;
+        bgMusic.volume = 0.8;
+        bgMusic.play().catch(e => console.log(e));
+      }
+    }
+
+    enterScreen.addEventListener('touchstart', startExperience, { once: true });
+    enterScreen.addEventListener('click', startExperience, { once: true });
+
+    function createSnowflake() {
+      const snowflake = document.createElement('div');
+      snowflake.classList.add('snowflake');
+      snowflake.innerHTML = '❄';
+      
+      snowflake.style.left = Math.random() * 100 + 'vw';
+      snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+      snowflake.style.animationDuration = Math.random() * 5 + 3 + 's';
+      snowflake.style.opacity = Math.random();
+
+      document.body.appendChild(snowflake);
+
+      setTimeout(function() {
+        snowflake.remove();
+      }, 8000);
+    }
+
+    setInterval(createSnowflake, 200);
+  </script>
+
+</body>
+</html>
