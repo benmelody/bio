@@ -29,38 +29,37 @@
       position: relative;
     }
 
-    /* Màn hình chờ đen Click to enter */
+    /* Màn hình phủ đen Click to enter */
     #enter-screen {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       background-color: #000000;
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 9999;
+      z-index: 99999;
       cursor: pointer;
-      transition: opacity 0.8s ease, visibility 0.8s ease;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
     }
 
     #enter-screen h1 {
       color: #ffffff;
       font-family: 'Fredoka', sans-serif;
-      font-size: 32px;
+      font-size: 30px;
       font-weight: 700;
-      letter-spacing: 1px;
       user-select: none;
-      animation: pulse 1.8s infinite;
+      animation: pulse 1.5s infinite;
     }
 
     @keyframes pulse {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.6; transform: scale(0.98); }
+      50% { opacity: 0.5; transform: scale(0.96); }
     }
 
-    /* Hiệu ứng tuyết rơi */
+    /* Tuyết rơi */
     .snowflake {
       position: absolute;
       top: -10px;
@@ -72,14 +71,8 @@
     }
 
     @keyframes fall {
-      0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 0.8;
-      }
-      100% {
-        transform: translateY(105vh) rotate(360deg);
-        opacity: 0.2;
-      }
+      0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+      100% { transform: translateY(105vh) rotate(360deg); opacity: 0.2; }
     }
 
     /* Khung Bio */
@@ -193,18 +186,85 @@
 </head>
 <body>
 
+  <!-- Màn hình chờ đen Click to enter -->
   <div id="enter-screen">
     <h1>Click to enter</h1>
   </div>
 
-  <audio id="bg-music" loop>
-    <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mpeg">
+  <!-- Nhạc nền Catbox cá nhân của bạn -->
+  <audio id="bg-music" loop preload="auto">
+    <source src="https://files.catbox.moe/pm0gph.mp3" type="audio/mpeg">
   </audio>
 
+  <!-- Bio Profile -->
   <div class="bio-card">
     <img class="avatar" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
 
     <h1 class="username">whynotben</h1>
 
     <div class="badges-container">
-      <img src="
+      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_bravery.svg" class="badge-img" alt="Bravery">
+      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_brilliance.svg" class="badge-img" alt="Brilliance">
+      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_balance.svg" class="badge-img" alt="Balance">
+      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/active_developer.svg" class="badge-img" alt="Active Dev">
+      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/nitro.svg" class="badge-img" alt="Nitro">
+    </div>
+
+    <div class="subtitle">Owner @benmelody</div>
+
+    <div class="divider">Socials</div>
+
+    <div class="social-links">
+      <a href="https://discord.com" class="social-icon" target="_blank"><i class="fa-brands fa-discord"></i></a>
+      <a href="https://facebook.com" class="social-icon" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+      <a href="https://instagram.com" class="social-icon" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+      <a href="https://telegram.org" class="social-icon" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+    </div>
+  </div>
+
+  <script>
+    const enterScreen = document.getElementById('enter-screen');
+    const bgMusic = document.getElementById('bg-music');
+
+    enterScreen.addEventListener('click', function() {
+      // Ẩn màn hình chờ
+      enterScreen.style.opacity = '0';
+      setTimeout(function() {
+        enterScreen.style.visibility = 'hidden';
+      }, 600);
+
+      // Phát nhạc
+      if (bgMusic) {
+        bgMusic.volume = 0.6;
+        var playPromise = bgMusic.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(function(error) {
+            console.log("Lỗi phát nhạc:", error);
+          });
+        }
+      }
+    });
+
+    // Tuyết rơi
+    function createSnowflake() {
+      const snowflake = document.createElement('div');
+      snowflake.classList.add('snowflake');
+      snowflake.innerHTML = '❄';
+      
+      snowflake.style.left = Math.random() * 100 + 'vw';
+      snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+      snowflake.style.animationDuration = Math.random() * 5 + 3 + 's';
+      snowflake.style.opacity = Math.random();
+
+      document.body.appendChild(snowflake);
+
+      setTimeout(function() {
+        snowflake.remove();
+      }, 8000);
+    }
+
+    setInterval(createSnowflake, 200);
+  </script>
+
+</body>
+</html>
