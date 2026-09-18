@@ -94,7 +94,7 @@
       box-shadow: 0 0 15px rgba(255, 71, 87, 0.6);
     }
 
-    /* Khung Tải Nội Dung Chính */
+    /* Khung Main */
     .container {
       position: relative;
       z-index: 10;
@@ -199,7 +199,7 @@
       filter: drop-shadow(0 0 6px rgba(255, 71, 87, 0.8));
     }
 
-    /* Music Player */
+    /* Music Player Chuẩn Thời Gian Thực */
     .music-player {
       display: flex;
       align-items: center;
@@ -246,22 +246,25 @@
     .time {
       font-size: 11px;
       color: #94a3b8;
+      min-width: 28px;
     }
 
     .progress-bar {
       flex: 1;
-      height: 4px;
+      height: 6px;
       background: rgba(255, 255, 255, 0.2);
       border-radius: 4px;
       position: relative;
-      overflow: hidden;
+      cursor: pointer;
     }
 
     .progress-fill {
-      width: 45%;
+      width: 0%;
       height: 100%;
       background: #5eead4;
       box-shadow: 0 0 8px #5eead4;
+      border-radius: 4px;
+      transition: width 0.1s linear;
     }
 
     .controls-btns {
@@ -356,19 +359,19 @@
     <div class="music-player">
       <img class="song-cover" src="https://files.catbox.moe/6iewk3.jpeg" alt="Song Cover">
       <div class="player-controls">
-        <div class="song-title">Vết Thương</div>
+        <div class="song-title">Banana Street</div>
         <div class="progress-container">
-          <span class="time">0:01</span>
-          <div class="progress-bar">
-            <div class="progress-fill"></div>
+          <span class="time" id="currentTime">0:00</span>
+          <div class="progress-bar" id="progressBar" onclick="seekMusic(event)">
+            <div class="progress-fill" id="progressFill"></div>
           </div>
-          <span class="time">3:22</span>
+          <span class="time" id="durationTime">0:00</span>
         </div>
       </div>
       <div class="controls-btns">
-        <i class="fa-solid fa-backward-step btn-step"></i>
+        <i class="fa-solid fa-backward-step btn-step" onclick="restartMusic()"></i>
         <div class="btn-play" onclick="togglePlay()"><i class="fa-solid fa-pause" id="playIcon"></i></div>
-        <i class="fa-solid fa-forward-step btn-step"></i>
+        <i class="fa-solid fa-forward-step btn-step" onclick="restartMusic()"></i>
       </div>
     </div>
 
@@ -389,69 +392,82 @@
     const viewCount = document.getElementById('viewCount');
     const statHeartIcon = document.getElementById('statHeartIcon');
 
-    // Khóa định danh chuẩn cho trang Bio của bạn
+    const currentTimeEl = document.getElementById('currentTime');
+    const durationTimeEl = document.getElementById('durationTime');
+    const progressFill = document.getElementById('progressFill');
+    const progressBar = document.getElementById('progressBar');
+
     const KEY_LIKE = "whynotben_bio_likes_v3";
     const KEY_VIEW = "whynotben_bio_views_v3";
 
-    // 1. Khởi tạo & Tải lượt xem thực tế từ Server API
+    // 1. Lấy dữ liệu đếm
     fetch(`https://countapi.mileshilliard.com/api/v1/hit/${KEY_VIEW}`)
       .then(res => res.json())
-      .then(data => {
-        if (data && data.value) viewCount.innerText = data.value;
-      })
+      .then(data => { if (data && data.value) viewCount.innerText = data.value; })
       .catch(() => { viewCount.innerText = "186"; });
 
-    // 2. Tải số lượt tim công khai từ Server
     fetch(`https://countapi.mileshilliard.com/api/v1/get/${KEY_LIKE}`)
       .then(res => res.json())
-      .then(data => {
-        if (data && data.value) likeCount.innerText = data.value;
-      })
+      .then(data => { if (data && data.value) likeCount.innerText = data.value; })
       .catch(() => {});
 
-    // Kiểm tra bộ nhớ thiết bị xem người dùng đã thả tim chưa
     let userLiked = localStorage.getItem('has_liked_whynotben') === 'true';
     if (userLiked) {
       likeBtn.classList.add('liked');
       statHeartIcon.className = 'fa-solid fa-heart active-heart';
     }
 
-    // Hàm Thả Tim (Được đồng bộ hoá vĩnh viễn trên Server)
+    // 2. Xử lý thời gian nhạc REAL-TIME
+    function formatTime(seconds) {
+      const min = Math.floor(seconds / 60);
+      const sec = Math.floor(seconds % 60);
+      return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+    }
+
+    audio.addEventListener('timeupdate', () => {
+      if (audio.duration) {
+        const progressPercent = (audio.currentTime / audio.duration) * 100;
+        progressFill.style.width = `${progressPercent}%`;
+        currentTimeEl.innerText = formatTime(audio.currentTime);
+        durationTimeEl.innerText = formatTime(audio.duration);
+      }
+    });
+
+    // Cho phép bấm vào thanh để tua nhạc
+    function seekMusic(e) {
+      const rect = progressBar.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const width = rect.width;
+      audio.currentTime = (clickX / width) * audio.duration;
+    }
+
+    function restartMusic() {
+      audio.currentTime = 0;
+    }
+
+    // Các hàm tương tác khác
     function toggleLike() {
       if (!userLiked) {
         userLiked = true;
         localStorage.setItem('has_liked_whynotben', 'true');
-        
         likeBtn.classList.add('liked');
         statHeartIcon.className = 'fa-solid fa-heart active-heart';
-        
-        // Cập nhật số liệu trên màn hình ngay lập tức
         let currentLikes = parseInt(likeCount.innerText) || 0;
         likeCount.innerText = currentLikes + 1;
         showToast("Cảm ơn bạn đã thả tim!");
 
-        // Gửi thông số lên máy chủ lưu trữ cho toàn bộ các thiết bị khác cùng thấy
         fetch(`https://countapi.mileshilliard.com/api/v1/hit/${KEY_LIKE}`)
           .then(res => res.json())
-          .then(data => {
-            if (data && data.value) likeCount.innerText = data.value;
-          })
-          .catch(() => {});
+          .then(data => { if (data && data.value) likeCount.innerText = data.value; });
       } else {
         showToast("Bạn đã thả tim trang này rồi!");
       }
     }
 
     function toggleMute() {
-      if (audio.muted) {
-        audio.muted = false;
-        volumeIcon.className = 'fa-solid fa-volume-high';
-        showToast("Audio Unmuted");
-      } else {
-        audio.muted = true;
-        volumeIcon.className = 'fa-solid fa-volume-xmark';
-        showToast("Audio Muted");
-      }
+      audio.muted = !audio.muted;
+      volumeIcon.className = audio.muted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
+      showToast(audio.muted ? "Audio Muted" : "Audio Unmuted");
     }
 
     function togglePlay() {
