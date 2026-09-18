@@ -123,10 +123,11 @@
 
     .profile-section { display: flex; align-items: center; gap: 18px; }
     
+    /* KHUNG BAO QUANH AVATAR ĐƯỢC ĐỒNG BỘ TỰ ĐỘNG TỪ API */
     .avatar-wrapper { 
       position: relative; 
-      width: 86px; 
-      height: 86px; 
+      width: 90px; 
+      height: 90px; 
       flex-shrink: 0;
       display: flex;
       justify-content: center;
@@ -134,13 +135,24 @@
     }
 
     .avatar { 
-      width: 100%; 
-      height: 100%; 
+      width: 76px; 
+      height: 76px; 
       border-radius: 50%; 
       object-fit: cover; 
-      border: 2px solid #5eead4;
-      box-shadow: 0 0 15px rgba(94, 234, 212, 0.4);
       z-index: 2;
+    }
+
+    .avatar-decoration-img {
+      position: absolute;
+      top: -18px;
+      left: -18px;
+      width: 126px;
+      height: 126px;
+      object-fit: contain;
+      z-index: 5;
+      pointer-events: none;
+      display: none; /* Mặc định ẩn nếu không đeo khung, tự bật khi có khung API */
+      filter: drop-shadow(0 0 8px rgba(200, 180, 255, 0.6));
     }
 
     .status-dot {
@@ -248,6 +260,8 @@
     <div class="profile-card">
       <div class="profile-section">
         <div class="avatar-wrapper">
+          <!-- KHUNG TRANG TRÍ TỰ ĐỘNG ĐỒNG BỘ TỪ API DISCORD -->
+          <img class="avatar-decoration-img" id="discordDecoration" src="" alt="Decoration">
           <!-- AVATAR TỰ ĐỘNG CẬP NHẬT TỪ DISCORD API -->
           <img class="avatar" id="discordAvatar" src="https://files.catbox.moe/bl3khq.jpeg" alt="Avatar">
           <div class="status-dot" id="statusDot"></div>
@@ -347,13 +361,24 @@
         if (result.success && result.data) {
           const data = result.data;
           
-          // Tự động nhận diện và cập nhật avatar mới nhất từ tài khoản Discord của bạn
+          // 1. Tự động cập nhật Avatar
           if (data.discord_user && data.discord_user.avatar) {
             const avatarHash = data.discord_user.avatar;
             const discordAvatarUrl = `https://cdn.discordapp.com/avatars/${DISCORD_USER_ID}/${avatarHash}.png?size=256`;
             document.getElementById('discordAvatar').src = discordAvatarUrl;
           }
 
+          // 2. Tự động cập nhật Khung trang trí Avatar (Avatar Decoration) từ API Discord
+          const decorationEl = document.getElementById('discordDecoration');
+          if (data.discord_user && data.discord_user.avatar_decoration_data) {
+            const decoAsset = data.discord_user.avatar_decoration_data.asset;
+            decorationEl.src = `https://cdn.discordapp.com/avatar-decoration-presets/${decoAsset}.png?size=240&passthrough=true`;
+            decorationEl.style.display = 'block';
+          } else {
+            decorationEl.style.display = 'none';
+          }
+
+          // 3. Cập nhật chấm trạng thái online/offline
           const statusDot = document.getElementById('statusDot');
           const colors = {
             online: '#23a55a',
@@ -365,6 +390,7 @@
             statusDot.style.backgroundColor = colors[data.discord_status] || '#80848e';
           }
 
+          // 4. Cập nhật hoạt động
           const statusTitle = document.getElementById('statusTitle');
           const statusDesc = document.getElementById('statusDesc');
 
