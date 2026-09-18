@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>whynotben</title>
+  <title>whynotben - Bio Link</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -24,15 +24,22 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(135deg, #1e5799 0%, #2989d8 50%, #7db9e8 100%);
-      background-size: cover;
-      background-attachment: fixed;
+      /* Background Gradient Động */
+      background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1e5799);
+      background-size: 400% 400%;
+      animation: gradientBG 12s ease infinite;
       padding: 20px;
       overflow: hidden;
       position: relative;
     }
 
-    /* Màn hình trắng Click To Enter nhún nhảy */
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Màn hình chờ nhún nhảy */
     #enter-screen {
       position: fixed;
       top: 0;
@@ -59,24 +66,19 @@
     }
 
     @keyframes bounceUpDown {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-15px);
-      }
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
     }
 
     #enter-screen.slide-up {
       transform: translateY(-100vh);
     }
 
-    /* Hiệu ứng hạt tuyết/mưa rơi */
+    /* Hạt tuyết rơi nhẹ */
     .snowflake {
       position: fixed;
       top: -10px;
-      color: #ffffff;
-      opacity: 0.8;
+      color: rgba(255, 255, 255, 0.8);
       pointer-events: none;
       user-select: none;
       z-index: 2;
@@ -84,31 +86,32 @@
     }
 
     @keyframes fall {
-      0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 0.8;
-      }
-      100% {
-        transform: translateY(105vh) rotate(360deg);
-        opacity: 0.2;
-      }
+      0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+      100% { transform: translateY(105vh) rotate(360deg); opacity: 0.1; }
     }
 
-    /* Thẻ Bio Card Glassmorphism */
+    /* Bio Card Glassmorphism */
     .bio-card {
       width: 100%;
       max-width: 360px;
-      padding: 40px 25px;
-      background: rgba(255, 255, 255, 0.18);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      padding: 35px 25px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
       border-radius: 35px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.1), 0 15px 35px rgba(0, 0, 0, 0.4);
       text-align: center;
       color: #ffffff;
       position: relative;
       z-index: 10;
+    }
+
+    /* Avatar hình tròn tĩnh đẹp mắt */
+    .avatar-wrapper {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 12px;
     }
 
     .avatar {
@@ -116,38 +119,95 @@
       height: 110px;
       border-radius: 50%;
       object-fit: cover;
-      margin-bottom: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
     }
 
     .username {
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 800;
-      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      text-shadow: 0 0 10px rgba(255,255,255,0.3);
     }
 
     .badges-container {
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(0, 0, 0, 0.2);
       padding: 6px 16px;
       border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      margin-bottom: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      margin-bottom: 16px;
     }
 
     .badge-img {
       width: 20px;
       height: 20px;
       object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
     }
 
     .subtitle {
-      font-size: 16px;
+      font-size: 15px;
+      font-weight: 600;
+      opacity: 0.9;
+      margin-bottom: 20px;
+    }
+
+    /* Music Player Widget */
+    .music-widget {
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 18px;
+      padding: 10px 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .disc-icon {
+      font-size: 18px;
+      color: #00f2fe;
+    }
+
+    .song-info {
+      text-align: left;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .song-title {
+      font-size: 12px;
       font-weight: 700;
-      opacity: 0.95;
-      margin-bottom: 25px;
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+
+    .sound-bars {
+      display: flex;
+      gap: 3px;
+      align-items: flex-end;
+      height: 15px;
+    }
+
+    .bar {
+      width: 3px;
+      height: 100%;
+      background: #00f2fe;
+      border-radius: 3px;
+      animation: wave 1s ease-in-out infinite alternate;
+    }
+
+    .bar:nth-child(2) { animation-delay: 0.2s; }
+    .bar:nth-child(3) { animation-delay: 0.4s; }
+    .bar:nth-child(4) { animation-delay: 0.6s; }
+
+    @keyframes wave {
+      0% { height: 20%; }
+      100% { height: 100%; }
     }
 
     .divider {
@@ -155,58 +215,81 @@
       align-items: center;
       justify-content: center;
       gap: 12px;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
-      opacity: 0.9;
-      margin-bottom: 20px;
+      opacity: 0.8;
+      margin-bottom: 18px;
     }
 
     .divider::before, .divider::after {
       content: "";
-      height: 1.5px;
-      width: 40px;
-      background-color: rgba(255, 255, 255, 0.7);
+      height: 1px;
+      width: 35px;
+      background-color: rgba(255, 255, 255, 0.5);
     }
 
     .social-links {
       display: flex;
       justify-content: center;
-      gap: 16px;
+      gap: 14px;
     }
 
     .social-icon {
-      width: 48px;
-      height: 48px;
+      width: 46px;
+      height: 46px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       display: flex;
       justify-content: center;
       align-items: center;
       color: #fff;
-      font-size: 22px;
+      font-size: 20px;
       text-decoration: none;
-      transition: 0.3s;
+      transition: all 0.3s ease;
     }
 
     .social-icon:active {
-      transform: scale(0.9);
-      background: rgba(255, 255, 255, 0.4);
+      transform: scale(0.85);
+      background: rgba(255, 255, 255, 0.35);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Popup thông báo nhỏ */
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 9999;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
 
+  <!-- Màn hình chờ nhún nhảy -->
   <div id="enter-screen" onclick="startExperience()">
     <h1>Click to enter</h1>
   </div>
 
+  <!-- Audio nhạc nền -->
   <audio id="bg-music" loop preload="auto">
     <source src="https://files.catbox.moe/88pag4.mov" type="audio/mp4">
     <source src="https://files.catbox.moe/88pag4.mov" type="audio/mpeg">
   </audio>
 
+  <!-- Khung Bio -->
   <div class="bio-card">
-    <img class="avatar" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
+    <div class="avatar-wrapper">
+      <img class="avatar" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
+    </div>
     
     <h1 class="username">whynotben</h1>
 
@@ -220,15 +303,31 @@
 
     <div class="subtitle">Owner @benmelody</div>
 
+    <!-- Music Player Mini Widget -->
+    <div class="music-widget">
+      <i class="fa-solid fa-music disc-icon"></i>
+      <div class="song-info">
+        <div class="song-title">Playing Track...</div>
+      </div>
+      <div class="sound-bars">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
+    </div>
+
     <div class="divider">Socials</div>
 
     <div class="social-links">
-      <a href="https://discord.com" class="social-icon" target="_blank"><i class="fa-brands fa-discord"></i></a>
+      <a href="javascript:void(0)" onclick="copyText('whynotben#0000')" class="social-icon"><i class="fa-brands fa-discord"></i></a>
       <a href="https://facebook.com" class="social-icon" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
       <a href="https://instagram.com" class="social-icon" target="_blank"><i class="fa-brands fa-instagram"></i></a>
       <a href="https://telegram.org" class="social-icon" target="_blank"><i class="fa-brands fa-telegram"></i></a>
     </div>
   </div>
+
+  <div id="toast">Copied Discord ID!</div>
 
   <script>
     function startExperience() {
@@ -240,27 +339,27 @@
       if (bgMusic) {
         bgMusic.muted = false;
         bgMusic.volume = 0.8;
-        bgMusic.play().catch(function(e) {
-          console.log("Lỗi nhạc: ", e);
-        });
+        bgMusic.play().catch(e => console.log(e));
       }
+    }
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text);
+      const toast = document.getElementById('toast');
+      toast.style.opacity = '1';
+      setTimeout(() => { toast.style.opacity = '0'; }, 2000);
     }
 
     function createSnowflake() {
       const snowflake = document.createElement('div');
       snowflake.classList.add('snowflake');
       snowflake.innerHTML = '❄';
-      
       snowflake.style.left = Math.random() * 100 + 'vw';
       snowflake.style.fontSize = Math.random() * 8 + 10 + 'px';
       snowflake.style.animationDuration = Math.random() * 3 + 3 + 's';
       snowflake.style.opacity = Math.random();
-
       document.body.appendChild(snowflake);
-
-      setTimeout(function() {
-        snowflake.remove();
-      }, 6000);
+      setTimeout(() => { snowflake.remove(); }, 6000);
     }
 
     setInterval(createSnowflake, 150);
