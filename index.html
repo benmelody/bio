@@ -32,6 +32,20 @@
       position: relative;
     }
 
+    /* LỚP PHỦ SẤM CHỚP */
+    #lightning-flash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(255, 255, 255, 0.15); /* Độ sáng nhẹ của ánh chớp */
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.05s ease-out;
+    }
+
     /* HIỆU ỨNG MƯA RƠI */
     .drop {
       position: absolute;
@@ -224,6 +238,9 @@
 </head>
 <body>
 
+  <!-- Lớp Sấm Chớp -->
+  <div id="lightning-flash"></div>
+
   <!-- Màn hình chờ Click to enter -->
   <div id="enter-screen">
     <h1>Click to enter</h1>
@@ -268,6 +285,7 @@
   <script>
     const enterScreen = document.getElementById('enter-screen');
     const bgMusic = document.getElementById('bg-music');
+    const flashLayer = document.getElementById('lightning-flash');
 
     function startExperience() {
       enterScreen.style.opacity = '0';
@@ -280,6 +298,9 @@
         bgMusic.volume = 0.8;
         bgMusic.play().catch(e => console.log("Lỗi phát nhạc: ", e));
       }
+
+      // Khởi chạy sấm chớp sau khi ấn vào màn hình
+      scheduleLightning();
     }
 
     enterScreen.addEventListener('click', startExperience);
@@ -292,9 +313,9 @@
       setTimeout(() => { toast.style.opacity = '0'; }, 2000);
     }
 
-    /* Script tạo hạt mưa rơi */
+    /* Tạo hạt mưa */
     function createRain() {
-      const dropCount = 40; // Số lượng hạt mưa
+      const dropCount = 40;
       for (let i = 0; i < dropCount; i++) {
         const drop = document.createElement('div');
         drop.classList.add('drop');
@@ -303,6 +324,32 @@
         drop.style.animationDelay = (Math.random() * 2) + 's';
         document.body.appendChild(drop);
       }
+    }
+
+    /* Hiệu ứng Sấm Chớp ngẫu nhiên */
+    function triggerLightning() {
+      // Nhấp nháy lần 1
+      flashLayer.style.opacity = '1';
+      setTimeout(() => {
+        flashLayer.style.opacity = '0';
+        
+        // Nhấp nháy nhẹ lần 2 sau 80ms (Tạo độ chớp thực tế)
+        setTimeout(() => {
+          flashLayer.style.opacity = '0.6';
+          setTimeout(() => {
+            flashLayer.style.opacity = '0';
+          }, 50);
+        }, 80);
+
+      }, 60);
+
+      // Lập lịch cho đợt chớp tiếp theo (khoảng 4 đến 10 giây)
+      scheduleLightning();
+    }
+
+    function scheduleLightning() {
+      const randomDelay = Math.random() * 6000 + 4000;
+      setTimeout(triggerLightning, randomDelay);
     }
 
     createRain();
