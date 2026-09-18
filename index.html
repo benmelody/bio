@@ -125,8 +125,8 @@
     
     .avatar-wrapper { 
       position: relative; 
-      width: 90px; 
-      height: 90px; 
+      width: 86px; 
+      height: 86px; 
       flex-shrink: 0;
       display: flex;
       justify-content: center;
@@ -141,19 +141,6 @@
       border: 2px solid #5eead4;
       box-shadow: 0 0 15px rgba(94, 234, 212, 0.4);
       z-index: 2;
-    }
-
-    .avatar-decoration-img {
-      position: absolute;
-      top: -18px;
-      left: -18px;
-      width: 126px;
-      height: 126px;
-      object-fit: contain;
-      z-index: 5;
-      pointer-events: none;
-      display: none;
-      filter: drop-shadow(0 0 8px rgba(200, 180, 255, 0.6));
     }
 
     .status-dot {
@@ -262,7 +249,6 @@
     <div class="profile-card">
       <div class="profile-section">
         <div class="avatar-wrapper">
-          <img class="avatar-decoration-img" id="discordDecoration" src="" alt="Decoration">
           <img class="avatar" id="discordAvatar" src="https://files.catbox.moe/bl3khq.jpeg" alt="Avatar">
           <div class="status-dot" id="statusDot"></div>
         </div>
@@ -306,7 +292,7 @@
       <img class="song-cover" id="songCover" src="https://files.catbox.moe/r770n8.jpeg" alt="Song Cover">
       <div class="player-controls">
         <div class="song-title" id="songTitle">ben con mèo</div>
-        <div class="song-artist" id="songArtist">Spotify Offline</div>
+        <div class="song-artist" id="songArtist">Background Music</div>
         <div class="progress-container">
           <span class="time" id="currentTime">0:00</span>
           <div class="progress-bar" id="progressBar" onclick="seekMusic(event)">
@@ -368,28 +354,14 @@
         if (result.success && result.data) {
           const data = result.data;
           
-          // Cập nhật Avatar
           if (data.discord_user && data.discord_user.avatar) {
-            const avatarHash = data.discord_user.avatar;
-            document.getElementById('discordAvatar').src = `https://cdn.discordapp.com/avatars/${DISCORD_USER_ID}/${avatarHash}.png?size=256`;
+            document.getElementById('discordAvatar').src = `https://cdn.discordapp.com/avatars/${DISCORD_USER_ID}/${data.discord_user.avatar}.png?size=256`;
           }
 
-          // Cập nhật Khung trang trí (Decoration)
-          const decorationEl = document.getElementById('discordDecoration');
-          if (data.discord_user && data.discord_user.avatar_decoration_data) {
-            const decoAsset = data.discord_user.avatar_decoration_data.asset;
-            decorationEl.src = `https://cdn.discordapp.com/avatar-decoration-presets/${decoAsset}.png?size=240&passthrough=true`;
-            decorationEl.style.display = 'block';
-          } else {
-            decorationEl.style.display = 'none';
-          }
-
-          // Cập nhật chấm Online
           const statusDot = document.getElementById('statusDot');
           const colors = { online: '#23a55a', idle: '#f0b232', dnd: '#f23f43', offline: '#80848e' };
           if (statusDot) statusDot.style.backgroundColor = colors[data.discord_status] || '#80848e';
 
-          // CẬP NHẬT SPOTIFY REALTIME
           if (data.spotify && data.spotify.track_id) {
             isListeningSpotify = true;
             songTitleEl.innerText = data.spotify.song;
@@ -401,12 +373,11 @@
             if (isListeningSpotify) {
               isListeningSpotify = false;
               songTitleEl.innerText = "ben con mèo";
-              songArtistEl.innerText = "";
+              songArtistEl.innerText = "Background Music";
               songCoverEl.src = "https://files.catbox.moe/r770n8.jpeg";
             }
           }
 
-          // Trạng thái Discord
           const statusTitle = document.getElementById('statusTitle');
           const statusDesc = document.getElementById('statusDesc');
           if (data.activities && data.activities.length > 0) {
@@ -428,7 +399,7 @@
     }
 
     fetchDiscordData();
-    setInterval(fetchDiscordData, 5000); // Quét lại thông tin mỗi 5 giây
+    setInterval(fetchDiscordData, 5000);
 
     function createRain() {
       const rainContainer = document.getElementById('rain');
