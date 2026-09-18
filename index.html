@@ -30,6 +30,7 @@
       padding: 20px;
       overflow: hidden;
       position: relative;
+      perspective: 1000px; /* Tạo không gian 3D */
     }
 
     @keyframes gradientBG {
@@ -38,6 +39,7 @@
       100% { background-position: 0% 50%; }
     }
 
+    /* Màn hình chờ */
     #enter-screen {
       position: fixed;
       top: 0;
@@ -87,6 +89,7 @@
       100% { transform: translateY(105vh) rotate(360deg); opacity: 0.1; }
     }
 
+    /* Bio Card Glassmorphism + 3D Tilt Effect */
     .bio-card {
       width: 100%;
       max-width: 360px;
@@ -101,9 +104,36 @@
       color: #ffffff;
       position: relative;
       z-index: 10;
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out;
+      overflow: hidden;
     }
 
-    /* Khung Viền Neon Cầu Vồng đĩa Xoay nhẹ chuẩn Discord Premium */
+    /* Hiệu ứng 3. Vệt sáng quét ngang mặt kính (Shine Effect) */
+    .bio-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        60deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.15) 50%,
+        transparent 70%
+      );
+      transform: rotate(30deg);
+      animation: shineSweep 6s infinite;
+      pointer-events: none;
+    }
+
+    @keyframes shineSweep {
+      0% { transform: translateY(-100%) rotate(30deg); }
+      20%, 100% { transform: translateY(100%) rotate(30deg); }
+    }
+
+    /* Viền Neon Avatar Cầu Vồng */
     .avatar-wrapper {
       position: relative;
       width: 105px;
@@ -132,12 +162,23 @@
       border: 2px solid rgba(255, 255, 255, 0.8);
     }
 
+    /* Hiệu ứng 1. Tên Chữ Đổi Màu Cầu Vồng (Rainbow Text Glow) */
     .username {
-      font-size: 26px;
+      font-size: 28px;
       font-weight: 800;
       letter-spacing: 0.5px;
       margin-bottom: 8px;
-      text-shadow: 0 0 10px rgba(255,255,255,0.3);
+      background: linear-gradient(90deg, #ff71ce, #01cdfe, #05ffa1, #b967ff, #fffb96, #ff71ce);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbowText 5s linear infinite;
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+    }
+
+    @keyframes rainbowText {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 100% 0%; }
     }
 
     .badges-container {
@@ -237,7 +278,8 @@
     <source src="https://files.catbox.moe/88pag4.mov" type="audio/mpeg">
   </audio>
 
-  <div class="bio-card">
+  <!-- Khung Bio tích hợp 3D Tilt -->
+  <div class="bio-card" id="card">
     <div class="avatar-wrapper">
       <img class="avatar" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
     </div>
@@ -300,6 +342,32 @@
     }
 
     setInterval(createSnowflake, 150);
+
+    /* Script xử lý Hiệu ứng 2. Nghiêng 3D theo tay chạm màn hình */
+    const card = document.getElementById('card');
+
+    function handleMove(e) {
+      const x = e.touches ? e.touches[0].clientX : e.clientX;
+      const y = e.touches ? e.touches[0].clientY : e.clientY;
+      
+      const rect = card.getBoundingClientRect();
+      const cardX = rect.left + rect.width / 2;
+      const cardY = rect.top + rect.height / 2;
+      
+      const rotateX = (y - cardY) / 18;
+      const rotateY = (cardX - x) / 18;
+      
+      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    }
+
+    function handleReset() {
+      card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+    }
+
+    window.addEventListener('mousemove', handleMove);
+    window.addEventListener('mouseleave', handleReset);
+    window.addEventListener('touchmove', handleMove);
+    window.addEventListener('touchend', handleReset);
   </script>
 
 </body>
