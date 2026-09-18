@@ -100,7 +100,10 @@
       font-size: 16px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
       cursor: pointer;
+      transition: all 0.2s ease;
     }
+
+    .top-btn:active { transform: scale(0.9); }
 
     .top-btn.liked {
       color: #ff4757;
@@ -189,7 +192,10 @@
       font-size: 20px;
       text-decoration: none;
       filter: drop-shadow(0 0 6px rgba(153, 246, 228, 0.4));
+      transition: transform 0.2s ease;
     }
+
+    .social-icons a:active { transform: scale(0.85); }
 
     .stats-bar {
       display: flex;
@@ -311,7 +317,7 @@
 </head>
 <body>
 
-  <!-- Overlay -->
+  <!-- Màn hình chờ Click to Enter -->
   <div id="enter-overlay" onclick="handleEnter()">
     <h2>Click to Enter</h2>
   </div>
@@ -386,7 +392,40 @@
     const progressFill = document.getElementById('progressFill');
     const progressBar = document.getElementById('progressBar');
 
-    // Typewriter Effect
+    // CẤU HÌNH TIM LƯU VÀO TRÌNH DUYỆT (LOCALSTORAGE)
+    const BASE_LIKES = 12;
+    let savedLikes = parseInt(localStorage.getItem('whynotben_likes_count')) || BASE_LIKES;
+    let isLiked = localStorage.getItem('whynotben_is_liked') === 'true';
+
+    likeCount.innerText = savedLikes;
+    if (isLiked) {
+      likeBtn.classList.add('liked');
+      statHeartIcon.className = 'fa-solid fa-heart active-heart';
+    }
+
+    function toggleLike() {
+      let currentLikes = parseInt(likeCount.innerText) || BASE_LIKES;
+
+      if (!isLiked) {
+        isLiked = true;
+        currentLikes += 1;
+        likeBtn.classList.add('liked');
+        statHeartIcon.className = 'fa-solid fa-heart active-heart';
+        showToast("Đã thả tim!");
+      } else {
+        isLiked = false;
+        currentLikes -= 1;
+        likeBtn.classList.remove('liked');
+        statHeartIcon.className = 'fa-regular fa-heart';
+        showToast("Đã bỏ thả tim!");
+      }
+
+      likeCount.innerText = currentLikes;
+      localStorage.setItem('whynotben_likes_count', currentLikes);
+      localStorage.setItem('whynotben_is_liked', isLiked);
+    }
+
+    // HIỆU ỨNG GÕ CHỮ LẶP VÔ TẬN
     const textToType = "whynotben";
     let charIndex = 0;
     let isDeleting = false;
@@ -456,19 +495,6 @@
       } else {
         audio.pause();
         playIcon.className = 'fa-solid fa-play';
-      }
-    }
-
-    function toggleLike() {
-      let currentLikes = parseInt(likeCount.innerText) || 12;
-      likeBtn.classList.toggle('liked');
-      if (likeBtn.classList.contains('liked')) {
-        statHeartIcon.className = 'fa-solid fa-heart active-heart';
-        likeCount.innerText = currentLikes + 1;
-        showToast("Đã thả tim!");
-      } else {
-        statHeartIcon.className = 'fa-regular fa-heart';
-        likeCount.innerText = currentLikes - 1;
       }
     }
 
