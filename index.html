@@ -18,14 +18,14 @@
       justify-content: center;
       align-items: center;
       position: relative;
-      background: url('https://files.catbox.moe/5ixv1d.jpeg') no-repeat center center fixed;
+      background: url('https://files.catbox.moe/p8arom.jpeg') no-repeat center center fixed;
       background-size: cover;
     }
 
     .bg-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.45);
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
       z-index: 1;
@@ -317,7 +317,6 @@
     const progressFill = document.getElementById('progressFill');
     const progressBar = document.getElementById('progressBar');
 
-    // 1. TỰ ĐỘNG TĂNG VÀ HIỂN THỊ LƯỢT VIEW (REALTIME)
     const VIEW_KEY = "whynotben_bio_views_v1";
     fetch(`https://countapi.mileshilliard.com/api/v1/hit/${VIEW_KEY}`)
       .then(res => res.json())
@@ -330,7 +329,6 @@
         document.getElementById('viewCount').innerText = "1";
       });
 
-    // 2. TÍCH HỢP LANYARD DISCORD API
     const DISCORD_USER_ID = "1538207077728526456";
 
     async function fetchDiscordStatus() {
@@ -377,7 +375,6 @@
     fetchDiscordStatus();
     setInterval(fetchDiscordStatus, 10000);
 
-    // Mưa & Sấm chớp
     function createRain() {
       const rainContainer = document.getElementById('rain');
       for (let i = 0; i < 40; i++) {
