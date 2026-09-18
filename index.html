@@ -40,7 +40,7 @@
       pointer-events: none;
     }
     
-    /* Màn hình chờ */
+    /* Màn hình chờ chuẩn */
     #enter-overlay {
       position: fixed;
       top: 0;
@@ -54,7 +54,7 @@
       z-index: 999999;
       cursor: pointer;
       opacity: 1;
-      transition: opacity 0.4s ease;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
     }
 
     #enter-overlay h2 {
@@ -65,14 +65,3 @@
       text-transform: uppercase;
       text-shadow: 0 0 15px rgba(94, 234, 212, 0.6);
       animation: pulse 1.5s infinite ease-in-out;
-      pointer-events: none;
-    }
-
-    @keyframes pulse { 0%, 100% { opacity: 0.6; transform: scale(0.98); } 50% { opacity: 1; transform: scale(1.02); } }
-    
-    .top-buttons { position: fixed; top: 25px; left: 20px; display: flex; gap: 12px; z-index: 10; }
-    .top-btn {
-      width: 42px; height: 42px; border-radius: 14px; background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.2);
-      display: flex; justify-content: center; align-items: center; color: #5eead4; font-size: 16px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); cursor: pointer; transition: all 0.2
