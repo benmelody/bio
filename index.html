@@ -123,7 +123,6 @@
 
     .profile-section { display: flex; align-items: center; gap: 18px; }
     
-    /* KHUNG BAO QUANH AVATAR ĐƯỢC ĐỒNG BỘ TỰ ĐỘNG TỪ API */
     .avatar-wrapper { 
       position: relative; 
       width: 90px; 
@@ -135,10 +134,12 @@
     }
 
     .avatar { 
-      width: 76px; 
-      height: 76px; 
+      width: 100%; 
+      height: 100%; 
       border-radius: 50%; 
       object-fit: cover; 
+      border: 2px solid #5eead4;
+      box-shadow: 0 0 15px rgba(94, 234, 212, 0.4);
       z-index: 2;
     }
 
@@ -151,7 +152,7 @@
       object-fit: contain;
       z-index: 5;
       pointer-events: none;
-      display: none; /* Mặc định ẩn nếu không đeo khung, tự bật khi có khung API */
+      display: none;
       filter: drop-shadow(0 0 8px rgba(200, 180, 255, 0.6));
     }
 
@@ -225,8 +226,9 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
     .song-cover { width: 55px; height: 55px; border-radius: 14px; object-fit: cover; border: 1px solid rgba(255, 255, 255, 0.2); }
-    .player-controls { flex: 1; display: flex; flex-direction: column; gap: 6px; }
-    .song-title { font-size: 15px; font-weight: 700; color: #5eead4; }
+    .player-controls { flex: 1; display: flex; flex-direction: column; gap: 6px; overflow: hidden; }
+    .song-title { font-size: 14px; font-weight: 700; color: #5eead4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .song-artist { font-size: 11px; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .progress-container { display: flex; align-items: center; gap: 8px; }
     .time { font-size: 11px; color: #94a3b8; min-width: 26px; }
     .progress-bar { flex: 1; height: 5px; background: rgba(255, 255, 255, 0.2); border-radius: 4px; position: relative; cursor: pointer; }
@@ -260,9 +262,7 @@
     <div class="profile-card">
       <div class="profile-section">
         <div class="avatar-wrapper">
-          <!-- KHUNG TRANG TRÍ TỰ ĐỘNG ĐỒNG BỘ TỪ API DISCORD -->
           <img class="avatar-decoration-img" id="discordDecoration" src="" alt="Decoration">
-          <!-- AVATAR TỰ ĐỘNG CẬP NHẬT TỪ DISCORD API -->
           <img class="avatar" id="discordAvatar" src="https://files.catbox.moe/bl3khq.jpeg" alt="Avatar">
           <div class="status-dot" id="statusDot"></div>
         </div>
@@ -303,9 +303,10 @@
     </div>
 
     <div class="music-player">
-      <img class="song-cover" src="https://files.catbox.moe/r770n8.jpeg" alt="Song Cover">
+      <img class="song-cover" id="songCover" src="https://files.catbox.moe/r770n8.jpeg" alt="Song Cover">
       <div class="player-controls">
-        <div class="song-title">ben con mèo</div>
+        <div class="song-title" id="songTitle">ben con mèo</div>
+        <div class="song-artist" id="songArtist">Spotify Offline</div>
         <div class="progress-container">
           <span class="time" id="currentTime">0:00</span>
           <div class="progress-bar" id="progressBar" onclick="seekMusic(event)">
@@ -339,6 +340,12 @@
     const progressFill = document.getElementById('progressFill');
     const progressBar = document.getElementById('progressBar');
 
+    const songTitleEl = document.getElementById('songTitle');
+    const songArtistEl = document.getElementById('songArtist');
+    const songCoverEl = document.getElementById('songCover');
+
+    let isListeningSpotify = false;
+
     const VIEW_KEY = "whynotben_bio_views_v1";
     fetch(`https://countapi.mileshilliard.com/api/v1/hit/${VIEW_KEY}`)
       .then(res => res.json())
@@ -361,14 +368,13 @@
         if (result.success && result.data) {
           const data = result.data;
           
-          // 1. Tự động cập nhật Avatar
+          // Cập nhật Avatar
           if (data.discord_user && data.discord_user.avatar) {
             const avatarHash = data.discord_user.avatar;
-            const discordAvatarUrl = `https://cdn.discordapp.com/avatars/${DISCORD_USER_ID}/${avatarHash}.png?size=256`;
-            document.getElementById('discordAvatar').src = discordAvatarUrl;
+            document.getElementById('discordAvatar').src = `https://cdn.discordapp.com/avatars/${DISCORD_USER_ID}/${avatarHash}.png?size=256`;
           }
 
-          // 2. Tự động cập nhật Khung trang trí Avatar (Avatar Decoration) từ API Discord
+          // Cập nhật Khung trang trí (Decoration)
           const decorationEl = document.getElementById('discordDecoration');
           if (data.discord_user && data.discord_user.avatar_decoration_data) {
             const decoAsset = data.discord_user.avatar_decoration_data.asset;
@@ -378,25 +384,33 @@
             decorationEl.style.display = 'none';
           }
 
-          // 3. Cập nhật chấm trạng thái online/offline
+          // Cập nhật chấm Online
           const statusDot = document.getElementById('statusDot');
-          const colors = {
-            online: '#23a55a',
-            idle: '#f0b232',
-            dnd: '#f23f43',
-            offline: '#80848e'
-          };
-          if (statusDot) {
-            statusDot.style.backgroundColor = colors[data.discord_status] || '#80848e';
+          const colors = { online: '#23a55a', idle: '#f0b232', dnd: '#f23f43', offline: '#80848e' };
+          if (statusDot) statusDot.style.backgroundColor = colors[data.discord_status] || '#80848e';
+
+          // CẬP NHẬT SPOTIFY REALTIME
+          if (data.spotify && data.spotify.track_id) {
+            isListeningSpotify = true;
+            songTitleEl.innerText = data.spotify.song;
+            songArtistEl.innerText = data.spotify.artist;
+            if (data.spotify.album_art_url) {
+              songCoverEl.src = data.spotify.album_art_url;
+            }
+          } else {
+            if (isListeningSpotify) {
+              isListeningSpotify = false;
+              songTitleEl.innerText = "ben con mèo";
+              songArtistEl.innerText = "";
+              songCoverEl.src = "https://files.catbox.moe/r770n8.jpeg";
+            }
           }
 
-          // 4. Cập nhật hoạt động
+          // Trạng thái Discord
           const statusTitle = document.getElementById('statusTitle');
           const statusDesc = document.getElementById('statusDesc');
-
           if (data.activities && data.activities.length > 0) {
             const activeAct = data.activities.find(act => act.type !== 4) || data.activities[0];
-            
             if (statusTitle && statusDesc) {
               statusTitle.textContent = activeAct.name;
               statusDesc.textContent = activeAct.details || activeAct.state || "Đang hoạt động";
@@ -409,12 +423,12 @@
           }
         }
       } catch (e) {
-        console.log("Không thể tải thông tin Discord");
+        console.log("Lỗi tải API Discord");
       }
     }
 
     fetchDiscordData();
-    setInterval(fetchDiscordData, 10000);
+    setInterval(fetchDiscordData, 5000); // Quét lại thông tin mỗi 5 giây
 
     function createRain() {
       const rainContainer = document.getElementById('rain');
@@ -424,7 +438,6 @@
         drop.style.left = `${Math.random() * 100}vw`;
         drop.style.animationDuration = `${Math.random() * 0.8 + 0.6}s`;
         drop.style.animationDelay = `${Math.random() * 2}s`;
-        drop.style.opacity = Math.random() * 0.4 + 0.2;
         rainContainer.appendChild(drop);
       }
     }
@@ -460,7 +473,6 @@
     function typeLoop() {
       const typewriterEl = document.getElementById("typewriter");
       if (!typewriterEl) return;
-
       typewriterEl.textContent = textToType.substring(0, charIndex);
       let speed = isDeleting ? 80 : 130;
 
@@ -486,7 +498,7 @@
     }
 
     audio.addEventListener('timeupdate', () => {
-      if (audio.duration) {
+      if (audio.duration && !isListeningSpotify) {
         progressFill.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
         currentTimeEl.innerText = formatTime(audio.currentTime);
         durationTimeEl.innerText = formatTime(audio.duration);
@@ -494,19 +506,23 @@
     });
 
     function seekMusic(e) {
-      const rect = progressBar.getBoundingClientRect();
-      audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+      if (!isListeningSpotify) {
+        const rect = progressBar.getBoundingClientRect();
+        audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+      }
     }
 
-    function restartMusic() { audio.currentTime = 0; }
+    function restartMusic() { if (!isListeningSpotify) audio.currentTime = 0; }
 
     function togglePlay() {
-      if (audio.paused) {
-        audio.play();
-        playIcon.className = 'fa-solid fa-pause';
-      } else {
-        audio.pause();
-        playIcon.className = 'fa-solid fa-play';
+      if (!isListeningSpotify) {
+        if (audio.paused) {
+          audio.play();
+          playIcon.className = 'fa-solid fa-pause';
+        } else {
+          audio.pause();
+          playIcon.className = 'fa-solid fa-play';
+        }
       }
     }
 
