@@ -107,20 +107,35 @@
       z-index: 10;
     }
 
-    /* Avatar hình tròn tĩnh đẹp mắt */
+    /* Khung Avatar Discord Decoration */
     .avatar-wrapper {
       position: relative;
       display: inline-block;
+      width: 130px;
+      height: 130px;
       margin-bottom: 12px;
     }
 
     .avatar {
-      width: 110px;
-      height: 110px;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid rgba(255, 255, 255, 0.5);
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      z-index: 1;
+    }
+
+    /* Khung hiệu ứng Discord bao quanh */
+    .avatar-decoration {
+      width: 130px;
+      height: 130px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 2;
+      pointer-events: none;
     }
 
     .username {
@@ -153,61 +168,7 @@
       font-size: 15px;
       font-weight: 600;
       opacity: 0.9;
-      margin-bottom: 20px;
-    }
-
-    /* Music Player Widget */
-    .music-widget {
-      background: rgba(0, 0, 0, 0.25);
-      border-radius: 18px;
-      padding: 10px 15px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .disc-icon {
-      font-size: 18px;
-      color: #00f2fe;
-    }
-
-    .song-info {
-      text-align: left;
-      flex: 1;
-      overflow: hidden;
-    }
-
-    .song-title {
-      font-size: 12px;
-      font-weight: 700;
-      white-space: nowrap;
-      text-transform: uppercase;
-    }
-
-    .sound-bars {
-      display: flex;
-      gap: 3px;
-      align-items: flex-end;
-      height: 15px;
-    }
-
-    .bar {
-      width: 3px;
-      height: 100%;
-      background: #00f2fe;
-      border-radius: 3px;
-      animation: wave 1s ease-in-out infinite alternate;
-    }
-
-    .bar:nth-child(2) { animation-delay: 0.2s; }
-    .bar:nth-child(3) { animation-delay: 0.4s; }
-    .bar:nth-child(4) { animation-delay: 0.6s; }
-
-    @keyframes wave {
-      0% { height: 20%; }
-      100% { height: 100%; }
+      margin-bottom: 25px;
     }
 
     .divider {
@@ -287,8 +248,11 @@
 
   <!-- Khung Bio -->
   <div class="bio-card">
+    <!-- Khung Avatar + Khung Discord Decoration -->
     <div class="avatar-wrapper">
       <img class="avatar" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
+      <!-- Link khung trang trí Discord (Cyber / Anime) -->
+      <img class="avatar-decoration" src="https://cdn.discordapp.com/avatar-decoration-presets/v2_a_c2cb0f9b6b71f30740a16ef54c86518a.png" alt="Decoration">
     </div>
     
     <h1 class="username">whynotben</h1>
@@ -302,20 +266,6 @@
     </div>
 
     <div class="subtitle">Owner @benmelody</div>
-
-    <!-- Music Player Mini Widget -->
-    <div class="music-widget">
-      <i class="fa-solid fa-music disc-icon"></i>
-      <div class="song-info">
-        <div class="song-title">Playing Track...</div>
-      </div>
-      <div class="sound-bars">
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
-      </div>
-    </div>
 
     <div class="divider">Socials</div>
 
