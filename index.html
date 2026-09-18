@@ -114,9 +114,9 @@
     </div>
 
     <div class="stats-bar">
-      <div class="stat-item"><i class="fa-regular fa-heart" id="statHeartIcon"></i> <span id="likeCount">12</span></div>
+      <div class="stat-item"><i class="fa-regular fa-heart" id="statHeartIcon"></i> <span id="likeCount">...</span></div>
       <span>|</span>
-      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">258</span></div>
+      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">...</span></div>
       <span>|</span>
       <div class="stat-item"><i class="fa-solid fa-location-dot"></i> Vietnam</div>
     </div>
@@ -162,73 +162,58 @@
     const progressFill = document.getElementById('progressFill');
     const progressBar = document.getElementById('progressBar');
 
-    // SERVER DATABASE LƯU CHUNG (Dùng Server API Ninjas / CountAPI Endpoint mới)
-    const NAMESPACE = "whynotben_melody_v1";
+    // TÊN ĐỊNH DANH DUY NHẤT CHO TRANG CỦA BẠN (ONLINE SERVER)
+    const SITE_KEY = "whynotben_melody_v100";
 
-    // 1. Đồng bộ lượt xem & tim từ Server
+    // 1. Tự động lấy lượt xem & tim từ Server
     async function loadStats() {
-      // Đếm lượt xem
-      try {
-        let res = await fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/views`);
-        let data = await res.json();
-        if (data.value) viewCount.innerText = data.value;
-      } catch (e) {
-        // Nếu API ngoài bị chặn, lấy fallback hợp lý
-        let fallbackViews = parseInt(localStorage.getItem('fallback_views') || "258") + 1;
-        localStorage.setItem('fallback_views', fallbackViews);
-        viewCount.innerText = fallbackViews;
-      }
+      // Tăng lượt xem online
+      fetch(`https://api.counterapi.dev/v1/${SITE_KEY}/views/up`)
+        .then(res => res.json())
+        .then(data => { if (data.count) viewCount.innerText = data.count; })
+        .catch(() => { viewCount.innerText = "258"; });
 
-      // Lấy lượt tim
-      try {
-        let res = await fetch(`https://api.countapi.xyz/get/${NAMESPACE}/likes`);
-        let data = await res.json();
-        if (data.value !== undefined) likeCount.innerText = data.value;
-      } catch (e) {
-        likeCount.innerText = localStorage.getItem('fallback_likes') || "12";
-      }
+      // Lấy số tim online
+      fetch(`https://api.counterapi.dev/v1/${SITE_KEY}/likes`)
+        .then(res => res.json())
+        .then(data => { if (data.count !== undefined) likeCount.innerText = data.count; })
+        .catch(() => { likeCount.innerText = "12"; });
 
-      // Kiểm tra trạng thái máy cá nhân
-      if (localStorage.getItem('has_liked') === 'true') {
+      // Kiểm tra xem thiết bị này đã thả tim chưa
+      if (localStorage.getItem(`${SITE_KEY}_liked`) === 'true') {
         likeBtn.classList.add('liked');
         statHeartIcon.className = 'fa-solid fa-heart active-heart';
       }
     }
 
-    // 2. Thả / Hủy thả tim
-    async function toggleLike() {
-      let hasLiked = localStorage.getItem('has_liked') === 'true';
-      let currentLikes = parseInt(likeCount.innerText) || 12;
+    // 2. Thả / Hủy thả tim online
+    function toggleLike() {
+      let isLiked = localStorage.getItem(`${SITE_KEY}_liked`) === 'true';
 
-      if (!hasLiked) {
-        // Thả tim
-        localStorage.setItem('has_liked', 'true');
+      if (!isLiked) {
+        localStorage.setItem(`${SITE_KEY}_liked`, 'true');
         likeBtn.classList.add('liked');
         statHeartIcon.className = 'fa-solid fa-heart active-heart';
-        likeCount.innerText = currentLikes + 1;
-        localStorage.setItem('fallback_likes', currentLikes + 1);
         showToast("Đã thả tim!");
 
-        try {
-          await fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/likes`);
-        } catch (e) {}
+        // Gửi lệnh tăng tim lên server chung
+        fetch(`https://api.counterapi.dev/v1/${SITE_KEY}/likes/up`)
+          .then(res => res.json())
+          .then(data => { if (data.count !== undefined) likeCount.innerText = data.count; });
       } else {
-        // Hủy tim
-        localStorage.setItem('has_liked', 'false');
+        localStorage.setItem(`${SITE_KEY}_liked`, 'false');
         likeBtn.classList.remove('liked');
         statHeartIcon.className = 'fa-regular fa-heart';
-        let newCount = Math.max(0, currentLikes - 1);
-        likeCount.innerText = newCount;
-        localStorage.setItem('fallback_likes', newCount);
         showToast("Đã hủy thả tim!");
 
-        try {
-          await fetch(`https://api.countapi.xyz/set/${NAMESPACE}/likes?value=${newCount}`);
-        } catch (e) {}
+        // Gửi lệnh giảm tim lên server chung
+        fetch(`https://api.counterapi.dev/v1/${SITE_KEY}/likes/down`)
+          .then(res => res.json())
+          .then(data => { if (data.count !== undefined) likeCount.innerText = data.count; });
       }
     }
 
-    // GÕ CHỮ VÔ TẬN
+    // Hiệu ứng chữ gõ
     const textToType = "whynotben";
     let charIndex = 0;
     let isDeleting = false;
