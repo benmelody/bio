@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>whynotben - Bio Link</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -12,6 +12,15 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <style>
+    /* LỆNH KHÓA CUỘN TRANG TRÊN ĐIỆN THOẠI */
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden !important;
+      position: fixed;
+      touch-action: none; /* Khóa hoàn toàn thao tác cuộn trên iOS/Android */
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -20,7 +29,6 @@
     }
 
     body {
-      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -28,9 +36,6 @@
       background-size: 400% 400%;
       animation: gradientBG 12s ease infinite;
       padding: 20px;
-      overflow: hidden;
-      position: relative;
-      perspective: 1000px;
     }
 
     @keyframes gradientBG {
@@ -39,7 +44,7 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* Màn hình chờ */
+    /* Màn hình chờ Click to enter */
     #enter-screen {
       position: fixed;
       top: 0;
@@ -74,7 +79,7 @@
       transform: translateY(-100vh);
     }
 
-    /* Hạt lấp lánh khi vuốt tay */
+    /* Vệt sáng vuốt ngón tay */
     .trail-particle {
       position: fixed;
       width: 8px;
@@ -108,7 +113,7 @@
       100% { transform: translateY(105vh) rotate(360deg); opacity: 0.1; }
     }
 
-    /* Bio Card Glassmorphism */
+    /* Thẻ Bio Cố Định */
     .bio-card {
       width: 100%;
       max-width: 360px;
@@ -123,12 +128,9 @@
       color: #ffffff;
       position: relative;
       z-index: 10;
-      transform-style: preserve-3d;
-      transition: transform 0.1s ease-out;
       overflow: hidden;
     }
 
-    /* Vệt sáng quét mặt kính */
     .bio-card::before {
       content: '';
       position: absolute;
@@ -152,7 +154,6 @@
       20%, 100% { transform: translateY(100%) rotate(30deg); }
     }
 
-    /* Avatar Wrapper & Online Status */
     .avatar-wrapper {
       position: relative;
       width: 105px;
@@ -194,7 +195,6 @@
       box-shadow: 0 0 8px #23a55a;
     }
 
-    /* Tên Chữ Cầu Vồng */
     .username {
       font-size: 28px;
       font-weight: 800;
@@ -305,12 +305,11 @@
     <h1>Click to enter</h1>
   </div>
 
-  <!-- Audio nhạc ẩn, tự động kích hoạt khi bấm Click to enter -->
   <audio id="bg-music" loop preload="auto">
     <source src="https://files.catbox.moe/pm0gph.mp3" type="audio/mpeg">
   </audio>
 
-  <div class="bio-card" id="card">
+  <div class="bio-card">
     <div class="avatar-wrapper">
       <img class="avatar" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
       <div class="status-dot" title="Online"></div>
@@ -375,26 +374,13 @@
     }
     setInterval(createSnowflake, 150);
 
-    /* 3D Tilt */
-    const card = document.getElementById('card');
+    /* Vệt sáng vuốt ngón tay */
     function handleMove(e) {
       const x = e.touches ? e.touches[0].clientX : e.clientX;
       const y = e.touches ? e.touches[0].clientY : e.clientY;
-      const rect = card.getBoundingClientRect();
-      const cardX = rect.left + rect.width / 2;
-      const cardY = rect.top + rect.height / 2;
-      const rotateX = (y - cardY) / 18;
-      const rotateY = (cardX - x) / 18;
-      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-
       createTrail(x, y);
     }
 
-    function handleReset() {
-      card.style.transform = `rotateX(0deg) rotateY(0deg)`;
-    }
-
-    /* Vệt sáng vuốt ngón tay */
     function createTrail(x, y) {
       const particle = document.createElement('div');
       particle.classList.add('trail-particle');
@@ -405,9 +391,12 @@
     }
 
     window.addEventListener('mousemove', handleMove);
-    window.addEventListener('mouseleave', handleReset);
     window.addEventListener('touchmove', handleMove);
-    window.addEventListener('touchend', handleReset);
+
+    /* Chặn triệt để hiệu ứng nảy/cuộn của Safari iOS */
+    document.body.addEventListener('touchmove', function(e) {
+      e.preventDefault();
+    }, { passive: false });
   </script>
 
 </body>
