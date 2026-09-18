@@ -103,35 +103,33 @@
       z-index: 10;
     }
 
-    /* Khung Avatar Fix Lỗi */
+    /* Khung Viền Neon Cầu Vồng đĩa Xoay nhẹ chuẩn Discord Premium */
     .avatar-wrapper {
       position: relative;
-      width: 120px;
-      height: 120px;
-      margin: 0 auto 12px auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      width: 105px;
+      height: 105px;
+      margin: 0 auto 16px auto;
+      border-radius: 50%;
+      padding: 3px;
+      background: linear-gradient(45deg, #ff007f, #7f00ff, #00f2fe, #4facfe, #ff007f);
+      background-size: 300% 300%;
+      animation: rainbowGlow 4s linear infinite;
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
+    }
+
+    @keyframes rainbowGlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     .avatar {
-      width: 90px;
-      height: 90px;
+      width: 100%;
+      height: 100%;
       border-radius: 50%;
       object-fit: cover;
-      position: absolute;
-      z-index: 1;
-    }
-
-    .avatar-decoration {
-      width: 120px;
-      height: 120px;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 2;
-      pointer-events: none;
-      object-fit: contain;
+      display: block;
+      border: 2px solid rgba(255, 255, 255, 0.8);
     }
 
     .username {
@@ -242,8 +240,6 @@
   <div class="bio-card">
     <div class="avatar-wrapper">
       <img class="avatar" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
-      <!-- Link khung Discord mượt 100% -->
-      <img class="avatar-decoration" src="https://raw.githubusercontent.com/merlinfuchs/discord-badges/main/assets/decorations/a_8673b64bcbe34a3ee93c83b8b15d9a93.png" alt="" />
     </div>
     
     <h1 class="username">whynotben</h1>
