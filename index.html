@@ -34,7 +34,7 @@
       position: relative;
     }
 
-    /* Video Nền Cá Voi / Bầu Trời Chuyển Động */
+    /* Video Nền */
     .bg-video {
       position: fixed;
       top: 0;
@@ -80,6 +80,19 @@
       color: #5eead4;
       font-size: 16px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .top-btn:active {
+      transform: scale(0.9);
+    }
+
+    /* Đổi màu nút Tim khi được yêu thích */
+    .top-btn.liked {
+      color: #ff4757;
+      border-color: rgba(255, 71, 87, 0.5);
+      box-shadow: 0 0 15px rgba(255, 71, 87, 0.6);
     }
 
     /* Khung Tải Nội Dung Chính */
@@ -182,6 +195,11 @@
       font-size: 14px;
     }
 
+    .stat-item i.active-heart {
+      color: #ff4757;
+      filter: drop-shadow(0 0 6px rgba(255, 71, 87, 0.8));
+    }
+
     /* Music Player */
     .music-player {
       display: flex;
@@ -273,7 +291,7 @@
       cursor: pointer;
     }
 
-    /* Popup thông báo Copy ID */
+    /* Popup thông báo */
     #toast {
       position: fixed;
       bottom: 30px;
@@ -302,8 +320,8 @@
   <div class="overlay"></div>
 
   <div class="top-buttons">
-    <div class="top-btn"><i class="fa-solid fa-volume-high"></i></div>
-    <div class="top-btn"><i class="fa-solid fa-heart"></i></div>
+    <div class="top-btn" onclick="toggleMute()"><i class="fa-solid fa-volume-high" id="volumeIcon"></i></div>
+    <div class="top-btn" id="likeBtn" onclick="toggleLike()"><i class="fa-solid fa-heart"></i></div>
   </div>
 
   <div class="container">
@@ -325,7 +343,7 @@
     </div>
 
     <div class="stats-bar">
-      <div class="stat-item"><i class="fa-regular fa-heart"></i> 0</div>
+      <div class="stat-item"><i class="fa-regular fa-heart" id="statHeartIcon"></i> <span id="likeCount">0</span></div>
       <span>|</span>
       <div class="stat-item"><i class="fa-regular fa-eye"></i> 186</div>
       <span>|</span>
@@ -335,7 +353,7 @@
     <div class="music-player">
       <img class="song-cover" src="https://files.catbox.moe/6iewk3.jpeg" alt="Song Cover">
       <div class="player-controls">
-        <div class="song-title">Playing Track...</div>
+        <div class="song-title">Banana Street</div>
         <div class="progress-container">
           <span class="time">0:01</span>
           <div class="progress-bar">
@@ -362,7 +380,42 @@
   <script>
     const audio = document.getElementById('bg-audio');
     const playIcon = document.getElementById('playIcon');
+    const volumeIcon = document.getElementById('volumeIcon');
+    const likeBtn = document.getElementById('likeBtn');
+    const likeCount = document.getElementById('likeCount');
+    const statHeartIcon = document.getElementById('statHeartIcon');
 
+    let isLiked = false;
+
+    // Bật / Tắt Âm Lượng
+    function toggleMute() {
+      if (audio.muted) {
+        audio.muted = false;
+        volumeIcon.className = 'fa-solid fa-volume-high';
+        showToast("Audio Unmuted");
+      } else {
+        audio.muted = true;
+        volumeIcon.className = 'fa-solid fa-volume-xmark';
+        showToast("Audio Muted");
+      }
+    }
+
+    // Thả tim / Bỏ thả tim
+    function toggleLike() {
+      isLiked = !isLiked;
+      if (isLiked) {
+        likeBtn.classList.add('liked');
+        statHeartIcon.className = 'fa-solid fa-heart active-heart';
+        likeCount.innerText = '1';
+        showToast("Thanks for liking!");
+      } else {
+        likeBtn.classList.remove('liked');
+        statHeartIcon.className = 'fa-regular fa-heart';
+        likeCount.innerText = '0';
+      }
+    }
+
+    // Tắt / Bật phát nhạc
     function togglePlay() {
       if (audio.paused) {
         audio.play();
@@ -375,12 +428,17 @@
 
     function copyText(text) {
       navigator.clipboard.writeText(text);
+      showToast("Copied Discord ID!");
+    }
+
+    function showToast(msg) {
       const toast = document.getElementById('toast');
+      toast.innerText = msg;
       toast.style.opacity = '1';
       setTimeout(() => { toast.style.opacity = '0'; }, 2000);
     }
 
-    // Tự phát nhạc khi chạm vào màn hình
+    // Tự động phát nhạc khi chạm tương tác
     document.body.addEventListener('click', () => {
       if (audio.paused) {
         audio.play().catch(() => {});
