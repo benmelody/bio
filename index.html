@@ -363,7 +363,6 @@
           const colors = { online: '#23a55a', idle: '#f0b232', dnd: '#f23f43', offline: '#80848e' };
           if (statusDot) statusDot.style.backgroundColor = colors[data.discord_status] || '#80848e';
 
-          // KIỂM TRA TRẠNG THÁI SPOTIFY REALTIME
           if (data.spotify && data.spotify.track_id) {
             isListeningSpotify = true;
             songTitleEl.innerText = data.spotify.song;
@@ -371,13 +370,11 @@
             if (data.spotify.album_art_url) {
               songCoverEl.src = data.spotify.album_art_url;
             }
-            // Tạm dừng nhạc nền khi đang mở Spotify
             if (!audio.paused) {
               audio.pause();
               playIcon.className = 'fa-solid fa-play';
             }
           } else {
-            // Khi tắt hẳn Spotify, tự động chuyển về nhạc nền và phát lại nếu người dùng đã bấm Enter
             if (isListeningSpotify) {
               isListeningSpotify = false;
               songTitleEl.innerText = "ben con mèo";
@@ -446,88 +443,7 @@
       enterOverlay.style.pointerEvents = 'none';
       setTimeout(() => { enterOverlay.style.display = 'none'; }, 300);
 
-      if (audio && !isListeningSpotify) {
+      if (audio) {
         audio.play().then(() => { playIcon.className = 'fa-solid fa-pause'; }).catch(() => {});
       }
     }
-
-    const textToType = "whynotben";
-    let charIndex = 0;
-    let isDeleting = false;
-
-    function typeLoop() {
-      const typewriterEl = document.getElementById("typewriter");
-      if (!typewriterEl) return;
-      typewriterEl.textContent = textToType.substring(0, charIndex);
-      let speed = isDeleting ? 80 : 130;
-
-      if (!isDeleting && charIndex < textToType.length) {
-        charIndex++;
-      } else if (!isDeleting && charIndex === textToType.length) {
-        speed = 2000;
-        isDeleting = true;
-      } else if (isDeleting && charIndex > 0) {
-        charIndex--;
-      } else if (isDeleting && charIndex === 0) {
-        isDeleting = false;
-        speed = 500;
-      }
-      setTimeout(typeLoop, speed);
-    }
-    typeLoop();
-
-    function formatTime(seconds) {
-      const min = Math.floor(seconds / 60);
-      const sec = Math.floor(seconds % 60);
-      return `${min}:${sec < 10 ? '0' : ''}${sec}`;
-    }
-
-    audio.addEventListener('timeupdate', () => {
-      if (audio.duration && !isListeningSpotify) {
-        progressFill.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
-        currentTimeEl.innerText = formatTime(audio.currentTime);
-        durationTimeEl.innerText = formatTime(audio.duration);
-      }
-    });
-
-    function seekMusic(e) {
-      if (!isListeningSpotify) {
-        const rect = progressBar.getBoundingClientRect();
-        audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
-      }
-    }
-
-    function restartMusic() { if (!isListeningSpotify) audio.currentTime = 0; }
-
-    function togglePlay() {
-      if (!isListeningSpotify) {
-        if (audio.paused) {
-          audio.play();
-          playIcon.className = 'fa-solid fa-pause';
-        } else {
-          audio.pause();
-          playIcon.className = 'fa-solid fa-play';
-        }
-      }
-    }
-
-    function toggleMute() {
-      audio.muted = !audio.muted;
-      volumeIcon.className = audio.muted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
-      showToast(audio.muted ? "Tắt âm thanh" : "Bật âm thanh");
-    }
-
-    function copyText(text) {
-      navigator.clipboard.writeText(text);
-      showToast("Copied Discord ID!");
-    }
-
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      toast.innerText = msg;
-      toast.style.opacity = '1';
-      setTimeout(() => { toast.style.opacity = '0'; }, 2000);
-    }
-  </script>
-</body>
-</html>
