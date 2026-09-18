@@ -133,7 +133,6 @@
       align-items: center;
     }
 
-    /* Avatar chuẩn đơn giản không khung */
     .avatar { 
       width: 100%; 
       height: 100%; 
@@ -249,7 +248,7 @@
     <div class="profile-card">
       <div class="profile-section">
         <div class="avatar-wrapper">
-          <!-- AVATAR TỰ ĐỘNG CẬP NHẬT TỪ DISCORD -->
+          <!-- AVATAR TỰ ĐỘNG CẬP NHẬT TỪ DISCORD API -->
           <img class="avatar" id="discordAvatar" src="https://files.catbox.moe/bl3khq.jpeg" alt="Avatar">
           <div class="status-dot" id="statusDot"></div>
         </div>
@@ -348,6 +347,7 @@
         if (result.success && result.data) {
           const data = result.data;
           
+          // Tự động nhận diện và cập nhật avatar mới nhất từ tài khoản Discord của bạn
           if (data.discord_user && data.discord_user.avatar) {
             const avatarHash = data.discord_user.avatar;
             const discordAvatarUrl = `https://cdn.discordapp.com/avatars/${DISCORD_USER_ID}/${avatarHash}.png?size=256`;
