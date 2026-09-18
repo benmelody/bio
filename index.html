@@ -123,45 +123,42 @@
 
     .profile-section { display: flex; align-items: center; gap: 18px; }
     
-    /* GOM GỌN VÀ KHÓA CHẶT KHUNG VIỀN ĐỘNG SÁT AVATAR */
+    /* KHUNG AVATAR CHUẨN HOA HỒNG TINH XẢO DISCORD */
     .avatar-wrapper { 
       position: relative; 
-      width: 82px; 
-      height: 82px; 
+      width: 90px; 
+      height: 90px; 
       flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .avatar { 
-      width: 100%; 
-      height: 100%; 
+      width: 76px; 
+      height: 76px; 
       border-radius: 50%; 
       object-fit: cover; 
-      display: block;
-      border: 2px solid #0f172a;
+      z-index: 2;
     }
 
-    .avatar-decoration {
+    /* Ảnh khung hoa hồng đè lên trên, tự động phủ kín và tràn viền bao quanh ảnh */
+    .avatar-decoration-img {
       position: absolute;
-      top: -4px;
-      left: -4px;
-      right: -4px;
-      bottom: -4px;
-      border-radius: 50%;
-      background: conic-gradient(from 0deg, #ff007f, #7f00ff, #00f2fe, #5eead4, #ff73fa, #ff007f);
-      animation: rotateDecoration 3s linear infinite;
-      z-index: -1;
-      filter: drop-shadow(0 0 5px rgba(94, 234, 212, 0.7));
-    }
-
-    @keyframes rotateDecoration {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      top: -18px;
+      left: -18px;
+      width: 126px;
+      height: 126px;
+      object-fit: contain;
+      z-index: 5;
+      pointer-events: none;
+      filter: drop-shadow(0 0 8px rgba(200, 180, 255, 0.6));
     }
 
     .status-dot {
       position: absolute;
-      bottom: 0px;
-      right: 0px;
+      bottom: 2px;
+      right: 2px;
       width: 16px;
       height: 16px;
       background-color: #80848e;
@@ -263,7 +260,8 @@
     <div class="profile-card">
       <div class="profile-section">
         <div class="avatar-wrapper">
-          <div class="avatar-decoration"></div>
+          <!-- KHUNG HOA HỒNG TINH XẢO DISCORD -->
+          <img class="avatar-decoration-img" src="https://cdn.discordapp.com/avatar-decoration-presets/a_0c0eeb351ae2cf48c6e1eee2cae49d40.png?size=240&passthrough=true" alt="Decoration">
           <img class="avatar" src="https://files.catbox.moe/bl3khq.jpeg" alt="Avatar">
           <div class="status-dot" id="statusDot"></div>
         </div>
