@@ -344,7 +344,7 @@
       </div>
     </div>
 
-    <!-- Stats Bar (Tự động tải số Tim & Lượt Xem thực tế) -->
+    <!-- Stats Bar -->
     <div class="stats-bar">
       <div class="stat-item"><i class="fa-regular fa-heart" id="statHeartIcon"></i> <span id="likeCount">...</span></div>
       <span>|</span>
@@ -390,51 +390,62 @@
     const viewCount = document.getElementById('viewCount');
     const statHeartIcon = document.getElementById('statHeartIcon');
 
-    // Tên key định danh riêng cho tài khoản của bạn trên server CountAPI
-    const SITE_KEY = "whynotben_bio_unique_key";
+    // Tên ID riêng cho trang web của bạn
+    const USER_ID = "whynotben_bio_v2";
 
-    // 1. Tải Lượt Xem (Views) thực tế từ Server
-    fetch(`https://api.countapi.xyz/hit/${SITE_KEY}/views`)
+    // 1. Tải và tăng số Lượt Xem (Views) thực tế từ API mới
+    fetch(`https://api.counterapi.dev/v1/${USER_ID}/views/up`)
       .then(res => res.json())
       .then(data => {
-        viewCount.innerText = data.value;
+        if(data && data.count !== undefined) {
+          viewCount.innerText = data.count;
+        } else {
+          viewCount.innerText = "1";
+        }
       })
-      .catch(() => {
-        viewCount.innerText = "186";
-      });
+      .catch(() => { viewCount.innerText = "186"; });
 
-    // 2. Tải Lượt Tim (Likes) thực tế từ Server
-    fetch(`https://api.countapi.xyz/get/${SITE_KEY}/likes`)
+    // 2. Tải Lượt Tim (Likes) hiện tại từ Server
+    fetch(`https://api.counterapi.dev/v1/${USER_ID}/likes`)
       .then(res => res.json())
       .then(data => {
-        likeCount.innerText = data.value || 0;
+        if(data && data.count !== undefined) {
+          likeCount.innerText = data.count;
+        } else {
+          likeCount.innerText = "0";
+        }
       })
-      .catch(() => {
-        likeCount.innerText = "0";
-      });
+      .catch(() => { likeCount.innerText = "0"; });
 
-    // Kiểm tra xem máy này đã bấm tim chưa bằng LocalStorage
-    let hasLiked = localStorage.getItem('user_has_liked') === 'true';
+    // Kiểm tra xem thiết bị này đã thả tim trước đó chưa
+    let hasLiked = localStorage.getItem('whynotben_has_liked') === 'true';
     if (hasLiked) {
       likeBtn.classList.add('liked');
       statHeartIcon.className = 'fa-solid fa-heart active-heart';
     }
 
-    // Function Thả Tim tăng vĩnh viễn trên Server
+    // Hàm Bấm Thả Tim
     function toggleLike() {
       if (!hasLiked) {
-        // Gửi lệnh cộng +1 tim lên server vĩnh viễn
-        fetch(`https://api.countapi.xyz/hit/${SITE_KEY}/likes`)
-          .then(res => res.json())
-          .then(data => {
-            likeCount.innerText = data.value;
-          });
-
+        // Tăng +1 tim trên giao diện ngay lập tức
+        let currentLikes = parseInt(likeCount.innerText) || 0;
+        likeCount.innerText = currentLikes + 1;
+        
         hasLiked = true;
-        localStorage.setItem('user_has_liked', 'true');
+        localStorage.setItem('whynotben_has_liked', 'true');
         likeBtn.classList.add('liked');
         statHeartIcon.className = 'fa-solid fa-heart active-heart';
         showToast("Cảm ơn bạn đã thả tim!");
+
+        // Gửi lệnh lưu vĩnh viễn lên Server
+        fetch(`https://api.counterapi.dev/v1/${USER_ID}/likes/up`)
+          .then(res => res.json())
+          .then(data => {
+            if(data && data.count !== undefined) {
+              likeCount.innerText = data.count;
+            }
+          })
+          .catch(e => console.log(e));
       } else {
         showToast("Bạn đã thả tim rồi!");
       }
@@ -476,7 +487,7 @@
       setTimeout(() => { toast.style.opacity = '0'; }, 2000);
     }
 
-    // Tự động phát nhạc khi chạm
+    // Tự động phát nhạc khi chạm tương tác
     document.body.addEventListener('click', () => {
       if (audio.paused) {
         audio.play().catch(() => {});
