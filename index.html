@@ -123,44 +123,58 @@
 
     .profile-section { display: flex; align-items: center; gap: 18px; }
     
-    /* HIỆU ỨNG KHUNG AVATAR DISCORD (AVATAR DECORATION) */
+    /* KHUNG AVATAR ĐỘNG CHUẨN DISCORD NITRO DECORATION */
     .avatar-wrapper { 
       position: relative; 
-      width: 96px; 
-      height: 96px; 
+      width: 102px; 
+      height: 102px; 
       flex-shrink: 0; 
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
-    /* Viền khung động phong cách Discord Nitro */
+    /* Hiệu ứng khung viền lấp lánh xoay tròn giống decoration thật */
     .avatar-wrapper::before {
       content: '';
       position: absolute;
-      inset: -4px;
+      inset: -6px;
       border-radius: 50%;
-      background: linear-gradient(45deg, #ff007f, #7f00ff, #00f2fe, #5eead4, #ff007f);
-      background-size: 400% 400%;
-      animation: discordBorderGlow 4s linear infinite;
+      background: conic-gradient(from 0deg, #ff007f, #7f00ff, #00f2fe, #5eead4, #ff73fa, #ff007f);
+      animation: rotateDecoration 6s linear infinite;
       z-index: 1;
-      filter: drop-shadow(0 0 8px rgba(94, 234, 212, 0.6));
+      filter: drop-shadow(0 0 10px rgba(94, 234, 212, 0.8));
     }
 
-    @keyframes discordBorderGlow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    /* Lớp viền mờ bên ngoài tạo độ sâu 3D */
+    .avatar-wrapper::after {
+      content: '';
+      position: absolute;
+      inset: -10px;
+      border-radius: 50%;
+      border: 2px dashed rgba(94, 234, 212, 0.4);
+      animation: spinReverse 15s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes rotateDecoration {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes spinReverse {
+      0% { transform: rotate(360deg); }
+      100% { transform: rotate(0deg); }
     }
 
     .avatar { 
       position: relative;
-      width: 88px; 
-      height: 88px; 
+      width: 86px; 
+      height: 86px; 
       border-radius: 50%; 
       object-fit: cover; 
       z-index: 2;
-      border: 2px solid #0f172a;
+      border: 3px solid #0f172a;
     }
 
     .status-dot {
