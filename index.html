@@ -12,7 +12,6 @@
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
     html, body { width: 100%; height: 100%; overflow: hidden; -webkit-user-select: none; user-select: none; background: #0f172a; }
     
-    /* Hình Nền Ảnh Catbox */
     body {
       min-height: 100vh;
       display: flex;
@@ -23,7 +22,6 @@
       background-size: cover;
     }
 
-    /* Lớp phủ tối nhẹ */
     .bg-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -34,7 +32,6 @@
       pointer-events: none;
     }
 
-    /* HIỆU ỨNG SẤM CHỚP NHỆ (LIGHTNING FLASH) */
     .lightning-flash {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -57,7 +54,6 @@
       animation: flashAnim 0.7s ease-out;
     }
 
-    /* HIỆU ỨNG MƯA NHẸ */
     .rain-container {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -80,7 +76,6 @@
       100% { transform: translateY(105vh) translateX(-20px); }
     }
 
-    /* Màn hình chờ Click to enter */
     #enter-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -116,7 +111,6 @@
     
     .container { position: relative; z-index: 10; width: 100%; max-width: 380px; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
     
-    /* Khung Profile chuẩn kính mờ nhẹ */
     .profile-card {
       padding: 20px;
       border-radius: 28px;
@@ -149,7 +143,7 @@
       right: 3px;
       width: 18px;
       height: 18px;
-      background-color: #80848e; /* Mặc định xám (offline) */
+      background-color: #80848e;
       border: 3px solid #1e293b;
       border-radius: 50%;
       transition: background-color 0.3s ease;
@@ -160,7 +154,6 @@
     .cursor { display: inline-block; width: 3px; background-color: #5eead4; margin-left: 2px; animation: blink 0.8s infinite; }
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-    /* Huy hiệu Badges */
     .badges-container {
       display: flex;
       align-items: center;
@@ -179,7 +172,6 @@
     .badge-icon:nth-child(4) { color: #5865F2; }
     .badge-icon:nth-child(5) { color: #ff73fa; }
 
-    /* Discord Rich Presence (Động theo Lanyard API) */
     .discord-status {
       display: flex;
       align-items: center;
@@ -190,29 +182,10 @@
       margin-bottom: 8px;
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .status-icon {
-      font-size: 22px;
-      color: #5eead4;
-    }
-    .status-info {
-      display: flex;
-      flex-direction: column;
-      font-size: 11px;
-      overflow: hidden;
-    }
-    .status-title {
-      font-weight: 700;
-      color: #f8fafc;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .status-desc {
-      color: #94a3b8;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    .status-icon { font-size: 22px; color: #5eead4; }
+    .status-info { display: flex; flex-direction: column; font-size: 11px; overflow: hidden; }
+    .status-title { font-weight: 700; color: #f8fafc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .status-desc { color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     .bio-text { font-size: 13px; color: #cbd5e1; margin-bottom: 8px; opacity: 0.9; }
     .social-icons { display: flex; gap: 14px; }
@@ -223,7 +196,6 @@
     .stat-item { display: flex; align-items: center; gap: 6px; color: #cbd5e1; }
     .stat-item i { color: #5eead4; font-size: 14px; }
     
-    /* Trình Phát Nhạc */
     .music-player {
       display: flex; align-items: center; gap: 14px;
       padding: 14px 18px; border-radius: 24px;
@@ -257,7 +229,6 @@
   <div class="lightning-flash" id="lightning"></div>
   <div class="rain-container" id="rain"></div>
 
-  <!-- Overlay chạm để vào -->
   <div id="enter-overlay" onclick="handleEnter()" ontouchstart="handleEnter()">
     <h2>Click to Enter</h2>
   </div>
@@ -267,7 +238,6 @@
   </div>
 
   <div class="container">
-    <!-- Thẻ Khung Profile -->
     <div class="profile-card">
       <div class="profile-section">
         <div class="avatar-wrapper">
@@ -277,7 +247,6 @@
         <div class="info-box">
           <h1 class="username"><span id="typewriter"></span><span class="cursor">&nbsp;</span></h1>
           
-          <!-- Huy hiệu Badges -->
           <div class="badges-container">
             <i class="fa-solid fa-shield-halved badge-icon" title="HypeSquad Bravery"></i>
             <i class="fa-solid fa-fire badge-icon" title="HypeSquad Brilliance"></i>
@@ -286,7 +255,6 @@
             <i class="fa-solid fa-bolt badge-icon" title="Discord Nitro"></i>
           </div>
 
-          <!-- Discord Rich Presence (Tự động cập nhật Realtime) -->
           <div class="discord-status">
             <i class="fa-brands fa-discord status-icon"></i>
             <div class="status-info">
@@ -307,12 +275,11 @@
     </div>
 
     <div class="stats-bar">
-      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">328</span> Views</div>
+      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">...</span> Views</div>
       <span>|</span>
       <div class="stat-item"><i class="fa-solid fa-location-dot"></i> Vietnam</div>
     </div>
 
-    <!-- Thẻ Trình Phát Nhạc -->
     <div class="music-player">
       <img class="song-cover" src="https://files.catbox.moe/r770n8.jpeg" alt="Song Cover">
       <div class="player-controls">
@@ -350,7 +317,20 @@
     const progressFill = document.getElementById('progressFill');
     const progressBar = document.getElementById('progressBar');
 
-    // TÍCH HỢP LANYARD DISCORD API
+    // 1. TỰ ĐỘNG TĂNG VÀ HIỂN THỊ LƯỢT VIEW (REALTIME)
+    const VIEW_KEY = "whynotben_bio_views_v1";
+    fetch(`https://countapi.mileshilliard.com/api/v1/hit/${VIEW_KEY}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.value) {
+          document.getElementById('viewCount').innerText = data.value;
+        }
+      })
+      .catch(() => {
+        document.getElementById('viewCount').innerText = "1";
+      });
+
+    // 2. TÍCH HỢP LANYARD DISCORD API
     const DISCORD_USER_ID = "1538207077728526456";
 
     async function fetchDiscordStatus() {
@@ -361,7 +341,6 @@
         if (result.success && result.data) {
           const data = result.data;
           
-          // Đổi màu chấm online
           const statusDot = document.getElementById('statusDot');
           const colors = {
             online: '#23a55a',
@@ -373,12 +352,10 @@
             statusDot.style.backgroundColor = colors[data.discord_status] || '#80848e';
           }
 
-          // Cập nhật trạng thái hoạt động (Game / VS Code / Spotify...)
           const statusTitle = document.getElementById('statusTitle');
           const statusDesc = document.getElementById('statusDesc');
 
           if (data.activities && data.activities.length > 0) {
-            // Lọc ưu tiên hoạt động không phải Custom Status
             const activeAct = data.activities.find(act => act.type !== 4) || data.activities[0];
             
             if (statusTitle && statusDesc) {
@@ -397,11 +374,10 @@
       }
     }
 
-    // Chạy ngay khi mở web và tự động làm mới mỗi 10 giây
     fetchDiscordStatus();
     setInterval(fetchDiscordStatus, 10000);
 
-    // Tạo mưa
+    // Mưa & Sấm chớp
     function createRain() {
       const rainContainer = document.getElementById('rain');
       for (let i = 0; i < 40; i++) {
@@ -415,7 +391,6 @@
       }
     }
 
-    // Sấm chớp ngẫu nhiên
     function triggerLightning() {
       const lightning = document.getElementById('lightning');
       lightning.classList.add('flash-active');
@@ -440,7 +415,6 @@
       }
     }
 
-    // Gõ chữ
     const textToType = "whynotben";
     let charIndex = 0;
     let isDeleting = false;
