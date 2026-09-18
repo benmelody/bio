@@ -32,6 +32,27 @@
       position: relative;
     }
 
+    /* HIỆU ỨNG MƯA RƠI */
+    .drop {
+      position: absolute;
+      background: linear-gradient(transparent, rgba(255, 255, 255, 0.4));
+      width: 1px;
+      height: 25px;
+      opacity: 0.7;
+      pointer-events: none;
+      z-index: 2;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-100px);
+      }
+      100% {
+        transform: translateY(100vh);
+      }
+    }
+
     /* Màn hình chờ Click to enter */
     #enter-screen {
       position: fixed;
@@ -249,13 +270,11 @@
     const bgMusic = document.getElementById('bg-music');
 
     function startExperience() {
-      // Ẩn màn hình chờ ngay lập tức khi bấm/chạm
       enterScreen.style.opacity = '0';
       setTimeout(() => {
         enterScreen.style.display = 'none';
       }, 500);
 
-      // Bật nhạc nền
       if (bgMusic) {
         bgMusic.muted = false;
         bgMusic.volume = 0.8;
@@ -263,7 +282,6 @@
       }
     }
 
-    // Bắt cả sự kiện Chạm (điện thoại) lẫn Bấm chuột
     enterScreen.addEventListener('click', startExperience);
     enterScreen.addEventListener('touchstart', startExperience);
 
@@ -273,6 +291,21 @@
       toast.style.opacity = '1';
       setTimeout(() => { toast.style.opacity = '0'; }, 2000);
     }
+
+    /* Script tạo hạt mưa rơi */
+    function createRain() {
+      const dropCount = 40; // Số lượng hạt mưa
+      for (let i = 0; i < dropCount; i++) {
+        const drop = document.createElement('div');
+        drop.classList.add('drop');
+        drop.style.left = Math.random() * 100 + 'vw';
+        drop.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's';
+        drop.style.animationDelay = (Math.random() * 2) + 's';
+        document.body.appendChild(drop);
+      }
+    }
+
+    createRain();
   </script>
 
 </body>
