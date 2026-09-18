@@ -355,7 +355,7 @@
       <div class="stat-item"><i class="fa-solid fa-location-dot"></i> Vietnam</div>
     </div>
 
-    <!-- Music Player (Đã cập nhật Ảnh + Tên bài hát) -->
+    <!-- Music Player -->
     <div class="music-player">
       <img class="song-cover" src="https://files.catbox.moe/r770n8.jpeg" alt="Song Cover">
       <div class="player-controls">
@@ -370,7 +370,7 @@
       </div>
       <div class="controls-btns">
         <i class="fa-solid fa-backward-step btn-step" onclick="restartMusic()"></i>
-        <div class="btn-play" onclick="togglePlay()"><i class="fa-solid fa-pause" id="playIcon"></i></div>
+        <div class="btn-play" onclick="togglePlay()"><i class="fa-solid fa-play" id="playIcon"></i></div>
         <i class="fa-solid fa-forward-step btn-step" onclick="restartMusic()"></i>
       </div>
     </div>
@@ -379,7 +379,8 @@
 
   <div id="toast">Copied Discord ID!</div>
 
-  <audio id="bg-audio" loop autoplay>
+  <!-- Audio -->
+  <audio id="bg-audio" loop preload="auto">
     <source src="https://files.catbox.moe/pm0gph.mp3" type="audio/mpeg">
   </audio>
 
@@ -417,7 +418,7 @@
       statHeartIcon.className = 'fa-solid fa-heart active-heart';
     }
 
-    // 2. Xử lý thời gian nhạc REAL-TIME
+    // 2. Xử lý nhạc
     function formatTime(seconds) {
       const min = Math.floor(seconds / 60);
       const sec = Math.floor(seconds % 60);
@@ -444,6 +445,40 @@
       audio.currentTime = 0;
     }
 
+    function playAudio() {
+      audio.play().then(() => {
+        playIcon.className = 'fa-solid fa-pause';
+      }).catch(e => {
+        console.log("Autoplay blocked, waiting for user click");
+      });
+    }
+
+    function togglePlay() {
+      if (audio.paused) {
+        playAudio();
+      } else {
+        audio.pause();
+        playIcon.className = 'fa-solid fa-play';
+      }
+    }
+
+    // TỰ ĐỘNG PHÁT NHẠC NGAY KHI NGƯỜI DÙNG CHẠM MÀN HÌNH LẦN ĐẦU
+    function startMusicOnFirstTouch() {
+      if (audio.paused) {
+        playAudio();
+      }
+      document.removeEventListener('click', startMusicOnFirstTouch);
+      document.removeEventListener('touchstart', startMusicOnFirstTouch);
+    }
+
+    document.addEventListener('click', startMusicOnFirstTouch);
+    document.addEventListener('touchstart', startMusicOnFirstTouch);
+
+    // Thử tự động phát nhạc ngay từ đầu (nếu trình duyệt cho phép)
+    window.addEventListener('DOMContentLoaded', () => {
+      playAudio();
+    });
+
     function toggleLike() {
       if (!userLiked) {
         userLiked = true;
@@ -468,16 +503,6 @@
       showToast(audio.muted ? "Audio Muted" : "Audio Unmuted");
     }
 
-    function togglePlay() {
-      if (audio.paused) {
-        audio.play();
-        playIcon.className = 'fa-solid fa-pause';
-      } else {
-        audio.pause();
-        playIcon.className = 'fa-solid fa-play';
-      }
-    }
-
     function copyText(text) {
       navigator.clipboard.writeText(text);
       showToast("Copied Discord ID!");
@@ -489,12 +514,6 @@
       toast.style.opacity = '1';
       setTimeout(() => { toast.style.opacity = '0'; }, 2000);
     }
-
-    document.body.addEventListener('click', () => {
-      if (audio.paused) {
-        audio.play().catch(() => {});
-      }
-    }, { once: true });
   </script>
 
 </body>
