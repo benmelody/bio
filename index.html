@@ -108,9 +108,9 @@
     </div>
 
     <div class="stats-bar">
-      <div class="stat-item"><i class="fa-regular fa-heart" id="statHeartIcon"></i> <span id="likeCount">--</span></div>
+      <div class="stat-item"><i class="fa-regular fa-heart" id="statHeartIcon"></i> <span id="likeCount">12</span></div>
       <span>|</span>
-      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">--</span></div>
+      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">258</span></div>
       <span>|</span>
       <div class="stat-item"><i class="fa-solid fa-location-dot"></i> Vietnam</div>
     </div>
@@ -156,51 +156,46 @@
     const progressFill = document.getElementById('progressFill');
     const progressBar = document.getElementById('progressBar');
 
-    // TÊN TÀI KHOẢN DUY NHẤT TRÊN SERVER ONLINE
-    const SITE_ID = "whynotben_melody_v1";
+    // TỐI ƯU HIỂN THỊ LƯỢT XEM VÀ TIM
+    const BASE_VIEWS = 258;
+    const BASE_LIKES = 12;
 
-    // 1. TẢI LƯỢT XEM & LƯỢT TIM TỪ SERVER VỀ
-    function fetchOnlineStats() {
-      // Đếm lượt xem online
-      fetch(`https://api.counterapi.dev/v1/${SITE_ID}/views/up`)
-        .then(res => res.json())
-        .then(data => { if(data.count) viewCount.innerText = data.count; })
-        .catch(() => { viewCount.innerText = "1"; });
+    // Xử lý lượt xem (Tăng dần thực tế)
+    let currentViews = parseInt(localStorage.getItem('whynotben_views')) || BASE_VIEWS;
+    currentViews += 1;
+    localStorage.setItem('whynotben_views', currentViews);
+    viewCount.innerText = currentViews;
 
-      // Lấy lượt tim online
-      fetch(`https://api.counterapi.dev/v1/${SITE_ID}/likes`)
-        .then(res => res.json())
-        .then(data => { if(data.count !== undefined) likeCount.innerText = data.count; })
-        .catch(() => { likeCount.innerText = "0"; });
-    }
+    // Xử lý lượt tim
+    let savedLikes = parseInt(localStorage.getItem('whynotben_likes')) || BASE_LIKES;
+    let isLiked = localStorage.getItem('whynotben_is_liked') === 'true';
 
-    // Đã thả tim trên máy này chưa?
-    let userHasLiked = localStorage.getItem(`${SITE_ID}_has_liked`) === 'true';
-    if (userHasLiked) {
+    likeCount.innerText = savedLikes;
+    if (isLiked) {
       likeBtn.classList.add('liked');
       statHeartIcon.className = 'fa-solid fa-heart active-heart';
     }
 
-    // 2. BẤM THẢ TIM ĐỦ SẼ TĂNG TRÊN SERVER VÀ LƯU LẠI
     function toggleLike() {
-      if (!userHasLiked) {
-        userHasLiked = true;
-        localStorage.setItem(`${SITE_ID}_has_liked`, 'true');
+      let currentLikes = parseInt(likeCount.innerText) || BASE_LIKES;
+
+      if (!isLiked) {
+        isLiked = true;
+        currentLikes += 1;
         likeBtn.classList.add('liked');
         statHeartIcon.className = 'fa-solid fa-heart active-heart';
         showToast("Đã thả tim!");
-
-        // Gửi lệnh tăng tim lên Server Online
-        fetch(`https://api.counterapi.dev/v1/${SITE_ID}/likes/up`)
-          .then(res => res.json())
-          .then(data => { if(data.count !== undefined) likeCount.innerText = data.count; })
-          .catch(() => {
-            let curr = parseInt(likeCount.innerText) || 0;
-            likeCount.innerText = curr + 1;
-          });
       } else {
-        showToast("Bạn đã thả tim trang này rồi!");
+        isLiked = false;
+        currentLikes -= 1;
+        likeBtn.classList.remove('liked');
+        statHeartIcon.className = 'fa-regular fa-heart';
+        showToast("Đã bỏ thả tim!");
       }
+
+      likeCount.innerText = currentLikes;
+      localStorage.setItem('whynotben_likes', currentLikes);
+      localStorage.setItem('whynotben_is_liked', isLiked);
     }
 
     // GÕ CHỮ VÔ TẬN
@@ -242,7 +237,6 @@
     }
 
     typeLoop();
-    fetchOnlineStats();
 
     function formatTime(seconds) {
       const min = Math.floor(seconds / 60);
