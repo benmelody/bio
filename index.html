@@ -20,7 +20,6 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      touch-action: none;
       -webkit-user-select: none;
       user-select: none;
     }
@@ -34,33 +33,34 @@
       position: relative;
     }
 
-    /* Màn hình chờ Enter */
+    /* Màn hình chờ Click to Enter FIX */
     #enter-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 10, 20, 0.9);
+      background: rgba(0, 10, 20, 0.92);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      z-index: 99999;
+      z-index: 999999;
       cursor: pointer;
-      transition: opacity 0.6s ease, visibility 0.6s ease;
+      transition: opacity 0.5s ease;
     }
 
     #enter-overlay h2 {
       color: #5eead4;
       font-family: 'Fredoka', sans-serif;
-      font-size: 24px;
+      font-size: 26px;
       letter-spacing: 2px;
       text-transform: uppercase;
       text-shadow: 0 0 15px rgba(94, 234, 212, 0.6);
       animation: pulse 1.5s infinite ease-in-out;
+      pointer-events: none;
     }
 
     @keyframes pulse {
@@ -343,21 +343,25 @@
 </head>
 <body>
 
-  <div id="enter-overlay" onclick="enterSite()">
+  <!-- Màn hình chờ Click to Enter -->
+  <div id="enter-overlay">
     <h2>Click to Enter</h2>
   </div>
 
+  <!-- Video Nền -->
   <video class="bg-video" autoplay loop muted playsinline>
     <source src="https://assets.mixkit.co/videos/preview/mixkit-underwater-lights-background-loop-30372-large.mp4" type="video/mp4">
   </video>
 
   <div class="overlay"></div>
 
+  <!-- Nút Icon Góc Trên -->
   <div class="top-buttons">
     <div class="top-btn" onclick="toggleMute()"><i class="fa-solid fa-volume-high" id="volumeIcon"></i></div>
     <div class="top-btn" id="likeBtn" onclick="toggleLike()"><i class="fa-solid fa-heart"></i></div>
   </div>
 
+  <!-- Nội Dung Bio Main -->
   <div class="container">
     <div class="profile-section">
       <div class="avatar-wrapper">
@@ -375,6 +379,7 @@
       </div>
     </div>
 
+    <!-- Stats Bar -->
     <div class="stats-bar">
       <div class="stat-item"><i class="fa-regular fa-heart" id="statHeartIcon"></i> <span id="likeCount">0</span></div>
       <span>|</span>
@@ -383,6 +388,7 @@
       <div class="stat-item"><i class="fa-solid fa-location-dot"></i> Vietnam</div>
     </div>
 
+    <!-- Music Player -->
     <div class="music-player">
       <img class="song-cover" src="https://files.catbox.moe/r770n8.jpeg" alt="Song Cover">
       <div class="player-controls">
@@ -405,6 +411,7 @@
 
   <div id="toast">Copied Discord ID!</div>
 
+  <!-- Audio Nhạc Nền -->
   <audio id="bg-audio" loop preload="auto">
     <source src="https://files.catbox.moe/pm0gph.mp3" type="audio/mpeg">
   </audio>
@@ -427,19 +434,25 @@
     const KEY_LIKE = "whynotben_bio_likes_v3";
     const KEY_VIEW = "whynotben_bio_views_v3";
 
-    // Hàm vào trang & tự động phát nhạc ngay
-    function enterSite() {
+    // Hàm sự kiện vào trang FIX CẢ TOUCH & CLICK
+    function handleEnter() {
       enterOverlay.style.opacity = '0';
       setTimeout(() => {
-        enterOverlay.style.visibility = 'hidden';
-      }, 600);
+        enterOverlay.style.display = 'none';
+      }, 500);
 
       audio.play().then(() => {
         playIcon.className = 'fa-solid fa-pause';
-      }).catch(e => console.log(e));
+      }).catch(e => console.log("Play error:", e));
+
+      enterOverlay.removeEventListener('click', handleEnter);
+      enterOverlay.removeEventListener('touchstart', handleEnter);
     }
 
-    // Tải dữ liệu đếm
+    enterOverlay.addEventListener('click', handleEnter);
+    enterOverlay.addEventListener('touchstart', handleEnter);
+
+    // Tải lượt xem/tim
     fetch(`https://countapi.mileshilliard.com/api/v1/hit/${KEY_VIEW}`)
       .then(res => res.json())
       .then(data => { if (data && data.value) viewCount.innerText = data.value; })
@@ -456,7 +469,7 @@
       statHeartIcon.className = 'fa-solid fa-heart active-heart';
     }
 
-    // Thời gian real-time
+    // Xử lý thời gian nhạc REAL-TIME
     function formatTime(seconds) {
       const min = Math.floor(seconds / 60);
       const sec = Math.floor(seconds % 60);
@@ -471,3 +484,60 @@
         durationTimeEl.innerText = formatTime(audio.duration);
       }
     });
+
+    function seekMusic(e) {
+      const rect = progressBar.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      audio.currentTime = (clickX / rect.width) * audio.duration;
+    }
+
+    function restartMusic() { audio.currentTime = 0; }
+
+    function togglePlay() {
+      if (audio.paused) {
+        audio.play();
+        playIcon.className = 'fa-solid fa-pause';
+      } else {
+        audio.pause();
+        playIcon.className = 'fa-solid fa-play';
+      }
+    }
+
+    function toggleLike() {
+      if (!userLiked) {
+        userLiked = true;
+        localStorage.setItem('has_liked_whynotben', 'true');
+        likeBtn.classList.add('liked');
+        statHeartIcon.className = 'fa-solid fa-heart active-heart';
+        likeCount.innerText = (parseInt(likeCount.innerText) || 0) + 1;
+        showToast("Cảm ơn bạn đã thả tim!");
+
+        fetch(`https://countapi.mileshilliard.com/api/v1/hit/${KEY_LIKE}`)
+          .then(res => res.json())
+          .then(data => { if (data && data.value) likeCount.innerText = data.value; });
+      } else {
+        showToast("Bạn đã thả tim trang này rồi!");
+      }
+    }
+
+    function toggleMute() {
+      audio.muted = !audio.muted;
+      volumeIcon.className = audio.muted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
+      showToast(audio.muted ? "Audio Muted" : "Audio Unmuted");
+    }
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text);
+      showToast("Copied Discord ID!");
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.style.opacity = '1';
+      setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+    }
+  </script>
+
+</body>
+</html>
