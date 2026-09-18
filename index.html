@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Dannj - Bio</title>
+  <title>whynotben - Bio</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -21,6 +21,8 @@
       height: 100%;
       overflow: hidden;
       touch-action: none;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     body {
@@ -32,7 +34,7 @@
       position: relative;
     }
 
-    /* Nền Video/GIF Cá voi dưới đại dương */
+    /* Video Nền Cá Voi / Bầu Trời Chuyển Động */
     .bg-video {
       position: fixed;
       top: 0;
@@ -41,21 +43,20 @@
       height: 100vh;
       object-fit: cover;
       z-index: 1;
-      filter: brightness(0.85);
+      filter: brightness(0.8);
     }
 
-    /* Lớp phủ tối nhẹ để nổi bật chữ */
     .overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 20, 40, 0.25);
+      background: radial-gradient(circle, rgba(0, 20, 40, 0.2) 0%, rgba(0, 10, 20, 0.6) 100%);
       z-index: 2;
     }
 
-    /* Nút góc trên (Âm thanh & Heart) */
+    /* Nút Icon Góc Trên */
     .top-buttons {
       position: fixed;
       top: 25px;
@@ -66,22 +67,22 @@
     }
 
     .top-btn {
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
       border-radius: 14px;
-      background: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(15px);
       -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       display: flex;
       justify-content: center;
       align-items: center;
-      color: #6ee7b7;
-      font-size: 18px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      color: #5eead4;
+      font-size: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     }
 
-    /* Khung chứa tổng thể các phần tử */
+    /* Khung Tải Nội Dung Chính */
     .container {
       position: relative;
       z-index: 10;
@@ -90,21 +91,20 @@
       padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 25px;
+      gap: 22px;
     }
 
-    /* Phần thông tin hồ sơ (Avatar + Info) */
+    /* Phần Hồ Sơ */
     .profile-section {
       display: flex;
       align-items: center;
       gap: 18px;
     }
 
-    /* Avatar tròn viền Neon Xanh */
-    .avatar-box {
+    .avatar-wrapper {
       position: relative;
-      width: 105px;
-      height: 105px;
+      width: 100px;
+      height: 100px;
       flex-shrink: 0;
     }
 
@@ -114,61 +114,60 @@
       border-radius: 50%;
       object-fit: cover;
       border: 2px solid #5eead4;
-      box-shadow: 0 0 20px rgba(94, 234, 212, 0.6), inset 0 0 10px rgba(94, 234, 212, 0.4);
+      box-shadow: 0 0 20px rgba(94, 234, 212, 0.5), inset 0 0 10px rgba(94, 234, 212, 0.3);
     }
 
-    /* Khung Chữ bên phải Avatar */
     .info-box {
       display: flex;
-      flex-direction: flex-start;
       flex-direction: column;
       color: #ffffff;
     }
 
     .username {
       font-family: 'Fredoka', sans-serif;
-      font-size: 32px;
+      font-size: 30px;
       font-weight: 700;
       color: #99f6e4;
-      text-shadow: 0 0 12px rgba(153, 246, 228, 0.6);
+      text-shadow: 0 0 12px rgba(153, 246, 228, 0.5);
       line-height: 1.1;
       margin-bottom: 4px;
+      word-break: break-word;
     }
 
     .bio-text {
       font-size: 13px;
       color: #cbd5e1;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       opacity: 0.9;
     }
 
-    /* Icon Mạng xã hội */
+    /* Social Icons */
     .social-icons {
       display: flex;
-      gap: 12px;
+      gap: 14px;
     }
 
     .social-icons a {
       color: #99f6e4;
       font-size: 20px;
       text-decoration: none;
-      transition: transform 0.2s ease;
-      filter: drop-shadow(0 0 6px rgba(153, 246, 228, 0.5));
+      transition: transform 0.2s ease, filter 0.2s ease;
+      filter: drop-shadow(0 0 6px rgba(153, 246, 228, 0.4));
     }
 
     .social-icons a:active {
       transform: scale(0.85);
     }
 
-    /* Thanh thông số Stats (Views, Location) */
+    /* Stats Bar (Thông số) */
     .stats-bar {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       color: #94a3b8;
       font-size: 13px;
       font-weight: 500;
-      padding-left: 5px;
+      padding-left: 4px;
     }
 
     .stat-item {
@@ -183,20 +182,26 @@
       font-size: 14px;
     }
 
-    /* Trình phát nhạc Music Player */
+    /* Music Player */
     .music-player {
       display: flex;
       align-items: center;
       gap: 14px;
-      margin-top: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 12px 16px;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
     }
 
     .song-cover {
-      width: 70px;
-      height: 70px;
-      border-radius: 18px;
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
       object-fit: cover;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
       border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
@@ -208,7 +213,7 @@
     }
 
     .song-title {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 700;
       color: #5eead4;
       letter-spacing: 0.3px;
@@ -236,7 +241,7 @@
     }
 
     .progress-fill {
-      width: 30%;
+      width: 45%;
       height: 100%;
       background: #5eead4;
       box-shadow: 0 0 8px #5eead4;
@@ -245,13 +250,12 @@
     .controls-btns {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-left: 5px;
+      gap: 10px;
     }
 
     .btn-step {
       color: #99f6e4;
-      font-size: 14px;
+      font-size: 13px;
       cursor: pointer;
     }
 
@@ -264,63 +268,74 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 14px;
+      font-size: 13px;
       box-shadow: 0 0 12px rgba(153, 246, 228, 0.8);
       cursor: pointer;
+    }
+
+    /* Popup thông báo Copy ID */
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.9);
+      color: #5eead4;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid rgba(94, 234, 212, 0.3);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 9999;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
 
-  <!-- Video nền động cá voi (Có thể thay link mp4 khác) -->
   <video class="bg-video" autoplay loop muted playsinline>
     <source src="https://assets.mixkit.co/videos/preview/mixkit-underwater-lights-background-loop-30372-large.mp4" type="video/mp4">
   </video>
 
   <div class="overlay"></div>
 
-  <!-- Nút Icon góc trên trái -->
   <div class="top-buttons">
     <div class="top-btn"><i class="fa-solid fa-volume-high"></i></div>
     <div class="top-btn"><i class="fa-solid fa-heart"></i></div>
   </div>
 
-  <!-- Nội dung chính Bio -->
   <div class="container">
     
-    <!-- Profile Row -->
     <div class="profile-section">
       <div class="avatar-wrapper">
-        <div class="avatar-box">
-          <img class="avatar" src="https://i.imgur.com/2x81e9k.jpg" alt="Avatar">
-        </div>
+        <img class="avatar" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
       </div>
       <div class="info-box">
-        <h1 class="username">Dannj</h1>
-        <p class="bio-text">info tui đây nha</p>
+        <h1 class="username">whynotben</h1>
+        <p class="bio-text">Owner @benmelody</p>
         <div class="social-icons">
-          <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-          <a href="#"><i class="fa-brands fa-tiktok"></i></a>
-          <a href="#"><i class="fa-brands fa-instagram"></i></a>
-          <a href="#"><i class="fa-brands fa-discord"></i></a>
+          <a href="javascript:void(0)" onclick="copyText('whynotben#0000')"><i class="fa-brands fa-discord"></i></a>
+          <a href="https://facebook.com" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="https://instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://telegram.org" target="_blank"><i class="fa-brands fa-telegram"></i></a>
         </div>
       </div>
     </div>
 
-    <!-- Stats Bar -->
     <div class="stats-bar">
       <div class="stat-item"><i class="fa-regular fa-heart"></i> 0</div>
       <span>|</span>
       <div class="stat-item"><i class="fa-regular fa-eye"></i> 186</div>
       <span>|</span>
-      <div class="stat-item"><i class="fa-solid fa-location-dot"></i> Trungky</div>
+      <div class="stat-item"><i class="fa-solid fa-location-dot"></i> Vietnam</div>
     </div>
 
-    <!-- Music Player -->
     <div class="music-player">
-      <img class="song-cover" src="https://i.imgur.com/2x81e9k.jpg" alt="Song Cover">
+      <img class="song-cover" src="https://files.catbox.moe/6iewk3.jpeg" alt="Song Cover">
       <div class="player-controls">
-        <div class="song-title">Banana Street</div>
+        <div class="song-title">Playing Track...</div>
         <div class="progress-container">
           <span class="time">0:01</span>
           <div class="progress-bar">
@@ -331,12 +346,14 @@
       </div>
       <div class="controls-btns">
         <i class="fa-solid fa-backward-step btn-step"></i>
-        <div class="btn-play" id="playBtn" onclick="togglePlay()"><i class="fa-solid fa-pause" id="playIcon"></i></div>
+        <div class="btn-play" onclick="togglePlay()"><i class="fa-solid fa-pause" id="playIcon"></i></div>
         <i class="fa-solid fa-forward-step btn-step"></i>
       </div>
     </div>
 
   </div>
+
+  <div id="toast">Copied Discord ID!</div>
 
   <audio id="bg-audio" loop autoplay>
     <source src="https://files.catbox.moe/pm0gph.mp3" type="audio/mpeg">
@@ -356,7 +373,14 @@
       }
     }
 
-    // Tự động bật nhạc khi chạm vào màn hình
+    function copyText(text) {
+      navigator.clipboard.writeText(text);
+      const toast = document.getElementById('toast');
+      toast.style.opacity = '1';
+      setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+    }
+
+    // Tự phát nhạc khi chạm vào màn hình
     document.body.addEventListener('click', () => {
       if (audio.paused) {
         audio.play().catch(() => {});
