@@ -76,7 +76,6 @@
       100% { transform: translateY(105vh) translateX(-20px); }
     }
 
-    /* Màn hình chờ */
     #enter-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -237,7 +236,6 @@
   <div class="lightning-flash" id="lightning"></div>
   <div class="rain-container" id="rain"></div>
 
-  <!-- Sửa sự kiện chạm để tránh xung đột -->
   <div id="enter-overlay" onclick="handleEnter()">
     <h2>Nhấp vào đii ><</h2>
   </div>
@@ -409,8 +407,9 @@
       }
     }
 
+    // Ép gọi dữ liệu ngay khi vừa tải trang để quét Spotify nhanh nhất
     fetchDiscordData();
-    setInterval(fetchDiscordData, 5000);
+    setInterval(fetchDiscordData, 3000); // Rút ngắn thời gian quét xuống mỗi 3 giây cho nhạy
 
     function createRain() {
       const rainContainer = document.getElementById('rain');
@@ -446,11 +445,14 @@
         enterOverlay.style.display = 'none'; 
       }, 400);
 
-      if (audio) {
-        audio.play().then(() => { 
-          playIcon.className = 'fa-solid fa-pause'; 
-        }).catch(() => {});
-      }
+      // Kiểm tra ngay khi bấm vào nếu không có Spotify thì phát nhạc nền luôn
+      fetchDiscordData().then(() => {
+        if (!isListeningSpotify && audio) {
+          audio.play().then(() => { 
+            playIcon.className = 'fa-solid fa-pause'; 
+          }).catch(() => {});
+        }
+      });
     }
 
     const textToType = "whynotben";
@@ -485,7 +487,7 @@
     }
 
     audio.addEventListener('timeupdate', () => {
-      if (audio.duration) {
+      if (audio.duration && !isListeningSpotify) {
         progressFill.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
         currentTimeEl.innerText = formatTime(audio.currentTime);
         durationTimeEl.innerText = formatTime(audio.duration);
@@ -493,19 +495,25 @@
     });
 
     function seekMusic(e) {
-      const rect = progressBar.getBoundingClientRect();
-      audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+      if (!isListeningSpotify) {
+        const rect = progressBar.getBoundingClientRect();
+        audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+      }
     }
 
-    function restartMusic() { audio.currentTime = 0; }
+    function restartMusic() { 
+      if (!isListeningSpotify) audio.currentTime = 0; 
+    }
 
     function togglePlay() {
-      if (audio.paused) {
-        audio.play();
-        playIcon.className = 'fa-solid fa-pause';
-      } else {
-        audio.pause();
-        playIcon.className = 'fa-solid fa-play';
+      if (!isListeningSpotify) {
+        if (audio.paused) {
+          audio.play();
+          playIcon.className = 'fa-solid fa-pause';
+        } else {
+          audio.pause();
+          playIcon.className = 'fa-solid fa-play';
+        }
       }
     }
 
