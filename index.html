@@ -3,13 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>benmelody</title>
+  <title>whynotben</title>
   
-  <!-- Font chữ & Icon -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- Khai báo màu đồng bộ thanh địa chỉ Safari/Chrome -->
   <meta name="theme-color" content="#1e5799">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -33,7 +31,6 @@
       overflow-x: hidden;
     }
 
-    /* --- MÀN HÌNH TRẮNG CHỜ CLICK (BOUNCE & SLIDE) --- */
     #enter-screen {
       position: fixed;
       top: 0;
@@ -46,7 +43,6 @@
       align-items: center;
       z-index: 99999;
       cursor: pointer;
-      /* Hiệu ứng trượt mượt mà lên trên */
       transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
     }
 
@@ -57,26 +53,18 @@
       letter-spacing: 2px;
       text-transform: uppercase;
       user-select: none;
-      /* Hiệu ứng trồi lên tụt xuống liên tục */
       animation: bounceUpDown 1.6s infinite ease-in-out;
     }
 
-    /* Animation nhún nhảy lên xuống */
     @keyframes bounceUpDown {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-15px);
-      }
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
     }
 
-    /* Class kích hoạt khi bấm: Trượt hẳn bảng trắng lên đỉnh màn hình */
     #enter-screen.slide-up {
       transform: translateY(-100vh);
     }
 
-    /* --- GIAO DIỆN BIO CARD GLASSMORPHISM --- */
     .bio-card {
       width: 100%;
       max-width: 360px;
@@ -117,6 +105,12 @@
       border-radius: 20px;
       border: 1px solid rgba(255, 255, 255, 0.2);
       margin-bottom: 18px;
+    }
+
+    .badge-img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
     }
 
     .subtitle {
@@ -172,31 +166,29 @@
 </head>
 <body>
 
-  <!-- Màn hình trắng Click To Enter nhún nhảy -->
   <div id="enter-screen" onclick="startExperience()">
     <h1>Click to enter</h1>
   </div>
 
-  <!-- Nhạc nền (Thay link catbox của bạn vào src) -->
+  <!-- DÁN LINK NHẠC CATBOX CỦA BẠN VÀO CHỖ SRC BÊN DƯỚI -->
   <audio id="bg-music" loop preload="auto">
-    <source src="https://files.catbox.moe/abc123xy.mp3" type="audio/mpeg">
+    <source src="THAY_LINK_NHAC_CATBOX_CUA_BAN_VAO_DAY.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Thẻ Bio chính -->
   <div class="bio-card">
-    <img class="avatar" src="https://i.imgur.com/2x81e9k.jpg" alt="Avatar">
+    <img class="avatar" src="https://files.catbox.moe/yk90ja.mp3" alt="Avatar">
     
-    <h1 class="username">minhquan</h1>
+    <h1 class="username">whynotben</h1>
 
     <div class="badges-container">
-      <i class="fa-solid fa-dharmachakra"></i>
-      <i class="fa-solid fa-shield-halved"></i>
-      <i class="fa-solid fa-play"></i>
-      <i class="fa-solid fa-hashtag"></i>
-      <i class="fa-solid fa-gem"></i>
+      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_bravery.svg" class="badge-img" alt="Bravery">
+      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_brilliance.svg" class="badge-img" alt="Brilliance">
+      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_balance.svg" class="badge-img" alt="Balance">
+      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/active_developer.svg" class="badge-img" alt="Active Dev">
+      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/nitro.svg" class="badge-img" alt="Nitro">
     </div>
 
-    <div class="subtitle">Owner @ senodoki</div>
+    <div class="subtitle">Owner @benmelody</div>
 
     <div class="divider">Socials</div>
 
@@ -213,10 +205,8 @@
       const enterScreen = document.getElementById('enter-screen');
       const bgMusic = document.getElementById('bg-music');
 
-      // 1. Kích hoạt hiệu ứng trượt màn hình trắng lên trên
       enterScreen.classList.add('slide-up');
 
-      // 2. Phát nhạc tự động sau khi nhấp
       if (bgMusic) {
         bgMusic.muted = false;
         bgMusic.volume = 0.8;
