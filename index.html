@@ -76,6 +76,7 @@
       100% { transform: translateY(105vh) translateX(-20px); }
     }
 
+    /* Màn hình chờ */
     #enter-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -83,8 +84,7 @@
       display: flex; justify-content: center; align-items: center;
       z-index: 999999;
       cursor: pointer;
-      opacity: 1;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
     }
 
     #enter-overlay h2 {
@@ -237,7 +237,8 @@
   <div class="lightning-flash" id="lightning"></div>
   <div class="rain-container" id="rain"></div>
 
-  <div id="enter-overlay" onclick="handleEnter()" ontouchstart="handleEnter()">
+  <!-- Sửa sự kiện chạm để tránh xung đột -->
+  <div id="enter-overlay" onclick="handleEnter()">
     <h2>Nhấp vào đii ><</h2>
   </div>
 
@@ -440,10 +441,91 @@
       hasStartedAudio = true;
 
       enterOverlay.style.opacity = '0';
-      enterOverlay.style.pointerEvents = 'none';
-      setTimeout(() => { enterOverlay.style.display = 'none'; }, 300);
+      enterOverlay.style.visibility = 'hidden';
+      setTimeout(() => { 
+        enterOverlay.style.display = 'none'; 
+      }, 400);
 
       if (audio) {
-        audio.play().then(() => { playIcon.className = 'fa-solid fa-pause'; }).catch(() => {});
+        audio.play().then(() => { 
+          playIcon.className = 'fa-solid fa-pause'; 
+        }).catch(() => {});
       }
     }
+
+    const textToType = "whynotben";
+    let charIndex = 0;
+    let isDeleting = false;
+
+    function typeLoop() {
+      const typewriterEl = document.getElementById("typewriter");
+      if (!typewriterEl) return;
+      typewriterEl.textContent = textToType.substring(0, charIndex);
+      let speed = isDeleting ? 80 : 130;
+
+      if (!isDeleting && charIndex < textToType.length) {
+        charIndex++;
+      } else if (!isDeleting && charIndex === textToType.length) {
+        speed = 2000;
+        isDeleting = true;
+      } else if (isDeleting && charIndex > 0) {
+        charIndex--;
+      } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        speed = 500;
+      }
+      setTimeout(typeLoop, speed);
+    }
+    typeLoop();
+
+    function formatTime(seconds) {
+      const min = Math.floor(seconds / 60);
+      const sec = Math.floor(seconds % 60);
+      return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+    }
+
+    audio.addEventListener('timeupdate', () => {
+      if (audio.duration) {
+        progressFill.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
+        currentTimeEl.innerText = formatTime(audio.currentTime);
+        durationTimeEl.innerText = formatTime(audio.duration);
+      }
+    });
+
+    function seekMusic(e) {
+      const rect = progressBar.getBoundingClientRect();
+      audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
+    }
+
+    function restartMusic() { audio.currentTime = 0; }
+
+    function togglePlay() {
+      if (audio.paused) {
+        audio.play();
+        playIcon.className = 'fa-solid fa-pause';
+      } else {
+        audio.pause();
+        playIcon.className = 'fa-solid fa-play';
+      }
+    }
+
+    function toggleMute() {
+      audio.muted = !audio.muted;
+      volumeIcon.className = audio.muted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
+      showToast(audio.muted ? "Tắt âm thanh" : "Bật âm thanh");
+    }
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text);
+      showToast("Copied Discord ID!");
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.style.opacity = '1';
+      setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+    }
+  </script>
+</body>
+</html>
