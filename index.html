@@ -30,7 +30,7 @@
       padding: 20px;
       overflow: hidden;
       position: relative;
-      perspective: 1000px; /* Tạo không gian 3D */
+      perspective: 1000px;
     }
 
     @keyframes gradientBG {
@@ -74,6 +74,25 @@
       transform: translateY(-100vh);
     }
 
+    /* Hạt lấp lánh khi vuốt tay (Cursor Trail) */
+    .trail-particle {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #00f2fe;
+      pointer-events: none;
+      box-shadow: 0 0 10px #00f2fe, 0 0 20px #ff007f;
+      animation: fadeOut 0.8s linear forwards;
+      z-index: 9999;
+    }
+
+    @keyframes fadeOut {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.2); }
+    }
+
+    /* Tuyết rơi */
     .snowflake {
       position: fixed;
       top: -10px;
@@ -89,7 +108,7 @@
       100% { transform: translateY(105vh) rotate(360deg); opacity: 0.1; }
     }
 
-    /* Bio Card Glassmorphism + 3D Tilt Effect */
+    /* Bio Card */
     .bio-card {
       width: 100%;
       max-width: 360px;
@@ -109,7 +128,7 @@
       overflow: hidden;
     }
 
-    /* Hiệu ứng 3. Vệt sáng quét ngang mặt kính (Shine Effect) */
+    /* Vệt sáng quét mặt kính */
     .bio-card::before {
       content: '';
       position: absolute;
@@ -133,7 +152,7 @@
       20%, 100% { transform: translateY(100%) rotate(30deg); }
     }
 
-    /* Viền Neon Avatar Cầu Vồng */
+    /* Avatar Wrapper & Online Status */
     .avatar-wrapper {
       position: relative;
       width: 105px;
@@ -162,7 +181,21 @@
       border: 2px solid rgba(255, 255, 255, 0.8);
     }
 
-    /* Hiệu ứng 1. Tên Chữ Đổi Màu Cầu Vồng (Rainbow Text Glow) */
+    /* Chấm Trạng Thái Online Discord */
+    .status-dot {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      width: 20px;
+      height: 20px;
+      background-color: #23a55a; /* Màu Online Discord */
+      border: 3px solid #1e1f22;
+      border-radius: 50%;
+      z-index: 5;
+      box-shadow: 0 0 8px #23a55a;
+    }
+
+    /* Tên Chữ Cầu Vồng */
     .username {
       font-size: 28px;
       font-weight: 800;
@@ -230,6 +263,7 @@
       gap: 14px;
     }
 
+    /* Nút bấm Elastic Nảy nhẹ */
     .social-icon {
       width: 46px;
       height: 46px;
@@ -242,13 +276,13 @@
       color: #fff;
       font-size: 20px;
       text-decoration: none;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     .social-icon:active {
-      transform: scale(0.85);
-      background: rgba(255, 255, 255, 0.35);
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+      transform: scale(0.8);
+      background: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.8);
     }
 
     #toast {
@@ -278,10 +312,10 @@
     <source src="https://files.catbox.moe/88pag4.mov" type="audio/mpeg">
   </audio>
 
-  <!-- Khung Bio tích hợp 3D Tilt -->
   <div class="bio-card" id="card">
     <div class="avatar-wrapper">
       <img class="avatar" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
+      <div class="status-dot" title="Online"></div>
     </div>
     
     <h1 class="username">whynotben</h1>
@@ -329,6 +363,7 @@
       setTimeout(() => { toast.style.opacity = '0'; }, 2000);
     }
 
+    /* Hiệu ứng Tuyết */
     function createSnowflake() {
       const snowflake = document.createElement('div');
       snowflake.classList.add('snowflake');
@@ -340,28 +375,36 @@
       document.body.appendChild(snowflake);
       setTimeout(() => { snowflake.remove(); }, 6000);
     }
-
     setInterval(createSnowflake, 150);
 
-    /* Script xử lý Hiệu ứng 2. Nghiêng 3D theo tay chạm màn hình */
+    /* Hiệu ứng 3D Tilt */
     const card = document.getElementById('card');
-
     function handleMove(e) {
       const x = e.touches ? e.touches[0].clientX : e.clientX;
       const y = e.touches ? e.touches[0].clientY : e.clientY;
-      
       const rect = card.getBoundingClientRect();
       const cardX = rect.left + rect.width / 2;
       const cardY = rect.top + rect.height / 2;
-      
       const rotateX = (y - cardY) / 18;
       const rotateY = (cardX - x) / 18;
-      
       card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+      // Tạo vệt sáng vuốt ngón tay
+      createTrail(x, y);
     }
 
     function handleReset() {
       card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+    }
+
+    /* Hiệu ứng Vệt sáng bám theo ngón tay chạm */
+    function createTrail(x, y) {
+      const particle = document.createElement('div');
+      particle.classList.add('trail-particle');
+      particle.style.left = `${x - 4}px`;
+      particle.style.top = `${y - 4}px`;
+      document.body.appendChild(particle);
+      setTimeout(() => { particle.remove(); }, 800);
     }
 
     window.addEventListener('mousemove', handleMove);
