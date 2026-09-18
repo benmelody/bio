@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <meta name="theme-color" content="#0f2027">
+  <meta name="theme-color" content="#0d0e12">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <style>
@@ -25,22 +25,15 @@
       overflow: hidden;
     }
 
+    /* NỀN ĐEN XÁM MỊN TỐI GIẢN (MINIMALIST DARK) */
     body {
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1e5799);
-      background-size: 400% 400%;
-      animation: gradientBG 12s ease infinite;
+      background: linear-gradient(135deg, #0d0e12 0%, #1a1c23 50%, #121318 100%);
       padding: 20px;
       position: relative;
-    }
-
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
     }
 
     /* Màn hình chờ nhún nhảy */
@@ -82,28 +75,28 @@
     .snowflake {
       position: fixed;
       top: -10px;
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, 0.6);
       pointer-events: none;
       z-index: 2;
       animation: fall linear infinite;
     }
 
     @keyframes fall {
-      0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+      0% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
       100% { transform: translateY(105vh) rotate(360deg); opacity: 0.1; }
     }
 
-    /* Thẻ Bio Glassmorphism chuẩn */
+    /* Thẻ Bio Glassmorphism tối giản */
     .bio-card {
       width: 100%;
       max-width: 360px;
       padding: 35px 25px;
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.06);
       backdrop-filter: blur(25px);
       -webkit-backdrop-filter: blur(25px);
       border-radius: 35px;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      box-shadow: 0 0 25px rgba(255, 255, 255, 0.1), 0 15px 35px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
       text-align: center;
       color: #ffffff;
       position: relative;
@@ -111,48 +104,12 @@
       overflow: hidden;
     }
 
-    /* Vệt sáng nhẹ quét qua kính */
-    .bio-card::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(
-        60deg,
-        transparent 30%,
-        rgba(255, 255, 255, 0.15) 50%,
-        transparent 70%
-      );
-      transform: rotate(30deg);
-      animation: shineSweep 6s infinite;
-      pointer-events: none;
-    }
-
-    @keyframes shineSweep {
-      0% { transform: translateY(-100%) rotate(30deg); }
-      20%, 100% { transform: translateY(100%) rotate(30deg); }
-    }
-
-    /* Avatar & Viền Neon Cầu Vồng */
+    /* Avatar & Viền Tối Giản */
     .avatar-wrapper {
       position: relative;
-      width: 105px;
-      height: 105px;
+      width: 100px;
+      height: 100px;
       margin: 0 auto 16px auto;
-      border-radius: 50%;
-      padding: 3px;
-      background: linear-gradient(45deg, #ff007f, #7f00ff, #00f2fe, #4facfe, #ff007f);
-      background-size: 300% 300%;
-      animation: rainbowGlow 4s linear infinite;
-      box-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
-    }
-
-    @keyframes rainbowGlow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
     }
 
     .avatar {
@@ -161,49 +118,39 @@
       border-radius: 50%;
       object-fit: cover;
       display: block;
-      border: 2px solid rgba(255, 255, 255, 0.8);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
 
     .status-dot {
       position: absolute;
-      bottom: 4px;
-      right: 4px;
-      width: 20px;
-      height: 20px;
+      bottom: 2px;
+      right: 2px;
+      width: 18px;
+      height: 18px;
       background-color: #23a55a;
-      border: 3px solid #1e1f22;
+      border: 3px solid #121318;
       border-radius: 50%;
       z-index: 5;
-      box-shadow: 0 0 8px #23a55a;
     }
 
-    /* Tên chữ Cầu Vồng */
+    /* Tên chữ trắng tinh xịn xò */
     .username {
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 800;
       letter-spacing: 0.5px;
       margin-bottom: 8px;
-      background: linear-gradient(90deg, #ff71ce, #01cdfe, #05ffa1, #b967ff, #fffb96, #ff71ce);
-      background-size: 300% 100%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: rainbowText 5s linear infinite;
-      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
-    }
-
-    @keyframes rainbowText {
-      0% { background-position: 0% 0%; }
-      100% { background-position: 100% 0%; }
+      color: #ffffff;
     }
 
     .badges-container {
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.08);
       padding: 6px 16px;
       border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       margin-bottom: 16px;
     }
 
@@ -215,9 +162,9 @@
     }
 
     .subtitle {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
-      opacity: 0.9;
+      opacity: 0.8;
       margin-bottom: 25px;
     }
 
@@ -228,7 +175,7 @@
       gap: 12px;
       font-size: 14px;
       font-weight: 700;
-      opacity: 0.8;
+      opacity: 0.7;
       margin-bottom: 18px;
     }
 
@@ -236,7 +183,7 @@
       content: "";
       height: 1px;
       width: 35px;
-      background-color: rgba(255, 255, 255, 0.5);
+      background-color: rgba(255, 255, 255, 0.3);
     }
 
     .social-links {
@@ -249,27 +196,26 @@
       width: 46px;
       height: 46px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       display: flex;
       justify-content: center;
       align-items: center;
       color: #fff;
       font-size: 20px;
       text-decoration: none;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: all 0.3s ease;
     }
 
     .social-icon:active {
-      transform: scale(0.8);
-      background: rgba(255, 255, 255, 0.4);
-      box-shadow: 0 0 20px rgba(0, 242, 254, 0.8);
+      transform: scale(0.9);
+      background: rgba(255, 255, 255, 0.2);
     }
 
     #toast {
       position: fixed;
       bottom: 30px;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.85);
       color: #fff;
       padding: 8px 18px;
       border-radius: 20px;
@@ -304,59 +250,4 @@
       <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_bravery.svg" class="badge-img" alt="Bravery">
       <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_brilliance.svg" class="badge-img" alt="Brilliance">
       <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_balance.svg" class="badge-img" alt="Balance">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/active_developer.svg" class="badge-img" alt="Active Dev">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/nitro.svg" class="badge-img" alt="Nitro">
-    </div>
-
-    <div class="subtitle">Owner @benmelody</div>
-
-    <div class="divider">Socials</div>
-
-    <div class="social-links">
-      <a href="javascript:void(0)" onclick="copyText('whynotben#0000')" class="social-icon"><i class="fa-brands fa-discord"></i></a>
-      <a href="https://facebook.com" class="social-icon" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
-      <a href="https://instagram.com" class="social-icon" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-      <a href="https://telegram.org" class="social-icon" target="_blank"><i class="fa-brands fa-telegram"></i></a>
-    </div>
-  </div>
-
-  <div id="toast">Copied Discord ID!</div>
-
-  <script>
-    const bgMusic = document.getElementById('bg-music');
-
-    function startExperience() {
-      const enterScreen = document.getElementById('enter-screen');
-      enterScreen.classList.add('slide-up');
-
-      if (bgMusic) {
-        bgMusic.muted = false;
-        bgMusic.volume = 0.8;
-        bgMusic.play().catch(e => console.log("Lỗi phát nhạc: ", e));
-      }
-    }
-
-    function copyText(text) {
-      navigator.clipboard.writeText(text);
-      const toast = document.getElementById('toast');
-      toast.style.opacity = '1';
-      setTimeout(() => { toast.style.opacity = '0'; }, 2000);
-    }
-
-    /* Hiệu ứng tuyết rơi */
-    function createSnowflake() {
-      const snowflake = document.createElement('div');
-      snowflake.classList.add('snowflake');
-      snowflake.innerHTML = '❄';
-      snowflake.style.left = Math.random() * 100 + 'vw';
-      snowflake.style.fontSize = Math.random() * 8 + 10 + 'px';
-      snowflake.style.animationDuration = Math.random() * 3 + 3 + 's';
-      snowflake.style.opacity = Math.random();
-      document.body.appendChild(snowflake);
-      setTimeout(() => { snowflake.remove(); }, 6000);
-    }
-    setInterval(createSnowflake, 150);
-  </script>
-
-</body>
-</html>
+      <img src="https://cdn
