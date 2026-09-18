@@ -123,38 +123,25 @@
 
     .profile-section { display: flex; align-items: center; gap: 18px; }
     
-    /* KHUNG AVATAR ĐỘNG CHUẨN DISCORD NITRO DECORATION */
+    /* FIX CHUẨN KHUNG AVATAR ĐỘNG DISCORD DECORATION */
     .avatar-wrapper { 
       position: relative; 
-      width: 102px; 
-      height: 102px; 
+      width: 86px; 
+      height: 86px; 
       flex-shrink: 0; 
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
-    /* Hiệu ứng khung viền lấp lánh xoay tròn giống decoration thật */
-    .avatar-wrapper::before {
-      content: '';
+    .avatar-decoration {
       position: absolute;
       inset: -6px;
       border-radius: 50%;
       background: conic-gradient(from 0deg, #ff007f, #7f00ff, #00f2fe, #5eead4, #ff73fa, #ff007f);
       animation: rotateDecoration 6s linear infinite;
       z-index: 1;
-      filter: drop-shadow(0 0 10px rgba(94, 234, 212, 0.8));
-    }
-
-    /* Lớp viền mờ bên ngoài tạo độ sâu 3D */
-    .avatar-wrapper::after {
-      content: '';
-      position: absolute;
-      inset: -10px;
-      border-radius: 50%;
-      border: 2px dashed rgba(94, 234, 212, 0.4);
-      animation: spinReverse 15s linear infinite;
-      z-index: 0;
+      filter: drop-shadow(0 0 8px rgba(94, 234, 212, 0.8));
     }
 
     @keyframes rotateDecoration {
@@ -162,15 +149,10 @@
       100% { transform: rotate(360deg); }
     }
 
-    @keyframes spinReverse {
-      0% { transform: rotate(360deg); }
-      100% { transform: rotate(0deg); }
-    }
-
     .avatar { 
       position: relative;
-      width: 86px; 
-      height: 86px; 
+      width: 100%; 
+      height: 100%; 
       border-radius: 50%; 
       object-fit: cover; 
       z-index: 2;
@@ -179,14 +161,14 @@
 
     .status-dot {
       position: absolute;
-      bottom: 2px;
-      right: 2px;
+      bottom: 0px;
+      right: 0px;
       width: 18px;
       height: 18px;
       background-color: #80848e;
       border: 3px solid #0f172a;
       border-radius: 50%;
-      z-index: 5;
+      z-index: 10;
       transition: background-color 0.3s ease;
     }
 
@@ -282,6 +264,7 @@
     <div class="profile-card">
       <div class="profile-section">
         <div class="avatar-wrapper">
+          <div class="avatar-decoration"></div>
           <img class="avatar" src="https://files.catbox.moe/bl3khq.jpeg" alt="Avatar">
           <div class="status-dot" id="statusDot"></div>
         </div>
