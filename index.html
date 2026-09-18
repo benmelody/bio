@@ -8,24 +8,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <meta name="theme-color" content="#1e5799">
+  <meta name="theme-color" content="#0f2027">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <style>
-    /* LỆNH KHÓA CUỘN TRANG TRÊN ĐIỆN THOẠI */
+    /* KHÓA CUỘN TRANG & GIỮ NỀN TỐI CHUẨN TRÊN IOS/ANDROID */
     html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden !important;
-      position: fixed;
-      touch-action: none; /* Khóa hoàn toàn thao tác cuộn trên iOS/Android */
-    }
-
-    * {
+      width: 100vw;
+      height: 100vh;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+      overscroll-behavior: none;
+      touch-action: none;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     body {
@@ -66,7 +63,6 @@
       font-weight: 800;
       letter-spacing: 2px;
       text-transform: uppercase;
-      user-select: none;
       animation: bounceUpDown 1.6s infinite ease-in-out;
     }
 
@@ -103,7 +99,6 @@
       top: -10px;
       color: rgba(255, 255, 255, 0.8);
       pointer-events: none;
-      user-select: none;
       z-index: 2;
       animation: fall linear infinite;
     }
@@ -113,7 +108,7 @@
       100% { transform: translateY(105vh) rotate(360deg); opacity: 0.1; }
     }
 
-    /* Thẻ Bio Cố Định */
+    /* Thẻ Bio Glassmorphism Cố Định */
     .bio-card {
       width: 100%;
       max-width: 360px;
@@ -162,242 +157,3 @@
       border-radius: 50%;
       padding: 3px;
       background: linear-gradient(45deg, #ff007f, #7f00ff, #00f2fe, #4facfe, #ff007f);
-      background-size: 300% 300%;
-      animation: rainbowGlow 4s linear infinite;
-      box-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
-    }
-
-    @keyframes rainbowGlow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .avatar {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      display: block;
-      border: 2px solid rgba(255, 255, 255, 0.8);
-    }
-
-    .status-dot {
-      position: absolute;
-      bottom: 4px;
-      right: 4px;
-      width: 20px;
-      height: 20px;
-      background-color: #23a55a;
-      border: 3px solid #1e1f22;
-      border-radius: 50%;
-      z-index: 5;
-      box-shadow: 0 0 8px #23a55a;
-    }
-
-    .username {
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
-      background: linear-gradient(90deg, #ff71ce, #01cdfe, #05ffa1, #b967ff, #fffb96, #ff71ce);
-      background-size: 300% 100%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: rainbowText 5s linear infinite;
-      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
-    }
-
-    @keyframes rainbowText {
-      0% { background-position: 0% 0%; }
-      100% { background-position: 100% 0%; }
-    }
-
-    .badges-container {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(0, 0, 0, 0.2);
-      padding: 6px 16px;
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      margin-bottom: 16px;
-    }
-
-    .badge-img {
-      width: 20px;
-      height: 20px;
-      object-fit: contain;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-    }
-
-    .subtitle {
-      font-size: 15px;
-      font-weight: 600;
-      opacity: 0.9;
-      margin-bottom: 25px;
-    }
-
-    .divider {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      font-size: 14px;
-      font-weight: 700;
-      opacity: 0.8;
-      margin-bottom: 18px;
-    }
-
-    .divider::before, .divider::after {
-      content: "";
-      height: 1px;
-      width: 35px;
-      background-color: rgba(255, 255, 255, 0.5);
-    }
-
-    .social-links {
-      display: flex;
-      justify-content: center;
-      gap: 14px;
-    }
-
-    .social-icon {
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #fff;
-      font-size: 20px;
-      text-decoration: none;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .social-icon:active {
-      transform: scale(0.8);
-      background: rgba(255, 255, 255, 0.4);
-      box-shadow: 0 0 20px rgba(0, 242, 254, 0.8);
-    }
-
-    #toast {
-      position: fixed;
-      bottom: 30px;
-      background: rgba(0, 0, 0, 0.8);
-      color: #fff;
-      padding: 8px 18px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 600;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 9999;
-      pointer-events: none;
-    }
-  </style>
-</head>
-<body>
-
-  <div id="enter-screen" onclick="startExperience()">
-    <h1>Click to enter</h1>
-  </div>
-
-  <audio id="bg-music" loop preload="auto">
-    <source src="https://files.catbox.moe/pm0gph.mp3" type="audio/mpeg">
-  </audio>
-
-  <div class="bio-card">
-    <div class="avatar-wrapper">
-      <img class="avatar" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
-      <div class="status-dot" title="Online"></div>
-    </div>
-    
-    <h1 class="username">whynotben</h1>
-
-    <div class="badges-container">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_bravery.svg" class="badge-img" alt="Bravery">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_brilliance.svg" class="badge-img" alt="Brilliance">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_balance.svg" class="badge-img" alt="Balance">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/active_developer.svg" class="badge-img" alt="Active Dev">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/nitro.svg" class="badge-img" alt="Nitro">
-    </div>
-
-    <div class="subtitle">Owner @benmelody</div>
-
-    <div class="divider">Socials</div>
-
-    <div class="social-links">
-      <a href="javascript:void(0)" onclick="copyText('whynotben#0000')" class="social-icon"><i class="fa-brands fa-discord"></i></a>
-      <a href="https://facebook.com" class="social-icon" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
-      <a href="https://instagram.com" class="social-icon" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-      <a href="https://telegram.org" class="social-icon" target="_blank"><i class="fa-brands fa-telegram"></i></a>
-    </div>
-  </div>
-
-  <div id="toast">Copied Discord ID!</div>
-
-  <script>
-    const bgMusic = document.getElementById('bg-music');
-
-    function startExperience() {
-      const enterScreen = document.getElementById('enter-screen');
-      enterScreen.classList.add('slide-up');
-
-      if (bgMusic) {
-        bgMusic.muted = false;
-        bgMusic.volume = 0.8;
-        bgMusic.play().catch(e => console.log("Lỗi phát nhạc: ", e));
-      }
-    }
-
-    function copyText(text) {
-      navigator.clipboard.writeText(text);
-      const toast = document.getElementById('toast');
-      toast.style.opacity = '1';
-      setTimeout(() => { toast.style.opacity = '0'; }, 2000);
-    }
-
-    /* Tuyết rơi */
-    function createSnowflake() {
-      const snowflake = document.createElement('div');
-      snowflake.classList.add('snowflake');
-      snowflake.innerHTML = '❄';
-      snowflake.style.left = Math.random() * 100 + 'vw';
-      snowflake.style.fontSize = Math.random() * 8 + 10 + 'px';
-      snowflake.style.animationDuration = Math.random() * 3 + 3 + 's';
-      snowflake.style.opacity = Math.random();
-      document.body.appendChild(snowflake);
-      setTimeout(() => { snowflake.remove(); }, 6000);
-    }
-    setInterval(createSnowflake, 150);
-
-    /* Vệt sáng vuốt ngón tay */
-    function handleMove(e) {
-      const x = e.touches ? e.touches[0].clientX : e.clientX;
-      const y = e.touches ? e.touches[0].clientY : e.clientY;
-      createTrail(x, y);
-    }
-
-    function createTrail(x, y) {
-      const particle = document.createElement('div');
-      particle.classList.add('trail-particle');
-      particle.style.left = `${x - 4}px`;
-      particle.style.top = `${y - 4}px`;
-      document.body.appendChild(particle);
-      setTimeout(() => { particle.remove(); }, 800);
-    }
-
-    window.addEventListener('mousemove', handleMove);
-    window.addEventListener('touchmove', handleMove);
-
-    /* Chặn triệt để hiệu ứng nảy/cuộn của Safari iOS */
-    document.body.addEventListener('touchmove', function(e) {
-      e.preventDefault();
-    }, { passive: false });
-  </script>
-
-</body>
-</html>
