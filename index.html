@@ -42,7 +42,6 @@
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); cursor: pointer; transition: all 0.2s ease;
     }
     .top-btn:active { transform: scale(0.9); }
-    .top-btn.liked { color: #ff4757; border-color: rgba(255, 71, 87, 0.5); box-shadow: 0 0 15px rgba(255, 71, 87, 0.6); }
     
     .container { position: relative; z-index: 10; width: 100%; max-width: 380px; padding: 20px; display: flex; flex-direction: column; gap: 22px; }
     .profile-section { display: flex; align-items: center; gap: 18px; }
@@ -57,10 +56,10 @@
     .social-icons a { color: #99f6e4; font-size: 20px; text-decoration: none; filter: drop-shadow(0 0 6px rgba(153, 246, 228, 0.4)); transition: transform 0.2s ease; }
     .social-icons a:active { transform: scale(0.85); }
     
+    /* Stats Bar chỉ còn View và Location */
     .stats-bar { display: flex; align-items: center; gap: 14px; color: #94a3b8; font-size: 13px; font-weight: 500; padding-left: 4px; }
     .stat-item { display: flex; align-items: center; gap: 6px; color: #cbd5e1; }
     .stat-item i { color: #5eead4; font-size: 14px; }
-    .stat-item i.active-heart { color: #ff4757; }
     
     .music-player {
       display: flex; align-items: center; gap: 14px; background: rgba(255, 255, 255, 0.08);
@@ -93,7 +92,6 @@
 
   <div class="top-buttons">
     <div class="top-btn" onclick="toggleMute()"><i class="fa-solid fa-volume-high" id="volumeIcon"></i></div>
-    <div class="top-btn" id="likeBtn" onclick="toggleLike()"><i class="fa-solid fa-heart"></i></div>
   </div>
 
   <div class="container">
@@ -113,10 +111,9 @@
       </div>
     </div>
 
+    <!-- Thanh hiển thị Lượt xem -->
     <div class="stats-bar">
-      <div class="stat-item"><i class="fa-regular fa-heart" id="statHeartIcon"></i> <span id="likeCount">...</span></div>
-      <span>|</span>
-      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">...</span></div>
+      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">...</span> Views</div>
       <span>|</span>
       <div class="stat-item"><i class="fa-solid fa-location-dot"></i> Vietnam</div>
     </div>
@@ -151,10 +148,7 @@
     const audio = document.getElementById('bg-audio');
     const playIcon = document.getElementById('playIcon');
     const volumeIcon = document.getElementById('volumeIcon');
-    const likeBtn = document.getElementById('likeBtn');
-    const likeCount = document.getElementById('likeCount');
     const viewCount = document.getElementById('viewCount');
-    const statHeartIcon = document.getElementById('statHeartIcon');
     const enterOverlay = document.getElementById('enter-overlay');
 
     const currentTimeEl = document.getElementById('currentTime');
@@ -162,58 +156,41 @@
     const progressFill = document.getElementById('progressFill');
     const progressBar = document.getElementById('progressBar');
 
-    // TÊN ĐỊNH DANH DUY NHẤT CHO TRANG CỦA BẠN (ONLINE SERVER)
-    const SITE_KEY = "whynotben_melody_v100";
+    // Link Firebase Realtime Database
+    const FIREBASE_URL = "DÁN_LINK_FIREBASE_CỦA_BẠN_VÀO_ĐÂY"; 
 
-    // 1. Tự động lấy lượt xem & tim từ Server
+    let globalViews = 258;
+
     async function loadStats() {
-      // Tăng lượt xem online
-      fetch(`https://api.counterapi.dev/v1/${SITE_KEY}/views/up`)
-        .then(res => res.json())
-        .then(data => { if (data.count) viewCount.innerText = data.count; })
-        .catch(() => { viewCount.innerText = "258"; });
+      if(!FIREBASE_URL || FIREBASE_URL.includes("DÁN_LINK")) {
+        viewCount.innerText = "258";
+        return;
+      }
+      
+      const cleanUrl = FIREBASE_URL.endsWith('/') ? FIREBASE_URL.slice(0, -1) : FIREBASE_URL;
 
-      // Lấy số tim online
-      fetch(`https://api.counterapi.dev/v1/${SITE_KEY}/likes`)
-        .then(res => res.json())
-        .then(data => { if (data.count !== undefined) likeCount.innerText = data.count; })
-        .catch(() => { likeCount.innerText = "12"; });
+      try {
+        let res = await fetch(`${cleanUrl}/whynotben.json`);
+        let data = await res.json();
 
-      // Kiểm tra xem thiết bị này đã thả tim chưa
-      if (localStorage.getItem(`${SITE_KEY}_liked`) === 'true') {
-        likeBtn.classList.add('liked');
-        statHeartIcon.className = 'fa-solid fa-heart active-heart';
+        if (data && data.views !== undefined) {
+          globalViews = data.views;
+        }
+
+        // Mỗi lần mở web sẽ tự động cộng 1 View lên Server Google
+        globalViews += 1;
+        viewCount.innerText = globalViews;
+
+        fetch(`${cleanUrl}/whynotben.json`, {
+          method: 'PATCH',
+          body: JSON.stringify({ views: globalViews })
+        });
+      } catch (e) {
+        viewCount.innerText = "258";
       }
     }
 
-    // 2. Thả / Hủy thả tim online
-    function toggleLike() {
-      let isLiked = localStorage.getItem(`${SITE_KEY}_liked`) === 'true';
-
-      if (!isLiked) {
-        localStorage.setItem(`${SITE_KEY}_liked`, 'true');
-        likeBtn.classList.add('liked');
-        statHeartIcon.className = 'fa-solid fa-heart active-heart';
-        showToast("Đã thả tim!");
-
-        // Gửi lệnh tăng tim lên server chung
-        fetch(`https://api.counterapi.dev/v1/${SITE_KEY}/likes/up`)
-          .then(res => res.json())
-          .then(data => { if (data.count !== undefined) likeCount.innerText = data.count; });
-      } else {
-        localStorage.setItem(`${SITE_KEY}_liked`, 'false');
-        likeBtn.classList.remove('liked');
-        statHeartIcon.className = 'fa-regular fa-heart';
-        showToast("Đã hủy thả tim!");
-
-        // Gửi lệnh giảm tim lên server chung
-        fetch(`https://api.counterapi.dev/v1/${SITE_KEY}/likes/down`)
-          .then(res => res.json())
-          .then(data => { if (data.count !== undefined) likeCount.innerText = data.count; });
-      }
-    }
-
-    // Hiệu ứng chữ gõ
+    // Gõ chữ
     const textToType = "whynotben";
     let charIndex = 0;
     let isDeleting = false;
