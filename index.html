@@ -123,29 +123,56 @@
 
     .profile-section { display: flex; align-items: center; gap: 18px; }
     
+    /* HIỆU ỨNG KHUNG AVATAR DISCORD (AVATAR DECORATION) */
     .avatar-wrapper { 
       position: relative; 
-      width: 90px; 
-      height: 90px; 
+      width: 96px; 
+      height: 96px; 
       flex-shrink: 0; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
+
+    /* Viền khung động phong cách Discord Nitro */
+    .avatar-wrapper::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, #ff007f, #7f00ff, #00f2fe, #5eead4, #ff007f);
+      background-size: 400% 400%;
+      animation: discordBorderGlow 4s linear infinite;
+      z-index: 1;
+      filter: drop-shadow(0 0 8px rgba(94, 234, 212, 0.6));
+    }
+
+    @keyframes discordBorderGlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
     .avatar { 
-      width: 100%; 
-      height: 100%; 
+      position: relative;
+      width: 88px; 
+      height: 88px; 
       border-radius: 50%; 
       object-fit: cover; 
-      border: 2px solid #5eead4; 
-      box-shadow: 0 0 20px rgba(94, 234, 212, 0.5); 
+      z-index: 2;
+      border: 2px solid #0f172a;
     }
+
     .status-dot {
       position: absolute;
-      bottom: 3px;
-      right: 3px;
+      bottom: 2px;
+      right: 2px;
       width: 18px;
       height: 18px;
       background-color: #80848e;
-      border: 3px solid #1e293b;
+      border: 3px solid #0f172a;
       border-radius: 50%;
+      z-index: 5;
       transition: background-color 0.3s ease;
     }
 
