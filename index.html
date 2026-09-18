@@ -130,10 +130,34 @@
     .profile-section { display: flex; align-items: center; gap: 18px; }
     .avatar-wrapper { position: relative; width: 90px; height: 90px; flex-shrink: 0; }
     .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #5eead4; box-shadow: 0 0 20px rgba(94, 234, 212, 0.5); }
-    .info-box { display: flex; flex-direction: column; color: #ffffff; }
-    .username { font-family: 'Fredoka', sans-serif; font-size: 28px; font-weight: 700; color: #99f6e4; text-shadow: 0 0 12px rgba(153, 246, 228, 0.5); line-height: 1.1; margin-bottom: 4px; min-height: 32px; }
+    
+    .info-box { display: flex; flex-direction: column; color: #ffffff; width: 100%; }
+    .username { font-family: 'Fredoka', sans-serif; font-size: 26px; font-weight: 700; color: #99f6e4; text-shadow: 0 0 12px rgba(153, 246, 228, 0.5); line-height: 1.1; margin-bottom: 4px; min-height: 30px; }
     .cursor { display: inline-block; width: 3px; background-color: #5eead4; margin-left: 2px; animation: blink 0.8s infinite; }
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    /* Thiết kế khung chứa Badges */
+    .badges-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 4px 10px;
+      border-radius: 12px;
+      width: fit-content;
+      margin-bottom: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .badge-icon {
+      font-size: 14px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    }
+    .badge-icon:nth-child(1) { color: #9b59b6; } /* Bravery */
+    .badge-icon:nth-child(2) { color: #e67e22; } /* Brilliance */
+    .badge-icon:nth-child(3) { color: #2ecc71; } /* Balance */
+    .badge-icon:nth-child(4) { color: #5865F2; } /* Active Dev */
+    .badge-icon:nth-child(5) { color: #ff73fa; } /* Nitro */
+
     .bio-text { font-size: 13px; color: #cbd5e1; margin-bottom: 10px; opacity: 0.9; }
     .social-icons { display: flex; gap: 14px; }
     .social-icons a { color: #99f6e4; font-size: 20px; text-decoration: none; filter: drop-shadow(0 0 6px rgba(153, 246, 228, 0.4)); transition: transform 0.2s ease; }
@@ -191,11 +215,20 @@
     <div class="profile-card">
       <div class="profile-section">
         <div class="avatar-wrapper">
-          <!-- Link Avatar Mới -->
           <img class="avatar" src="https://files.catbox.moe/bl3khq.jpeg" alt="Avatar">
         </div>
         <div class="info-box">
           <h1 class="username"><span id="typewriter">whynotben</span><span class="cursor">&nbsp;</span></h1>
+          
+          <!-- Khu vực hiển thị Huy hiệu (Badges) -->
+          <div class="badges-container">
+            <i class="fa-solid fa-shield-halved badge-icon" title="HypeSquad Bravery"></i>
+            <i class="fa-solid fa-fire badge-icon" title="HypeSquad Brilliance"></i>
+            <i class="fa-solid fa-gem badge-icon" title="HypeSquad Balance"></i>
+            <i class="fa-solid fa-code badge-icon" title="Active Developer"></i>
+            <i class="fa-solid fa-bolt badge-icon" title="Discord Nitro"></i>
+          </div>
+
           <p class="bio-text">Owner @benmelody</p>
           <div class="social-icons">
             <a href="javascript:void(0)" onclick="copyText('whynotben#0000')"><i class="fa-brands fa-discord"></i></a>
