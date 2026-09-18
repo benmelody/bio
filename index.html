@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>whynotben</title>
   
+  <!-- Font chữ & Icon -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+  <!-- Màu thanh địa chỉ trình duyệt -->
   <meta name="theme-color" content="#1e5799">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -28,9 +30,11 @@
       background-size: cover;
       background-attachment: fixed;
       padding: 20px;
-      overflow-x: hidden;
+      overflow: hidden;
+      position: relative;
     }
 
+    /* Màn hình trắng Click To Enter nhún nhảy */
     #enter-screen {
       position: fixed;
       top: 0;
@@ -57,14 +61,42 @@
     }
 
     @keyframes bounceUpDown {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-15px); }
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-15px);
+      }
     }
 
     #enter-screen.slide-up {
       transform: translateY(-100vh);
     }
 
+    /* Hiệu ứng hạt tuyết/mưa rơi */
+    .snowflake {
+      position: fixed;
+      top: -10px;
+      color: #ffffff;
+      opacity: 0.8;
+      pointer-events: none;
+      user-select: none;
+      z-index: 2;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(105vh) rotate(360deg);
+        opacity: 0.2;
+      }
+    }
+
+    /* Thẻ Bio Card Glassmorphism */
     .bio-card {
       width: 100%;
       max-width: 360px;
@@ -78,7 +110,7 @@
       text-align: center;
       color: #ffffff;
       position: relative;
-      z-index: 1;
+      z-index: 10;
     }
 
     .avatar {
@@ -166,17 +198,19 @@
 </head>
 <body>
 
+  <!-- Màn hình chờ màu trắng -->
   <div id="enter-screen" onclick="startExperience()">
     <h1>Click to enter</h1>
   </div>
 
-  <!-- DÁN LINK NHẠC CATBOX CỦA BẠN VÀO CHỖ SRC BÊN DƯỚI -->
+  <!-- LINK NHẠC MỚI CỦA BẠN ĐÃ ĐƯỢC CẬP NHẬT -->
   <audio id="bg-music" loop preload="auto">
-    <source src="THAY_LINK_NHAC_CATBOX_CUA_BAN_VAO_DAY.mp3" type="audio/mpeg">
+    <source src="https://files.catbox.moe/yk90ja.mp3" type="audio/mpeg">
   </audio>
 
+  <!-- Khung Bio -->
   <div class="bio-card">
-    <img class="avatar" src="https://files.catbox.moe/yk90ja.mp3" alt="Avatar">
+    <img class="avatar" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
     
     <h1 class="username">whynotben</h1>
 
@@ -211,10 +245,29 @@
         bgMusic.muted = false;
         bgMusic.volume = 0.8;
         bgMusic.play().catch(function(e) {
-          console.log("Audio play error: ", e);
+          console.log("Lỗi nhạc: ", e);
         });
       }
     }
+
+    function createSnowflake() {
+      const snowflake = document.createElement('div');
+      snowflake.classList.add('snowflake');
+      snowflake.innerHTML = '❄';
+      
+      snowflake.style.left = Math.random() * 100 + 'vw';
+      snowflake.style.fontSize = Math.random() * 8 + 10 + 'px';
+      snowflake.style.animationDuration = Math.random() * 3 + 3 + 's';
+      snowflake.style.opacity = Math.random();
+
+      document.body.appendChild(snowflake);
+
+      setTimeout(function() {
+        snowflake.remove();
+      }, 6000);
+    }
+
+    setInterval(createSnowflake, 150);
   </script>
 
 </body>
