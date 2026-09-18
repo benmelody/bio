@@ -88,7 +88,6 @@
       transform: scale(0.9);
     }
 
-    /* Đổi màu nút Tim khi được yêu thích */
     .top-btn.liked {
       color: #ff4757;
       border-color: rgba(255, 71, 87, 0.5);
@@ -172,7 +171,7 @@
       transform: scale(0.85);
     }
 
-    /* Stats Bar (Thông số) */
+    /* Stats Bar */
     .stats-bar {
       display: flex;
       align-items: center;
@@ -313,17 +312,20 @@
 </head>
 <body>
 
+  <!-- Video Nền -->
   <video class="bg-video" autoplay loop muted playsinline>
     <source src="https://assets.mixkit.co/videos/preview/mixkit-underwater-lights-background-loop-30372-large.mp4" type="video/mp4">
   </video>
 
   <div class="overlay"></div>
 
+  <!-- Nút Icon Góc Trên -->
   <div class="top-buttons">
     <div class="top-btn" onclick="toggleMute()"><i class="fa-solid fa-volume-high" id="volumeIcon"></i></div>
     <div class="top-btn" id="likeBtn" onclick="toggleLike()"><i class="fa-solid fa-heart"></i></div>
   </div>
 
+  <!-- Nội Dung Bio Main -->
   <div class="container">
     
     <div class="profile-section">
@@ -342,14 +344,16 @@
       </div>
     </div>
 
+    <!-- Stats Bar (Tự động tải số Tim & Lượt Xem thực tế) -->
     <div class="stats-bar">
-      <div class="stat-item"><i class="fa-regular fa-heart" id="statHeartIcon"></i> <span id="likeCount">0</span></div>
+      <div class="stat-item"><i class="fa-regular fa-heart" id="statHeartIcon"></i> <span id="likeCount">...</span></div>
       <span>|</span>
-      <div class="stat-item"><i class="fa-regular fa-eye"></i> 186</div>
+      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">...</span></div>
       <span>|</span>
       <div class="stat-item"><i class="fa-solid fa-location-dot"></i> Vietnam</div>
     </div>
 
+    <!-- Music Player -->
     <div class="music-player">
       <img class="song-cover" src="https://files.catbox.moe/6iewk3.jpeg" alt="Song Cover">
       <div class="player-controls">
@@ -383,9 +387,58 @@
     const volumeIcon = document.getElementById('volumeIcon');
     const likeBtn = document.getElementById('likeBtn');
     const likeCount = document.getElementById('likeCount');
+    const viewCount = document.getElementById('viewCount');
     const statHeartIcon = document.getElementById('statHeartIcon');
 
-    let isLiked = false;
+    // Tên key định danh riêng cho tài khoản của bạn trên server CountAPI
+    const SITE_KEY = "whynotben_bio_unique_key";
+
+    // 1. Tải Lượt Xem (Views) thực tế từ Server
+    fetch(`https://api.countapi.xyz/hit/${SITE_KEY}/views`)
+      .then(res => res.json())
+      .then(data => {
+        viewCount.innerText = data.value;
+      })
+      .catch(() => {
+        viewCount.innerText = "186";
+      });
+
+    // 2. Tải Lượt Tim (Likes) thực tế từ Server
+    fetch(`https://api.countapi.xyz/get/${SITE_KEY}/likes`)
+      .then(res => res.json())
+      .then(data => {
+        likeCount.innerText = data.value || 0;
+      })
+      .catch(() => {
+        likeCount.innerText = "0";
+      });
+
+    // Kiểm tra xem máy này đã bấm tim chưa bằng LocalStorage
+    let hasLiked = localStorage.getItem('user_has_liked') === 'true';
+    if (hasLiked) {
+      likeBtn.classList.add('liked');
+      statHeartIcon.className = 'fa-solid fa-heart active-heart';
+    }
+
+    // Function Thả Tim tăng vĩnh viễn trên Server
+    function toggleLike() {
+      if (!hasLiked) {
+        // Gửi lệnh cộng +1 tim lên server vĩnh viễn
+        fetch(`https://api.countapi.xyz/hit/${SITE_KEY}/likes`)
+          .then(res => res.json())
+          .then(data => {
+            likeCount.innerText = data.value;
+          });
+
+        hasLiked = true;
+        localStorage.setItem('user_has_liked', 'true');
+        likeBtn.classList.add('liked');
+        statHeartIcon.className = 'fa-solid fa-heart active-heart';
+        showToast("Cảm ơn bạn đã thả tim!");
+      } else {
+        showToast("Bạn đã thả tim rồi!");
+      }
+    }
 
     // Bật / Tắt Âm Lượng
     function toggleMute() {
@@ -397,21 +450,6 @@
         audio.muted = true;
         volumeIcon.className = 'fa-solid fa-volume-xmark';
         showToast("Audio Muted");
-      }
-    }
-
-    // Thả tim / Bỏ thả tim
-    function toggleLike() {
-      isLiked = !isLiked;
-      if (isLiked) {
-        likeBtn.classList.add('liked');
-        statHeartIcon.className = 'fa-solid fa-heart active-heart';
-        likeCount.innerText = '1';
-        showToast("Thanks for liking!");
-      } else {
-        likeBtn.classList.remove('liked');
-        statHeartIcon.className = 'fa-regular fa-heart';
-        likeCount.innerText = '0';
       }
     }
 
@@ -438,7 +476,7 @@
       setTimeout(() => { toast.style.opacity = '0'; }, 2000);
     }
 
-    // Tự động phát nhạc khi chạm tương tác
+    // Tự động phát nhạc khi chạm
     document.body.addEventListener('click', () => {
       if (audio.paused) {
         audio.play().catch(() => {});
