@@ -3,17 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>whynotben - Bio</title>
+  <title>benmelody</title>
   
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+  <!-- Font chữ & Icon -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Khai báo màu đồng bộ thanh địa chỉ Safari/Chrome -->
+  <meta name="theme-color" content="#1e5799">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Poppins', sans-serif;
     }
 
     body {
@@ -21,78 +26,71 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(135deg, #185a9d 0%, #2980b9 50%, #6dd5ed 100%);
+      background: linear-gradient(135deg, #1e5799 0%, #2989d8 50%, #7db9e8 100%);
       background-size: cover;
       background-attachment: fixed;
       padding: 20px;
-      overflow: hidden;
-      position: relative;
+      overflow-x: hidden;
     }
 
-    /* Màn hình phủ đen Click to enter */
+    /* --- MÀN HÌNH TRẮNG CHỜ CLICK (BOUNCE & SLIDE) --- */
     #enter-screen {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: #000000;
+      background-color: #ffffff;
       display: flex;
       justify-content: center;
       align-items: center;
       z-index: 99999;
       cursor: pointer;
-      transition: opacity 0.6s ease, visibility 0.6s ease;
+      /* Hiệu ứng trượt mượt mà lên trên */
+      transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
     }
 
     #enter-screen h1 {
-      color: #ffffff;
-      font-family: 'Outfit', sans-serif;
-      font-size: 28px;
+      color: #111111;
+      font-size: 24px;
       font-weight: 800;
       letter-spacing: 2px;
       text-transform: uppercase;
       user-select: none;
-      animation: pulse 1.5s infinite;
+      /* Hiệu ứng trồi lên tụt xuống liên tục */
+      animation: bounceUpDown 1.6s infinite ease-in-out;
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.96); }
+    /* Animation nhún nhảy lên xuống */
+    @keyframes bounceUpDown {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-15px);
+      }
     }
 
-    /* Tuyết rơi */
-    .snowflake {
-      position: absolute;
-      top: -10px;
-      color: #ffffff;
-      opacity: 0.8;
-      pointer-events: none;
-      user-select: none;
-      animation: fall linear infinite;
+    /* Class kích hoạt khi bấm: Trượt hẳn bảng trắng lên đỉnh màn hình */
+    #enter-screen.slide-up {
+      transform: translateY(-100vh);
     }
 
-    @keyframes fall {
-      0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
-      100% { transform: translateY(105vh) rotate(360deg); opacity: 0.2; }
-    }
-
-    /* Khung Bio kính mờ */
+    /* --- GIAO DIỆN BIO CARD GLASSMORPHISM --- */
     .bio-card {
       width: 100%;
-      max-width: 380px;
-      padding: 40px 25px 35px 25px;
+      max-width: 360px;
+      padding: 40px 25px;
       background: rgba(255, 255, 255, 0.18);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-radius: 35px;
       border: 1px solid rgba(255, 255, 255, 0.3);
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
       text-align: center;
       color: #ffffff;
-      z-index: 10;
       position: relative;
-      transition: transform 0.05s ease;
+      z-index: 1;
     }
 
     .avatar {
@@ -101,48 +99,29 @@
       border-radius: 50%;
       object-fit: cover;
       margin-bottom: 12px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-      transition: transform 0.05s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     }
 
     .username {
-      font-family: 'Outfit', sans-serif;
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 800;
-      letter-spacing: 0.5px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
-    /* Khung chứa các Badge */
     .badges-container {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      gap: 12px;
-      background: rgba(0, 0, 0, 0.18);
-      padding: 8px 16px;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 6px 16px;
       border-radius: 20px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      margin-bottom: 22px;
-    }
-
-    /* Badge hiệu ứng nhảy theo nhạc */
-    .badge-img {
-      width: 22px;
-      height: 22px;
-      object-fit: contain;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-      transition: transform 0.05s ease;
-      will-change: transform;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      margin-bottom: 18px;
     }
 
     .subtitle {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 15px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
+      font-size: 16px;
+      font-weight: 700;
       opacity: 0.95;
       margin-bottom: 25px;
     }
@@ -152,22 +131,17 @@
       align-items: center;
       justify-content: center;
       gap: 12px;
-      font-family: 'Outfit', sans-serif;
       font-size: 15px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-transform: uppercase;
+      font-weight: 700;
       opacity: 0.9;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
-    .divider::before,
-    .divider::after {
+    .divider::before, .divider::after {
       content: "";
-      height: 2px;
-      width: 45px;
-      background-color: rgba(255, 255, 255, 0.6);
-      border-radius: 2px;
+      height: 1.5px;
+      width: 40px;
+      background-color: rgba(255, 255, 255, 0.7);
     }
 
     .social-links {
@@ -177,49 +151,52 @@
     }
 
     .social-icon {
-      width: 50px;
-      height: 50px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.2);
       display: flex;
       justify-content: center;
       align-items: center;
-      color: #333333;
-      font-size: 24px;
+      color: #fff;
+      font-size: 22px;
       text-decoration: none;
-      transition: all 0.2s ease-in-out;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: 0.3s;
     }
 
     .social-icon:active {
       transform: scale(0.9);
+      background: rgba(255, 255, 255, 0.4);
     }
   </style>
 </head>
 <body>
 
-  <div id="enter-screen">
+  <!-- Màn hình trắng Click To Enter nhún nhảy -->
+  <div id="enter-screen" onclick="startExperience()">
     <h1>Click to enter</h1>
   </div>
 
-  <audio id="bg-music" loop crossorigin="anonymous" playsinline preload="auto">
-    <source src="https://files.catbox.moe/pm0gph.mp3" type="audio/mpeg">
+  <!-- Nhạc nền (Thay link catbox của bạn vào src) -->
+  <audio id="bg-music" loop preload="auto">
+    <source src="https://files.catbox.moe/abc123xy.mp3" type="audio/mpeg">
   </audio>
 
-  <div class="bio-card" id="bioCard">
-    <img class="avatar" id="avatarImg" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
-
-    <h1 class="username">whynotben</h1>
+  <!-- Thẻ Bio chính -->
+  <div class="bio-card">
+    <img class="avatar" src="https://i.imgur.com/2x81e9k.jpg" alt="Avatar">
+    
+    <h1 class="username">minhquan</h1>
 
     <div class="badges-container">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_bravery.svg" class="badge-img" alt="Bravery">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_brilliance.svg" class="badge-img" alt="Brilliance">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_balance.svg" class="badge-img" alt="Balance">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/active_developer.svg" class="badge-img" alt="Active Dev">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/nitro.svg" class="badge-img" alt="Nitro">
+      <i class="fa-solid fa-dharmachakra"></i>
+      <i class="fa-solid fa-shield-halved"></i>
+      <i class="fa-solid fa-play"></i>
+      <i class="fa-solid fa-hashtag"></i>
+      <i class="fa-solid fa-gem"></i>
     </div>
 
-    <div class="subtitle">Owner @benmelody</div>
+    <div class="subtitle">Owner @ senodoki</div>
 
     <div class="divider">Socials</div>
 
@@ -232,92 +209,22 @@
   </div>
 
   <script>
-    const enterScreen = document.getElementById('enter-screen');
-    const bgMusic = document.getElementById('bg-music');
-    const badgeElements = document.querySelectorAll('.badge-img');
-    const avatarImg = document.getElementById('avatarImg');
-
-    let audioCtx, analyser, source, dataArray;
-
-    function initAudioVisualizer() {
-      // Phân tích tần số nhạc bằng Web Audio API
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      analyser = audioCtx.createAnalyser();
-      analyser.fftSize = 64; // Chia dải tần số âm thanh
-
-      source = audioCtx.createMediaElementSource(bgMusic);
-      source.connect(analyser);
-      analyser.connect(audioCtx.destination);
-
-      dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-      // Chạy vòng lặp nhảy theo nhịp nhạc
-      renderVisualizer();
-    }
-
-    function renderVisualizer() {
-      requestAnimationFrame(renderVisualizer);
-      if (!analyser) return;
-
-      analyser.getByteFrequencyData(dataArray);
-
-      // Phân tích nhịp Bass âm thanh
-      let sum = 0;
-      for (let i = 0; i < 8; i++) {
-        sum += dataArray[i];
-      }
-      let averageBass = sum / 8; // Giá trị Bass trung bình
-
-      // Tạo hiệu ứng nhảy nảy cho các badge theo từng tần số
-      badgeElements.forEach((badge, index) => {
-        let value = dataArray[index * 2] || 0;
-        let scale = 1 + (value / 255) * 0.45; // Tỷ lệ phóng to khi có nhịp
-        let translateY = -(value / 255) * 8;   // Đẩy nảy lên trên
-        badge.style.transform = `scale(${scale}) translateY(${translateY}px)`;
-      });
-
-      // Nhảy nhẹ cả Avatar theo beat Bass
-      let avatarScale = 1 + (averageBass / 255) * 0.08;
-      avatarImg.style.transform = `scale(${avatarScale})`;
-    }
-
     function startExperience() {
-      enterScreen.style.opacity = '0';
-      setTimeout(function() {
-        enterScreen.style.visibility = 'hidden';
-      }, 600);
+      const enterScreen = document.getElementById('enter-screen');
+      const bgMusic = document.getElementById('bg-music');
 
+      // 1. Kích hoạt hiệu ứng trượt màn hình trắng lên trên
+      enterScreen.classList.add('slide-up');
+
+      // 2. Phát nhạc tự động sau khi nhấp
       if (bgMusic) {
         bgMusic.muted = false;
         bgMusic.volume = 0.8;
-        bgMusic.play().then(() => {
-          initAudioVisualizer();
-        }).catch(e => console.log(e));
+        bgMusic.play().catch(function(e) {
+          console.log("Audio play error: ", e);
+        });
       }
     }
-
-    enterScreen.addEventListener('touchstart', startExperience, { once: true });
-    enterScreen.addEventListener('click', startExperience, { once: true });
-
-    // Tuyết rơi
-    function createSnowflake() {
-      const snowflake = document.createElement('div');
-      snowflake.classList.add('snowflake');
-      snowflake.innerHTML = '❄';
-      
-      snowflake.style.left = Math.random() * 100 + 'vw';
-      snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
-      snowflake.style.animationDuration = Math.random() * 5 + 3 + 's';
-      snowflake.style.opacity = Math.random();
-
-      document.body.appendChild(snowflake);
-
-      setTimeout(function() {
-        snowflake.remove();
-      }, 8000);
-    }
-
-    setInterval(createSnowflake, 200);
   </script>
 
 </body>
