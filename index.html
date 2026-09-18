@@ -74,7 +74,7 @@
       transform: translateY(-100vh);
     }
 
-    /* Hạt lấp lánh khi vuốt tay (Cursor Trail) */
+    /* Hạt lấp lánh khi vuốt tay */
     .trail-particle {
       position: fixed;
       width: 8px;
@@ -181,14 +181,13 @@
       border: 2px solid rgba(255, 255, 255, 0.8);
     }
 
-    /* Chấm Trạng Thái Online Discord */
     .status-dot {
       position: absolute;
       bottom: 4px;
       right: 4px;
       width: 20px;
       height: 20px;
-      background-color: #23a55a; /* Màu Online Discord */
+      background-color: #23a55a;
       border: 3px solid #1e1f22;
       border-radius: 50%;
       z-index: 5;
@@ -263,7 +262,6 @@
       gap: 14px;
     }
 
-    /* Nút bấm Elastic Nảy nhẹ */
     .social-icon {
       width: 46px;
       height: 46px;
@@ -307,11 +305,6 @@
     <h1>Click to enter</h1>
   </div>
 
-  <audio id="bg-music" loop preload="auto">
-    <source src="https://files.catbox.moe/88pag4.mov" type="audio/mp4">
-    <source src="https://files.catbox.moe/88pag4.mov" type="audio/mpeg">
-  </audio>
-
   <div class="bio-card" id="card">
     <div class="avatar-wrapper">
       <img class="avatar" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
@@ -345,15 +338,7 @@
   <script>
     function startExperience() {
       const enterScreen = document.getElementById('enter-screen');
-      const bgMusic = document.getElementById('bg-music');
-
       enterScreen.classList.add('slide-up');
-
-      if (bgMusic) {
-        bgMusic.muted = false;
-        bgMusic.volume = 0.8;
-        bgMusic.play().catch(e => console.log(e));
-      }
     }
 
     function copyText(text) {
@@ -363,7 +348,7 @@
       setTimeout(() => { toast.style.opacity = '0'; }, 2000);
     }
 
-    /* Hiệu ứng Tuyết */
+    /* Tuyết rơi */
     function createSnowflake() {
       const snowflake = document.createElement('div');
       snowflake.classList.add('snowflake');
@@ -377,7 +362,7 @@
     }
     setInterval(createSnowflake, 150);
 
-    /* Hiệu ứng 3D Tilt */
+    /* 3D Tilt */
     const card = document.getElementById('card');
     function handleMove(e) {
       const x = e.touches ? e.touches[0].clientX : e.clientX;
@@ -389,7 +374,6 @@
       const rotateY = (cardX - x) / 18;
       card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
 
-      // Tạo vệt sáng vuốt ngón tay
       createTrail(x, y);
     }
 
@@ -397,7 +381,7 @@
       card.style.transform = `rotateX(0deg) rotateY(0deg)`;
     }
 
-    /* Hiệu ứng Vệt sáng bám theo ngón tay chạm */
+    /* Vệt sáng vuốt ngón tay */
     function createTrail(x, y) {
       const particle = document.createElement('div');
       particle.classList.add('trail-particle');
