@@ -24,13 +24,22 @@
       user-select: none;
     }
 
+    /* Nền Gradient Đêm Đại Dương Chuyển Động Chống Đen Màn Hình 100% */
     body {
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: #000;
+      background: linear-gradient(-45deg, #020617, #0f172a, #032b38, #0f4c5c, #020617);
+      background-size: 400% 400%;
+      animation: oceanBG 12s ease infinite;
       position: relative;
+    }
+
+    @keyframes oceanBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     /* Màn hình chờ Click to Enter */
@@ -40,7 +49,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 10, 20, 0.92);
+      background: rgba(2, 6, 23, 0.94);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       display: flex;
@@ -68,28 +77,6 @@
       50% { opacity: 1; transform: scale(1.02); }
     }
 
-    /* Video Nền */
-    .bg-video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      object-fit: cover;
-      z-index: 1;
-      filter: brightness(0.8);
-    }
-
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: radial-gradient(circle, rgba(0, 20, 40, 0.2) 0%, rgba(0, 10, 20, 0.6) 100%);
-      z-index: 2;
-    }
-
     /* Nút Icon Góc Trên */
     .top-buttons {
       position: fixed;
@@ -104,13 +91,109 @@
       width: 42px;
       height: 42px;
       border-radius: 14px;
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(15px);
       -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       display: flex;
       justify-content: center;
       align-items: center;
       color: #5eead4;
       font-size: 16px;
-      box-shadow: 0 8px 20px rgba(0
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .top-btn:active { transform: scale(0.9); }
+
+    .top-btn.liked {
+      color: #ff4757;
+      border-color: rgba(255, 71, 87, 0.5);
+      box-shadow: 0 0 15px rgba(255, 71, 87, 0.6);
+    }
+
+    /* Khung Main */
+    .container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 380px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    /* Hồ Sơ */
+    .profile-section {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      flex-shrink: 0;
+    }
+
+    .avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #5eead4;
+      box-shadow: 0 0 20px rgba(94, 234, 212, 0.5), inset 0 0 10px rgba(94, 234, 212, 0.3);
+    }
+
+    .info-box {
+      display: flex;
+      flex-direction: column;
+      color: #ffffff;
+    }
+
+    /* Username Typewriter */
+    .username {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 30px;
+      font-weight: 700;
+      color: #99f6e4;
+      text-shadow: 0 0 12px rgba(153, 246, 228, 0.5);
+      line-height: 1.1;
+      margin-bottom: 4px;
+      word-break: break-word;
+      min-height: 33px;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 3px;
+      background-color: #5eead4;
+      margin-left: 3px;
+      animation: blink 0.8s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .bio-text {
+      font-size: 13px;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+      opacity: 0.9;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 14px;
+    }
+
+    .social-icons a {
+      color: #99f6e4;
+      font-size: 20px;
+      text-decoration: none;
+      transition: transform 0.2s ease, filter
