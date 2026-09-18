@@ -290,7 +290,6 @@
       cursor: pointer;
     }
 
-    /* Popup thông báo */
     #toast {
       position: fixed;
       bottom: 30px;
@@ -346,9 +345,9 @@
 
     <!-- Stats Bar -->
     <div class="stats-bar">
-      <div class="stat-item"><i class="fa-regular fa-heart" id="statHeartIcon"></i> <span id="likeCount">...</span></div>
+      <div class="stat-item"><i class="fa-regular fa-heart" id="statHeartIcon"></i> <span id="likeCount">0</span></div>
       <span>|</span>
-      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">...</span></div>
+      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">0</span></div>
       <span>|</span>
       <div class="stat-item"><i class="fa-solid fa-location-dot"></i> Vietnam</div>
     </div>
@@ -390,68 +389,59 @@
     const viewCount = document.getElementById('viewCount');
     const statHeartIcon = document.getElementById('statHeartIcon');
 
-    // Tên ID riêng cho trang web của bạn
-    const USER_ID = "whynotben_bio_v2";
+    // Khóa định danh chuẩn cho trang Bio của bạn
+    const KEY_LIKE = "whynotben_bio_likes_v3";
+    const KEY_VIEW = "whynotben_bio_views_v3";
 
-    // 1. Tải và tăng số Lượt Xem (Views) thực tế từ API mới
-    fetch(`https://api.counterapi.dev/v1/${USER_ID}/views/up`)
+    // 1. Khởi tạo & Tải lượt xem thực tế từ Server API
+    fetch(`https://countapi.mileshilliard.com/api/v1/hit/${KEY_VIEW}`)
       .then(res => res.json())
       .then(data => {
-        if(data && data.count !== undefined) {
-          viewCount.innerText = data.count;
-        } else {
-          viewCount.innerText = "1";
-        }
+        if (data && data.value) viewCount.innerText = data.value;
       })
       .catch(() => { viewCount.innerText = "186"; });
 
-    // 2. Tải Lượt Tim (Likes) hiện tại từ Server
-    fetch(`https://api.counterapi.dev/v1/${USER_ID}/likes`)
+    // 2. Tải số lượt tim công khai từ Server
+    fetch(`https://countapi.mileshilliard.com/api/v1/get/${KEY_LIKE}`)
       .then(res => res.json())
       .then(data => {
-        if(data && data.count !== undefined) {
-          likeCount.innerText = data.count;
-        } else {
-          likeCount.innerText = "0";
-        }
+        if (data && data.value) likeCount.innerText = data.value;
       })
-      .catch(() => { likeCount.innerText = "0"; });
+      .catch(() => {});
 
-    // Kiểm tra xem thiết bị này đã thả tim trước đó chưa
-    let hasLiked = localStorage.getItem('whynotben_has_liked') === 'true';
-    if (hasLiked) {
+    // Kiểm tra bộ nhớ thiết bị xem người dùng đã thả tim chưa
+    let userLiked = localStorage.getItem('has_liked_whynotben') === 'true';
+    if (userLiked) {
       likeBtn.classList.add('liked');
       statHeartIcon.className = 'fa-solid fa-heart active-heart';
     }
 
-    // Hàm Bấm Thả Tim
+    // Hàm Thả Tim (Được đồng bộ hoá vĩnh viễn trên Server)
     function toggleLike() {
-      if (!hasLiked) {
-        // Tăng +1 tim trên giao diện ngay lập tức
-        let currentLikes = parseInt(likeCount.innerText) || 0;
-        likeCount.innerText = currentLikes + 1;
+      if (!userLiked) {
+        userLiked = true;
+        localStorage.setItem('has_liked_whynotben', 'true');
         
-        hasLiked = true;
-        localStorage.setItem('whynotben_has_liked', 'true');
         likeBtn.classList.add('liked');
         statHeartIcon.className = 'fa-solid fa-heart active-heart';
+        
+        // Cập nhật số liệu trên màn hình ngay lập tức
+        let currentLikes = parseInt(likeCount.innerText) || 0;
+        likeCount.innerText = currentLikes + 1;
         showToast("Cảm ơn bạn đã thả tim!");
 
-        // Gửi lệnh lưu vĩnh viễn lên Server
-        fetch(`https://api.counterapi.dev/v1/${USER_ID}/likes/up`)
+        // Gửi thông số lên máy chủ lưu trữ cho toàn bộ các thiết bị khác cùng thấy
+        fetch(`https://countapi.mileshilliard.com/api/v1/hit/${KEY_LIKE}`)
           .then(res => res.json())
           .then(data => {
-            if(data && data.count !== undefined) {
-              likeCount.innerText = data.count;
-            }
+            if (data && data.value) likeCount.innerText = data.value;
           })
-          .catch(e => console.log(e));
+          .catch(() => {});
       } else {
-        showToast("Bạn đã thả tim rồi!");
+        showToast("Bạn đã thả tim trang này rồi!");
       }
     }
 
-    // Bật / Tắt Âm Lượng
     function toggleMute() {
       if (audio.muted) {
         audio.muted = false;
@@ -464,7 +454,6 @@
       }
     }
 
-    // Tắt / Bật phát nhạc
     function togglePlay() {
       if (audio.paused) {
         audio.play();
@@ -487,7 +476,6 @@
       setTimeout(() => { toast.style.opacity = '0'; }, 2000);
     }
 
-    // Tự động phát nhạc khi chạm tương tác
     document.body.addEventListener('click', () => {
       if (audio.paused) {
         audio.play().catch(() => {});
