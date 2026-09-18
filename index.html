@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>whynotben - Bio Link</title>
+  <title>Dannj - Bio</title>
   
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
@@ -20,6 +20,7 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
+      touch-action: none;
     }
 
     body {
@@ -27,99 +28,84 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(135deg, #0d0e12 0%, #1a1c23 50%, #121318 100%);
-      padding: 20px;
+      background: #000;
       position: relative;
     }
 
-    /* LỚP PHỦ SẤM CHỚP */
-    #lightning-flash {
+    /* Nền Video/GIF Cá voi dưới đại dương */
+    .bg-video {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: rgba(255, 255, 255, 0.15); /* Độ sáng nhẹ của ánh chớp */
-      pointer-events: none;
+      object-fit: cover;
       z-index: 1;
-      opacity: 0;
-      transition: opacity 0.05s ease-out;
+      filter: brightness(0.85);
     }
 
-    /* HIỆU ỨNG MƯA RƠI */
-    .drop {
-      position: absolute;
-      background: linear-gradient(transparent, rgba(255, 255, 255, 0.4));
-      width: 1px;
-      height: 25px;
-      opacity: 0.7;
-      pointer-events: none;
-      z-index: 2;
-      animation: fall linear infinite;
-    }
-
-    @keyframes fall {
-      0% {
-        transform: translateY(-100px);
-      }
-      100% {
-        transform: translateY(100vh);
-      }
-    }
-
-    /* Màn hình chờ Click to enter */
-    #enter-screen {
+    /* Lớp phủ tối nhẹ để nổi bật chữ */
+    .overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: #ffffff;
+      background: rgba(0, 20, 40, 0.25);
+      z-index: 2;
+    }
+
+    /* Nút góc trên (Âm thanh & Heart) */
+    .top-buttons {
+      position: fixed;
+      top: 25px;
+      left: 20px;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 99999;
-      cursor: pointer;
-      transition: opacity 0.5s ease, visibility 0.5s ease;
-    }
-
-    #enter-screen h1 {
-      color: #111111;
-      font-size: 24px;
-      font-weight: 800;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      user-select: none;
-      animation: bounceUpDown 1.6s infinite ease-in-out;
-    }
-
-    @keyframes bounceUpDown {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
-    }
-
-    /* Thẻ Bio Glassmorphism */
-    .bio-card {
-      width: 100%;
-      max-width: 360px;
-      padding: 35px 25px;
-      background: rgba(255, 255, 255, 0.06);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border-radius: 35px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-      text-align: center;
-      color: #ffffff;
-      position: relative;
+      gap: 12px;
       z-index: 10;
     }
 
-    .avatar-wrapper {
+    .top-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #6ee7b7;
+      font-size: 18px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Khung chứa tổng thể các phần tử */
+    .container {
       position: relative;
-      width: 100px;
-      height: 100px;
-      margin: 0 auto 16px auto;
+      z-index: 10;
+      width: 100%;
+      max-width: 380px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    /* Phần thông tin hồ sơ (Avatar + Info) */
+    .profile-section {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    /* Avatar tròn viền Neon Xanh */
+    .avatar-box {
+      position: relative;
+      width: 105px;
+      height: 105px;
+      flex-shrink: 0;
     }
 
     .avatar {
@@ -127,232 +113,255 @@
       height: 100%;
       border-radius: 50%;
       object-fit: cover;
-      display: block;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      border: 2px solid #5eead4;
+      box-shadow: 0 0 20px rgba(94, 234, 212, 0.6), inset 0 0 10px rgba(94, 234, 212, 0.4);
     }
 
-    .status-dot {
-      position: absolute;
-      bottom: 2px;
-      right: 2px;
-      width: 18px;
-      height: 18px;
-      background-color: #23a55a;
-      border: 3px solid #121318;
-      border-radius: 50%;
-      z-index: 5;
-    }
-
-    .username {
-      font-size: 26px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
+    /* Khung Chữ bên phải Avatar */
+    .info-box {
+      display: flex;
+      flex-direction: flex-start;
+      flex-direction: column;
       color: #ffffff;
     }
 
-    .badges-container {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(255, 255, 255, 0.08);
-      padding: 6px 16px;
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      margin-bottom: 16px;
-    }
-
-    .badge-img {
-      width: 20px;
-      height: 20px;
-      object-fit: contain;
-    }
-
-    .subtitle {
-      font-size: 14px;
-      font-weight: 600;
-      opacity: 0.8;
-      margin-bottom: 25px;
-    }
-
-    .divider {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      font-size: 14px;
+    .username {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 32px;
       font-weight: 700;
-      opacity: 0.7;
-      margin-bottom: 18px;
+      color: #99f6e4;
+      text-shadow: 0 0 12px rgba(153, 246, 228, 0.6);
+      line-height: 1.1;
+      margin-bottom: 4px;
     }
 
-    .divider::before, .divider::after {
-      content: "";
-      height: 1px;
-      width: 35px;
-      background-color: rgba(255, 255, 255, 0.3);
+    .bio-text {
+      font-size: 13px;
+      color: #cbd5e1;
+      margin-bottom: 10px;
+      opacity: 0.9;
     }
 
-    .social-links {
+    /* Icon Mạng xã hội */
+    .social-icons {
       display: flex;
-      justify-content: center;
-      gap: 14px;
+      gap: 12px;
     }
 
-    .social-icon {
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #fff;
+    .social-icons a {
+      color: #99f6e4;
       font-size: 20px;
       text-decoration: none;
-      transition: all 0.3s ease;
+      transition: transform 0.2s ease;
+      filter: drop-shadow(0 0 6px rgba(153, 246, 228, 0.5));
     }
 
-    .social-icon:active {
-      transform: scale(0.9);
-      background: rgba(255, 255, 255, 0.2);
+    .social-icons a:active {
+      transform: scale(0.85);
     }
 
-    #toast {
-      position: fixed;
-      bottom: 30px;
-      background: rgba(0, 0, 0, 0.85);
-      color: #fff;
-      padding: 8px 18px;
-      border-radius: 20px;
+    /* Thanh thông số Stats (Views, Location) */
+    .stats-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: #94a3b8;
       font-size: 13px;
-      font-weight: 600;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 9999;
-      pointer-events: none;
+      font-weight: 500;
+      padding-left: 5px;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #cbd5e1;
+    }
+
+    .stat-item i {
+      color: #5eead4;
+      font-size: 14px;
+    }
+
+    /* Trình phát nhạc Music Player */
+    .music-player {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .song-cover {
+      width: 70px;
+      height: 70px;
+      border-radius: 18px;
+      object-fit: cover;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .player-controls {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .song-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #5eead4;
+      letter-spacing: 0.3px;
+      text-shadow: 0 0 10px rgba(94, 234, 212, 0.4);
+    }
+
+    .progress-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .time {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 30%;
+      height: 100%;
+      background: #5eead4;
+      box-shadow: 0 0 8px #5eead4;
+    }
+
+    .controls-btns {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: 5px;
+    }
+
+    .btn-step {
+      color: #99f6e4;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .btn-play {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #99f6e4;
+      color: #0f172a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+      box-shadow: 0 0 12px rgba(153, 246, 228, 0.8);
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-  <!-- Lớp Sấm Chớp -->
-  <div id="lightning-flash"></div>
+  <!-- Video nền động cá voi (Có thể thay link mp4 khác) -->
+  <video class="bg-video" autoplay loop muted playsinline>
+    <source src="https://assets.mixkit.co/videos/preview/mixkit-underwater-lights-background-loop-30372-large.mp4" type="video/mp4">
+  </video>
 
-  <!-- Màn hình chờ Click to enter -->
-  <div id="enter-screen">
-    <h1>Click to enter</h1>
+  <div class="overlay"></div>
+
+  <!-- Nút Icon góc trên trái -->
+  <div class="top-buttons">
+    <div class="top-btn"><i class="fa-solid fa-volume-high"></i></div>
+    <div class="top-btn"><i class="fa-solid fa-heart"></i></div>
   </div>
 
-  <!-- Audio Nhạc Nền -->
-  <audio id="bg-music" loop preload="auto">
+  <!-- Nội dung chính Bio -->
+  <div class="container">
+    
+    <!-- Profile Row -->
+    <div class="profile-section">
+      <div class="avatar-wrapper">
+        <div class="avatar-box">
+          <img class="avatar" src="https://i.imgur.com/2x81e9k.jpg" alt="Avatar">
+        </div>
+      </div>
+      <div class="info-box">
+        <h1 class="username">Dannj</h1>
+        <p class="bio-text">info tui đây nha</p>
+        <div class="social-icons">
+          <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-discord"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stat-item"><i class="fa-regular fa-heart"></i> 0</div>
+      <span>|</span>
+      <div class="stat-item"><i class="fa-regular fa-eye"></i> 186</div>
+      <span>|</span>
+      <div class="stat-item"><i class="fa-solid fa-location-dot"></i> Trungky</div>
+    </div>
+
+    <!-- Music Player -->
+    <div class="music-player">
+      <img class="song-cover" src="https://i.imgur.com/2x81e9k.jpg" alt="Song Cover">
+      <div class="player-controls">
+        <div class="song-title">Banana Street</div>
+        <div class="progress-container">
+          <span class="time">0:01</span>
+          <div class="progress-bar">
+            <div class="progress-fill"></div>
+          </div>
+          <span class="time">3:22</span>
+        </div>
+      </div>
+      <div class="controls-btns">
+        <i class="fa-solid fa-backward-step btn-step"></i>
+        <div class="btn-play" id="playBtn" onclick="togglePlay()"><i class="fa-solid fa-pause" id="playIcon"></i></div>
+        <i class="fa-solid fa-forward-step btn-step"></i>
+      </div>
+    </div>
+
+  </div>
+
+  <audio id="bg-audio" loop autoplay>
     <source src="https://files.catbox.moe/pm0gph.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Bio Card Main -->
-  <div class="bio-card">
-    <div class="avatar-wrapper">
-      <img class="avatar" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
-      <div class="status-dot" title="Online"></div>
-    </div>
-    
-    <h1 class="username">whynotben</h1>
-
-    <div class="badges-container">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_bravery.svg" class="badge-img" alt="Bravery">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_brilliance.svg" class="badge-img" alt="Brilliance">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/hypesquad_balance.svg" class="badge-img" alt="Balance">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/active_developer.svg" class="badge-img" alt="Active Dev">
-      <img src="https://cdn.jsdelivr.net/gh/merlinfuchs/discord-badges/SVG/nitro.svg" class="badge-img" alt="Nitro">
-    </div>
-
-    <div class="subtitle">Owner @benmelody</div>
-
-    <div class="divider">Socials</div>
-
-    <div class="social-links">
-      <a href="javascript:void(0)" onclick="copyText('whynotben#0000')" class="social-icon"><i class="fa-brands fa-discord"></i></a>
-      <a href="https://facebook.com" class="social-icon" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
-      <a href="https://instagram.com" class="social-icon" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-      <a href="https://telegram.org" class="social-icon" target="_blank"><i class="fa-brands fa-telegram"></i></a>
-    </div>
-  </div>
-
-  <div id="toast">Copied Discord ID!</div>
-
   <script>
-    const enterScreen = document.getElementById('enter-screen');
-    const bgMusic = document.getElementById('bg-music');
-    const flashLayer = document.getElementById('lightning-flash');
+    const audio = document.getElementById('bg-audio');
+    const playIcon = document.getElementById('playIcon');
 
-    function startExperience() {
-      enterScreen.style.opacity = '0';
-      setTimeout(() => {
-        enterScreen.style.display = 'none';
-      }, 500);
-
-      if (bgMusic) {
-        bgMusic.muted = false;
-        bgMusic.volume = 0.8;
-        bgMusic.play().catch(e => console.log("Lỗi phát nhạc: ", e));
-      }
-
-      // Khởi chạy sấm chớp sau khi ấn vào màn hình
-      scheduleLightning();
-    }
-
-    enterScreen.addEventListener('click', startExperience);
-    enterScreen.addEventListener('touchstart', startExperience);
-
-    function copyText(text) {
-      navigator.clipboard.writeText(text);
-      const toast = document.getElementById('toast');
-      toast.style.opacity = '1';
-      setTimeout(() => { toast.style.opacity = '0'; }, 2000);
-    }
-
-    /* Tạo hạt mưa */
-    function createRain() {
-      const dropCount = 40;
-      for (let i = 0; i < dropCount; i++) {
-        const drop = document.createElement('div');
-        drop.classList.add('drop');
-        drop.style.left = Math.random() * 100 + 'vw';
-        drop.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's';
-        drop.style.animationDelay = (Math.random() * 2) + 's';
-        document.body.appendChild(drop);
+    function togglePlay() {
+      if (audio.paused) {
+        audio.play();
+        playIcon.className = 'fa-solid fa-pause';
+      } else {
+        audio.pause();
+        playIcon.className = 'fa-solid fa-play';
       }
     }
 
-    /* Hiệu ứng Sấm Chớp ngẫu nhiên */
-    function triggerLightning() {
-      // Nhấp nháy lần 1
-      flashLayer.style.opacity = '1';
-      setTimeout(() => {
-        flashLayer.style.opacity = '0';
-        
-        // Nhấp nháy nhẹ lần 2 sau 80ms (Tạo độ chớp thực tế)
-        setTimeout(() => {
-          flashLayer.style.opacity = '0.6';
-          setTimeout(() => {
-            flashLayer.style.opacity = '0';
-          }, 50);
-        }, 80);
-
-      }, 60);
-
-      // Lập lịch cho đợt chớp tiếp theo (khoảng 4 đến 10 giây)
-      scheduleLightning();
-    }
-
-    function scheduleLightning() {
-      const randomDelay = Math.random() * 6000 + 4000;
-      setTimeout(triggerLightning, randomDelay);
-    }
-
-    createRain();
+    // Tự động bật nhạc khi chạm vào màn hình
+    document.body.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play().catch(() => {});
+      }
+    }, { once: true });
   </script>
 
 </body>
