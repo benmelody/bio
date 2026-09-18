@@ -9,21 +9,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      -webkit-user-select: none;
-      user-select: none;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    html, body { width: 100%; height: 100%; overflow: hidden; -webkit-user-select: none; user-select: none; }
     body {
       min-height: 100vh;
       display: flex;
@@ -34,290 +21,66 @@
       animation: oceanBG 12s ease infinite;
       position: relative;
     }
-
-    @keyframes oceanBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* Màn hình chờ Click to Enter */
+    @keyframes oceanBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
     #enter-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(2, 6, 23, 0.92);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 999999;
-      cursor: pointer;
-      transition: opacity 0.5s ease;
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(2, 6, 23, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      display: flex; justify-content: center; align-items: center; z-index: 999999; cursor: pointer; transition: opacity 0.5s ease;
     }
-
     #enter-overlay h2 {
-      color: #5eead4;
-      font-family: 'Fredoka', sans-serif;
-      font-size: 26px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      text-shadow: 0 0 15px rgba(94, 234, 212, 0.6);
-      animation: pulse 1.5s infinite ease-in-out;
-      pointer-events: none;
+      color: #5eead4; font-family: 'Fredoka', sans-serif; font-size: 26px; letter-spacing: 2px;
+      text-transform: uppercase; text-shadow: 0 0 15px rgba(94, 234, 212, 0.6); animation: pulse 1.5s infinite ease-in-out; pointer-events: none;
     }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 0.6; transform: scale(0.98); }
-      50% { opacity: 1; transform: scale(1.02); }
-    }
-
-    /* Top Buttons */
-    .top-buttons {
-      position: fixed;
-      top: 25px;
-      left: 20px;
-      display: flex;
-      gap: 12px;
-      z-index: 10;
-    }
-
+    @keyframes pulse { 0%, 100% { opacity: 0.6; transform: scale(0.98); } 50% { opacity: 1; transform: scale(1.02); } }
+    .top-buttons { position: fixed; top: 25px; left: 20px; display: flex; gap: 12px; z-index: 10; }
     .top-btn {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #5eead4;
-      font-size: 16px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-      cursor: pointer;
-      transition: all 0.2s ease;
+      width: 42px; height: 42px; border-radius: 14px; background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex; justify-content: center; align-items: center; color: #5eead4; font-size: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); cursor: pointer; transition: all 0.2s ease;
     }
-
     .top-btn:active { transform: scale(0.9); }
-
-    .top-btn.liked {
-      color: #ff4757;
-      border-color: rgba(255, 71, 87, 0.5);
-      box-shadow: 0 0 15px rgba(255, 71, 87, 0.6);
-    }
-
-    /* Container Main */
-    .container {
-      position: relative;
-      z-index: 10;
-      width: 100%;
-      max-width: 380px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 22px;
-    }
-
-    .profile-section {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
-
-    .avatar-wrapper {
-      position: relative;
-      width: 90px;
-      height: 90px;
-      flex-shrink: 0;
-    }
-
-    .avatar {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #5eead4;
-      box-shadow: 0 0 20px rgba(94, 234, 212, 0.5);
-    }
-
-    .info-box {
-      display: flex;
-      flex-direction: column;
-      color: #ffffff;
-    }
-
-    .username {
-      font-family: 'Fredoka', sans-serif;
-      font-size: 28px;
-      font-weight: 700;
-      color: #99f6e4;
-      text-shadow: 0 0 12px rgba(153, 246, 228, 0.5);
-      line-height: 1.1;
-      margin-bottom: 4px;
-      min-height: 32px;
-    }
-
-    .cursor {
-      display: inline-block;
-      width: 3px;
-      background-color: #5eead4;
-      margin-left: 2px;
-      animation: blink 0.8s infinite;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    .bio-text {
-      font-size: 13px;
-      color: #cbd5e1;
-      margin-bottom: 10px;
-      opacity: 0.9;
-    }
-
-    .social-icons {
-      display: flex;
-      gap: 14px;
-    }
-
-    .social-icons a {
-      color: #99f6e4;
-      font-size: 20px;
-      text-decoration: none;
-      filter: drop-shadow(0 0 6px rgba(153, 246, 228, 0.4));
-      transition: transform 0.2s ease;
-    }
-
+    .top-btn.liked { color: #ff4757; border-color: rgba(255, 71, 87, 0.5); box-shadow: 0 0 15px rgba(255, 71, 87, 0.6); }
+    .container { position: relative; z-index: 10; width: 100%; max-width: 380px; padding: 20px; display: flex; flex-direction: column; gap: 22px; }
+    .profile-section { display: flex; align-items: center; gap: 18px; }
+    .avatar-wrapper { position: relative; width: 90px; height: 90px; flex-shrink: 0; }
+    .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #5eead4; box-shadow: 0 0 20px rgba(94, 234, 212, 0.5); }
+    .info-box { display: flex; flex-direction: column; color: #ffffff; }
+    .username { font-family: 'Fredoka', sans-serif; font-size: 28px; font-weight: 700; color: #99f6e4; text-shadow: 0 0 12px rgba(153, 246, 228, 0.5); line-height: 1.1; margin-bottom: 4px; min-height: 32px; }
+    .cursor { display: inline-block; width: 3px; background-color: #5eead4; margin-left: 2px; animation: blink 0.8s infinite; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    .bio-text { font-size: 13px; color: #cbd5e1; margin-bottom: 10px; opacity: 0.9; }
+    .social-icons { display: flex; gap: 14px; }
+    .social-icons a { color: #99f6e4; font-size: 20px; text-decoration: none; filter: drop-shadow(0 0 6px rgba(153, 246, 228, 0.4)); transition: transform 0.2s ease; }
     .social-icons a:active { transform: scale(0.85); }
-
-    .stats-bar {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      color: #94a3b8;
-      font-size: 13px;
-      font-weight: 500;
-      padding-left: 4px;
-    }
-
-    .stat-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: #cbd5e1;
-    }
-
+    .stats-bar { display: flex; align-items: center; gap: 14px; color: #94a3b8; font-size: 13px; font-weight: 500; padding-left: 4px; }
+    .stat-item { display: flex; align-items: center; gap: 6px; color: #cbd5e1; }
     .stat-item i { color: #5eead4; font-size: 14px; }
     .stat-item i.active-heart { color: #ff4757; }
-
     .music-player {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      padding: 12px 16px;
-      border-radius: 22px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      display: flex; align-items: center; gap: 14px; background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 12px 16px; border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
     }
-
-    .song-cover {
-      width: 55px;
-      height: 55px;
-      border-radius: 14px;
-      object-fit: cover;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .player-controls {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .song-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #5eead4;
-    }
-
-    .progress-container {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
+    .song-cover { width: 55px; height: 55px; border-radius: 14px; object-fit: cover; border: 1px solid rgba(255, 255, 255, 0.2); }
+    .player-controls { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .song-title { font-size: 15px; font-weight: 700; color: #5eead4; }
+    .progress-container { display: flex; align-items: center; gap: 8px; }
     .time { font-size: 11px; color: #94a3b8; min-width: 26px; }
-
-    .progress-bar {
-      flex: 1;
-      height: 5px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 4px;
-      position: relative;
-      cursor: pointer;
-    }
-
-    .progress-fill {
-      width: 0%;
-      height: 100%;
-      background: #5eead4;
-      border-radius: 4px;
-    }
-
-    .controls-btns {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
+    .progress-bar { flex: 1; height: 5px; background: rgba(255, 255, 255, 0.2); border-radius: 4px; position: relative; cursor: pointer; }
+    .progress-fill { width: 0%; height: 100%; background: #5eead4; border-radius: 4px; }
+    .controls-btns { display: flex; align-items: center; gap: 10px; }
     .btn-step { color: #99f6e4; font-size: 13px; cursor: pointer; }
-
-    .btn-play {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: #99f6e4;
-      color: #0f172a;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 12px;
-      cursor: pointer;
-    }
-
+    .btn-play { width: 34px; height: 34px; border-radius: 50%; background: #99f6e4; color: #0f172a; display: flex; justify-content: center; align-items: center; font-size: 12px; cursor: pointer; }
     #toast {
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(15, 23, 42, 0.95);
-      color: #5eead4;
-      padding: 8px 18px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 600;
-      border: 1px solid rgba(94, 234, 212, 0.3);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 9999;
-      pointer-events: none;
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.95);
+      color: #5eead4; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; border: 1px solid rgba(94, 234, 212, 0.3);
+      opacity: 0; transition: opacity 0.3s ease; z-index: 9999; pointer-events: none;
     }
   </style>
 </head>
 <body>
 
-  <!-- Màn hình chờ Click to Enter -->
   <div id="enter-overlay" onclick="handleEnter()">
     <h2>Click to Enter</h2>
   </div>
@@ -345,9 +108,9 @@
     </div>
 
     <div class="stats-bar">
-      <div class="stat-item"><i class="fa-regular fa-heart" id="statHeartIcon"></i> <span id="likeCount">12</span></div>
+      <div class="stat-item"><i class="fa-regular fa-heart" id="statHeartIcon"></i> <span id="likeCount">--</span></div>
       <span>|</span>
-      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">258</span></div>
+      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">--</span></div>
       <span>|</span>
       <div class="stat-item"><i class="fa-solid fa-location-dot"></i> Vietnam</div>
     </div>
@@ -384,6 +147,7 @@
     const volumeIcon = document.getElementById('volumeIcon');
     const likeBtn = document.getElementById('likeBtn');
     const likeCount = document.getElementById('likeCount');
+    const viewCount = document.getElementById('viewCount');
     const statHeartIcon = document.getElementById('statHeartIcon');
     const enterOverlay = document.getElementById('enter-overlay');
 
@@ -392,40 +156,54 @@
     const progressFill = document.getElementById('progressFill');
     const progressBar = document.getElementById('progressBar');
 
-    // CẤU HÌNH TIM LƯU VÀO TRÌNH DUYỆT (LOCALSTORAGE)
-    const BASE_LIKES = 12;
-    let savedLikes = parseInt(localStorage.getItem('whynotben_likes_count')) || BASE_LIKES;
-    let isLiked = localStorage.getItem('whynotben_is_liked') === 'true';
+    // TÊN TÀI KHOẢN DUY NHẤT TRÊN SERVER ONLINE
+    const SITE_ID = "whynotben_melody_v1";
 
-    likeCount.innerText = savedLikes;
-    if (isLiked) {
+    // 1. TẢI LƯỢT XEM & LƯỢT TIM TỪ SERVER VỀ
+    function fetchOnlineStats() {
+      // Đếm lượt xem online
+      fetch(`https://api.counterapi.dev/v1/${SITE_ID}/views/up`)
+        .then(res => res.json())
+        .then(data => { if(data.count) viewCount.innerText = data.count; })
+        .catch(() => { viewCount.innerText = "1"; });
+
+      // Lấy lượt tim online
+      fetch(`https://api.counterapi.dev/v1/${SITE_ID}/likes`)
+        .then(res => res.json())
+        .then(data => { if(data.count !== undefined) likeCount.innerText = data.count; })
+        .catch(() => { likeCount.innerText = "0"; });
+    }
+
+    // Đã thả tim trên máy này chưa?
+    let userHasLiked = localStorage.getItem(`${SITE_ID}_has_liked`) === 'true';
+    if (userHasLiked) {
       likeBtn.classList.add('liked');
       statHeartIcon.className = 'fa-solid fa-heart active-heart';
     }
 
+    // 2. BẤM THẢ TIM ĐỦ SẼ TĂNG TRÊN SERVER VÀ LƯU LẠI
     function toggleLike() {
-      let currentLikes = parseInt(likeCount.innerText) || BASE_LIKES;
-
-      if (!isLiked) {
-        isLiked = true;
-        currentLikes += 1;
+      if (!userHasLiked) {
+        userHasLiked = true;
+        localStorage.setItem(`${SITE_ID}_has_liked`, 'true');
         likeBtn.classList.add('liked');
         statHeartIcon.className = 'fa-solid fa-heart active-heart';
         showToast("Đã thả tim!");
-      } else {
-        isLiked = false;
-        currentLikes -= 1;
-        likeBtn.classList.remove('liked');
-        statHeartIcon.className = 'fa-regular fa-heart';
-        showToast("Đã bỏ thả tim!");
-      }
 
-      likeCount.innerText = currentLikes;
-      localStorage.setItem('whynotben_likes_count', currentLikes);
-      localStorage.setItem('whynotben_is_liked', isLiked);
+        // Gửi lệnh tăng tim lên Server Online
+        fetch(`https://api.counterapi.dev/v1/${SITE_ID}/likes/up`)
+          .then(res => res.json())
+          .then(data => { if(data.count !== undefined) likeCount.innerText = data.count; })
+          .catch(() => {
+            let curr = parseInt(likeCount.innerText) || 0;
+            likeCount.innerText = curr + 1;
+          });
+      } else {
+        showToast("Bạn đã thả tim trang này rồi!");
+      }
     }
 
-    // HIỆU ỨNG GÕ CHỮ LẶP VÔ TẬN
+    // GÕ CHỮ VÔ TẬN
     const textToType = "whynotben";
     let charIndex = 0;
     let isDeleting = false;
@@ -464,6 +242,7 @@
     }
 
     typeLoop();
+    fetchOnlineStats();
 
     function formatTime(seconds) {
       const min = Math.floor(seconds / 60);
