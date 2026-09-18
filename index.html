@@ -24,7 +24,6 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      /* Background Gradient Động */
       background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1e5799);
       background-size: 400% 400%;
       animation: gradientBG 12s ease infinite;
@@ -39,7 +38,6 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* Màn hình chờ nhún nhảy */
     #enter-screen {
       position: fixed;
       top: 0;
@@ -74,7 +72,6 @@
       transform: translateY(-100vh);
     }
 
-    /* Hạt tuyết rơi nhẹ */
     .snowflake {
       position: fixed;
       top: -10px;
@@ -90,7 +87,6 @@
       100% { transform: translateY(105vh) rotate(360deg); opacity: 0.1; }
     }
 
-    /* Bio Card Glassmorphism */
     .bio-card {
       width: 100%;
       max-width: 360px;
@@ -107,35 +103,35 @@
       z-index: 10;
     }
 
-    /* Khung Avatar Discord Decoration */
+    /* Khung Avatar Fix Lỗi */
     .avatar-wrapper {
       position: relative;
-      display: inline-block;
-      width: 130px;
-      height: 130px;
-      margin-bottom: 12px;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 12px auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .avatar {
-      width: 100px;
-      height: 100px;
+      width: 90px;
+      height: 90px;
       border-radius: 50%;
       object-fit: cover;
       position: absolute;
-      top: 15px;
-      left: 15px;
       z-index: 1;
     }
 
-    /* Khung hiệu ứng Discord bao quanh */
     .avatar-decoration {
-      width: 130px;
-      height: 130px;
+      width: 120px;
+      height: 120px;
       position: absolute;
       top: 0;
       left: 0;
       z-index: 2;
       pointer-events: none;
+      object-fit: contain;
     }
 
     .username {
@@ -216,7 +212,6 @@
       box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
     }
 
-    /* Popup thông báo nhỏ */
     #toast {
       position: fixed;
       bottom: 30px;
@@ -235,24 +230,20 @@
 </head>
 <body>
 
-  <!-- Màn hình chờ nhún nhảy -->
   <div id="enter-screen" onclick="startExperience()">
     <h1>Click to enter</h1>
   </div>
 
-  <!-- Audio nhạc nền -->
   <audio id="bg-music" loop preload="auto">
     <source src="https://files.catbox.moe/88pag4.mov" type="audio/mp4">
     <source src="https://files.catbox.moe/88pag4.mov" type="audio/mpeg">
   </audio>
 
-  <!-- Khung Bio -->
   <div class="bio-card">
-    <!-- Khung Avatar + Khung Discord Decoration -->
     <div class="avatar-wrapper">
       <img class="avatar" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
-      <!-- Link khung trang trí Discord (Cyber / Anime) -->
-      <img class="avatar-decoration" src="https://cdn.discordapp.com/avatar-decoration-presets/v2_a_c2cb0f9b6b71f30740a16ef54c86518a.png" alt="Decoration">
+      <!-- Link khung Discord mượt 100% -->
+      <img class="avatar-decoration" src="https://raw.githubusercontent.com/merlinfuchs/discord-badges/main/assets/decorations/a_8673b64bcbe34a3ee93c83b8b15d9a93.png" alt="" />
     </div>
     
     <h1 class="username">whynotben</h1>
