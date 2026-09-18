@@ -33,7 +33,7 @@
       position: relative;
     }
 
-    /* Màn hình chờ Click to Enter FIX */
+    /* Màn hình chờ Click to Enter */
     #enter-overlay {
       position: fixed;
       top: 0;
@@ -167,6 +167,7 @@
       color: #ffffff;
     }
 
+    /* Username với hiệu ứng gõ chữ (Typewriter) */
     .username {
       font-family: 'Fredoka', sans-serif;
       font-size: 30px;
@@ -176,6 +177,21 @@
       line-height: 1.1;
       margin-bottom: 4px;
       word-break: break-word;
+      min-height: 33px;
+    }
+
+    /* Con trỏ nhấp nháy kiểu gõ phím */
+    .cursor {
+      display: inline-block;
+      width: 3px;
+      background-color: #5eead4;
+      margin-left: 3px;
+      animation: blink 0.8s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
     }
 
     .bio-text {
@@ -368,7 +384,8 @@
         <img class="avatar" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
       </div>
       <div class="info-box">
-        <h1 class="username">whynotben</h1>
+        <!-- Chữ gõ từ từ sẽ hiển thị ở đây -->
+        <h1 class="username"><span id="typewriter"></span><span class="cursor">&nbsp;</span></h1>
         <p class="bio-text">Owner @benmelody</p>
         <div class="social-icons">
           <a href="javascript:void(0)" onclick="copyText('whynotben#0000')"><i class="fa-brands fa-discord"></i></a>
@@ -434,16 +451,32 @@
     const KEY_LIKE = "whynotben_bio_likes_v3";
     const KEY_VIEW = "whynotben_bio_views_v3";
 
-    // Hàm sự kiện vào trang FIX CẢ TOUCH & CLICK
+    // HÀM HIỆU ỨNG GÕ CHỮ (TYPEWRITER)
+    const textToType = "whynotben";
+    const typewriterEl = document.getElementById("typewriter");
+    let charIndex = 0;
+
+    function typeEffect() {
+      if (charIndex < textToType.length) {
+        typewriterEl.textContent += textToType.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeEffect, 120); // Tốc độ gõ mỗi chữ (120ms)
+      }
+    }
+
+    // Xử lý khi nhấn Click to Enter
     function handleEnter() {
       enterOverlay.style.opacity = '0';
       setTimeout(() => {
         enterOverlay.style.display = 'none';
       }, 500);
 
+      // Bắt đầu phát nhạc & gõ chữ
       audio.play().then(() => {
         playIcon.className = 'fa-solid fa-pause';
       }).catch(e => console.log("Play error:", e));
+
+      typeEffect();
 
       enterOverlay.removeEventListener('click', handleEnter);
       enterOverlay.removeEventListener('touchstart', handleEnter);
@@ -469,7 +502,7 @@
       statHeartIcon.className = 'fa-solid fa-heart active-heart';
     }
 
-    // Xử lý thời gian nhạc REAL-TIME
+    // Thời gian real-time
     function formatTime(seconds) {
       const min = Math.floor(seconds / 60);
       const sec = Math.floor(seconds % 60);
