@@ -34,6 +34,40 @@
       position: relative;
     }
 
+    /* Màn hình chờ Enter */
+    #enter-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 10, 20, 0.9);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 99999;
+      cursor: pointer;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    #enter-overlay h2 {
+      color: #5eead4;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 24px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 0 0 15px rgba(94, 234, 212, 0.6);
+      animation: pulse 1.5s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; transform: scale(0.98); }
+      50% { opacity: 1; transform: scale(1.02); }
+    }
+
     /* Video Nền */
     .bg-video {
       position: fixed;
@@ -84,9 +118,7 @@
       transition: all 0.2s ease;
     }
 
-    .top-btn:active {
-      transform: scale(0.9);
-    }
+    .top-btn:active { transform: scale(0.9); }
 
     .top-btn.liked {
       color: #ff4757;
@@ -106,7 +138,7 @@
       gap: 22px;
     }
 
-    /* Phần Hồ Sơ */
+    /* Hồ Sơ */
     .profile-section {
       display: flex;
       align-items: center;
@@ -153,7 +185,6 @@
       opacity: 0.9;
     }
 
-    /* Social Icons */
     .social-icons {
       display: flex;
       gap: 14px;
@@ -167,9 +198,7 @@
       filter: drop-shadow(0 0 6px rgba(153, 246, 228, 0.4));
     }
 
-    .social-icons a:active {
-      transform: scale(0.85);
-    }
+    .social-icons a:active { transform: scale(0.85); }
 
     /* Stats Bar */
     .stats-bar {
@@ -314,22 +343,22 @@
 </head>
 <body>
 
-  <!-- Video Nền -->
+  <div id="enter-overlay" onclick="enterSite()">
+    <h2>Click to Enter</h2>
+  </div>
+
   <video class="bg-video" autoplay loop muted playsinline>
     <source src="https://assets.mixkit.co/videos/preview/mixkit-underwater-lights-background-loop-30372-large.mp4" type="video/mp4">
   </video>
 
   <div class="overlay"></div>
 
-  <!-- Nút Icon Góc Trên -->
   <div class="top-buttons">
     <div class="top-btn" onclick="toggleMute()"><i class="fa-solid fa-volume-high" id="volumeIcon"></i></div>
     <div class="top-btn" id="likeBtn" onclick="toggleLike()"><i class="fa-solid fa-heart"></i></div>
   </div>
 
-  <!-- Nội Dung Bio Main -->
   <div class="container">
-    
     <div class="profile-section">
       <div class="avatar-wrapper">
         <img class="avatar" src="https://files.catbox.moe/6iewk3.jpeg" alt="Avatar">
@@ -346,7 +375,6 @@
       </div>
     </div>
 
-    <!-- Stats Bar -->
     <div class="stats-bar">
       <div class="stat-item"><i class="fa-regular fa-heart" id="statHeartIcon"></i> <span id="likeCount">0</span></div>
       <span>|</span>
@@ -355,7 +383,6 @@
       <div class="stat-item"><i class="fa-solid fa-location-dot"></i> Vietnam</div>
     </div>
 
-    <!-- Music Player -->
     <div class="music-player">
       <img class="song-cover" src="https://files.catbox.moe/r770n8.jpeg" alt="Song Cover">
       <div class="player-controls">
@@ -370,16 +397,14 @@
       </div>
       <div class="controls-btns">
         <i class="fa-solid fa-backward-step btn-step" onclick="restartMusic()"></i>
-        <div class="btn-play" onclick="togglePlay()"><i class="fa-solid fa-play" id="playIcon"></i></div>
+        <div class="btn-play" onclick="togglePlay()"><i class="fa-solid fa-pause" id="playIcon"></i></div>
         <i class="fa-solid fa-forward-step btn-step" onclick="restartMusic()"></i>
       </div>
     </div>
-
   </div>
 
   <div id="toast">Copied Discord ID!</div>
 
-  <!-- Audio -->
   <audio id="bg-audio" loop preload="auto">
     <source src="https://files.catbox.moe/pm0gph.mp3" type="audio/mpeg">
   </audio>
@@ -392,6 +417,7 @@
     const likeCount = document.getElementById('likeCount');
     const viewCount = document.getElementById('viewCount');
     const statHeartIcon = document.getElementById('statHeartIcon');
+    const enterOverlay = document.getElementById('enter-overlay');
 
     const currentTimeEl = document.getElementById('currentTime');
     const durationTimeEl = document.getElementById('durationTime');
@@ -401,7 +427,19 @@
     const KEY_LIKE = "whynotben_bio_likes_v3";
     const KEY_VIEW = "whynotben_bio_views_v3";
 
-    // 1. Tải lượt xem/tim
+    // Hàm vào trang & tự động phát nhạc ngay
+    function enterSite() {
+      enterOverlay.style.opacity = '0';
+      setTimeout(() => {
+        enterOverlay.style.visibility = 'hidden';
+      }, 600);
+
+      audio.play().then(() => {
+        playIcon.className = 'fa-solid fa-pause';
+      }).catch(e => console.log(e));
+    }
+
+    // Tải dữ liệu đếm
     fetch(`https://countapi.mileshilliard.com/api/v1/hit/${KEY_VIEW}`)
       .then(res => res.json())
       .then(data => { if (data && data.value) viewCount.innerText = data.value; })
@@ -418,7 +456,7 @@
       statHeartIcon.className = 'fa-solid fa-heart active-heart';
     }
 
-    // 2. Xử lý nhạc
+    // Thời gian real-time
     function formatTime(seconds) {
       const min = Math.floor(seconds / 60);
       const sec = Math.floor(seconds % 60);
@@ -433,88 +471,3 @@
         durationTimeEl.innerText = formatTime(audio.duration);
       }
     });
-
-    function seekMusic(e) {
-      const rect = progressBar.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const width = rect.width;
-      audio.currentTime = (clickX / width) * audio.duration;
-    }
-
-    function restartMusic() {
-      audio.currentTime = 0;
-    }
-
-    function playAudio() {
-      audio.play().then(() => {
-        playIcon.className = 'fa-solid fa-pause';
-      }).catch(e => {
-        console.log("Autoplay blocked, waiting for user click");
-      });
-    }
-
-    function togglePlay() {
-      if (audio.paused) {
-        playAudio();
-      } else {
-        audio.pause();
-        playIcon.className = 'fa-solid fa-play';
-      }
-    }
-
-    // TỰ ĐỘNG PHÁT NHẠC NGAY KHI NGƯỜI DÙNG CHẠM MÀN HÌNH LẦN ĐẦU
-    function startMusicOnFirstTouch() {
-      if (audio.paused) {
-        playAudio();
-      }
-      document.removeEventListener('click', startMusicOnFirstTouch);
-      document.removeEventListener('touchstart', startMusicOnFirstTouch);
-    }
-
-    document.addEventListener('click', startMusicOnFirstTouch);
-    document.addEventListener('touchstart', startMusicOnFirstTouch);
-
-    // Thử tự động phát nhạc ngay từ đầu (nếu trình duyệt cho phép)
-    window.addEventListener('DOMContentLoaded', () => {
-      playAudio();
-    });
-
-    function toggleLike() {
-      if (!userLiked) {
-        userLiked = true;
-        localStorage.setItem('has_liked_whynotben', 'true');
-        likeBtn.classList.add('liked');
-        statHeartIcon.className = 'fa-solid fa-heart active-heart';
-        let currentLikes = parseInt(likeCount.innerText) || 0;
-        likeCount.innerText = currentLikes + 1;
-        showToast("Cảm ơn bạn đã thả tim!");
-
-        fetch(`https://countapi.mileshilliard.com/api/v1/hit/${KEY_LIKE}`)
-          .then(res => res.json())
-          .then(data => { if (data && data.value) likeCount.innerText = data.value; });
-      } else {
-        showToast("Bạn đã thả tim trang này rồi!");
-      }
-    }
-
-    function toggleMute() {
-      audio.muted = !audio.muted;
-      volumeIcon.className = audio.muted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
-      showToast(audio.muted ? "Audio Muted" : "Audio Unmuted");
-    }
-
-    function copyText(text) {
-      navigator.clipboard.writeText(text);
-      showToast("Copied Discord ID!");
-    }
-
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      toast.innerText = msg;
-      toast.style.opacity = '1';
-      setTimeout(() => { toast.style.opacity = '0'; }, 2000);
-    }
-  </script>
-
-</body>
-</html>
