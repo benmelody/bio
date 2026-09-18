@@ -123,11 +123,11 @@
 
     .profile-section { display: flex; align-items: center; gap: 18px; }
     
-    /* FIX CHUẨN TỌA ĐỘ KHUNG AVATAR DECORATION 100% KHÍT */
+    /* GOM GỌN VÀ KHÓA CHẶT KHUNG VIỀN ĐỘNG SÁT AVATAR */
     .avatar-wrapper { 
       position: relative; 
-      width: 85px; 
-      height: 85px; 
+      width: 82px; 
+      height: 82px; 
       flex-shrink: 0;
     }
 
@@ -137,22 +137,20 @@
       border-radius: 50%; 
       object-fit: cover; 
       display: block;
-      border: 2px solid #5eead4;
-      box-shadow: 0 0 15px rgba(94, 234, 212, 0.4);
+      border: 2px solid #0f172a;
     }
 
-    /* Viền hiệu ứng động Discord Nitro ôm sát khít ngoài avatar */
     .avatar-decoration {
       position: absolute;
-      top: -6px;
-      left: -6px;
-      right: -6px;
-      bottom: -6px;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
       border-radius: 50%;
       background: conic-gradient(from 0deg, #ff007f, #7f00ff, #00f2fe, #5eead4, #ff73fa, #ff007f);
-      animation: rotateDecoration 4s linear infinite;
+      animation: rotateDecoration 3s linear infinite;
       z-index: -1;
-      filter: drop-shadow(0 0 6px rgba(94, 234, 212, 0.8));
+      filter: drop-shadow(0 0 5px rgba(94, 234, 212, 0.7));
     }
 
     @keyframes rotateDecoration {
@@ -162,8 +160,8 @@
 
     .status-dot {
       position: absolute;
-      bottom: 2px;
-      right: 2px;
+      bottom: 0px;
+      right: 0px;
       width: 16px;
       height: 16px;
       background-color: #80848e;
