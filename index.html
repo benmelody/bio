@@ -331,6 +331,7 @@
     const songCoverEl = document.getElementById('songCover');
 
     let isListeningSpotify = false;
+    let hasStartedAudio = false;
 
     const VIEW_KEY = "whynotben_bio_views_v1";
     fetch(`https://countapi.mileshilliard.com/api/v1/hit/${VIEW_KEY}`)
@@ -362,6 +363,7 @@
           const colors = { online: '#23a55a', idle: '#f0b232', dnd: '#f23f43', offline: '#80848e' };
           if (statusDot) statusDot.style.backgroundColor = colors[data.discord_status] || '#80848e';
 
+          // KIỂM TRA TRẠNG THÁI SPOTIFY REALTIME
           if (data.spotify && data.spotify.track_id) {
             isListeningSpotify = true;
             songTitleEl.innerText = data.spotify.song;
@@ -369,12 +371,23 @@
             if (data.spotify.album_art_url) {
               songCoverEl.src = data.spotify.album_art_url;
             }
+            // Tạm dừng nhạc nền khi đang mở Spotify
+            if (!audio.paused) {
+              audio.pause();
+              playIcon.className = 'fa-solid fa-play';
+            }
           } else {
+            // Khi tắt hẳn Spotify, tự động chuyển về nhạc nền và phát lại nếu người dùng đã bấm Enter
             if (isListeningSpotify) {
               isListeningSpotify = false;
               songTitleEl.innerText = "ben con mèo";
               songArtistEl.innerText = "Background Music";
               songCoverEl.src = "https://files.catbox.moe/r770n8.jpeg";
+              
+              if (hasStartedAudio && audio.paused) {
+                audio.play().catch(() => {});
+                playIcon.className = 'fa-solid fa-pause';
+              }
             }
           }
 
@@ -427,12 +440,13 @@
     function handleEnter() {
       if (hasEntered) return;
       hasEntered = true;
+      hasStartedAudio = true;
 
       enterOverlay.style.opacity = '0';
       enterOverlay.style.pointerEvents = 'none';
       setTimeout(() => { enterOverlay.style.display = 'none'; }, 300);
 
-      if (audio) {
+      if (audio && !isListeningSpotify) {
         audio.play().then(() => { playIcon.className = 'fa-solid fa-pause'; }).catch(() => {});
       }
     }
