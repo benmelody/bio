@@ -178,6 +178,7 @@
     .badge-icon:nth-child(4) { color: #5865F2; }
     .badge-icon:nth-child(5) { color: #ff73fa; }
 
+    /* Khung Discord Status động */
     .discord-status {
       display: flex;
       align-items: center;
@@ -263,17 +264,18 @@
             <i class="fa-solid fa-bolt badge-icon" title="Discord Nitro"></i>
           </div>
 
+          <!-- Khung Discord Status Real-time -->
           <div class="discord-status">
             <i class="fa-brands fa-discord status-icon"></i>
             <div class="status-info">
               <span class="status-title" id="statusTitle">Đang ngoại tuyến</span>
-              <span class="status-desc" id="statusDesc">Chưa có hoạt động</span>
+              <span class="status-desc" id="statusDesc">Đang cập nhật trạng thái...</span>
             </div>
           </div>
 
-          <p class="bio-text">Designer by @benmelody</p>
+          <p class="bio-text">Owner @benmelody</p>
           <div class="social-icons">
-            <a href="javascript:void(0)" onclick="copyText('whynotben#0000')"><i class="fa-brands fa-discord"></i></a>
+            <a href="javascript:void(0)" onclick="copyText('1538207077728526456')"><i class="fa-brands fa-discord"></i></a>
             <a href="https://facebook.com" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
             <a href="https://instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a>
             <a href="https://telegram.org" target="_blank"><i class="fa-brands fa-telegram"></i></a>
@@ -346,7 +348,7 @@
         document.getElementById('viewCount').innerText = "1";
       });
 
-    // ID Discord chuẩn của ông đã được gắn vào đây
+    // ID Discord chuẩn của mày
     const DISCORD_USER_ID = "1538207077728526456";
 
     async function fetchDiscordData() {
@@ -358,10 +360,12 @@
         if (result.success && result.data) {
           const data = result.data;
           
+          // Tự động thay đổi Avatar theo Discord
           if (data.discord_user && data.discord_user.avatar) {
             document.getElementById('discordAvatar').src = `https://cdn.discordapp.com/avatars/${DISCORD_USER_ID}/${data.discord_user.avatar}.png?size=256`;
           }
 
+          // Thay đổi màu chấm trạng thái (online, idle, dnd, offline)
           const statusDot = document.getElementById('statusDot');
           const colors = { online: '#23a55a', idle: '#f0b232', dnd: '#f23f43', offline: '#80848e' };
           if (statusDot) statusDot.style.backgroundColor = colors[data.discord_status] || '#80848e';
@@ -369,6 +373,7 @@
           const statusTitle = document.getElementById('statusTitle');
           const statusDesc = document.getElementById('statusDesc');
 
+          // Kiểm tra nếu đang nghe Spotify
           if (data.spotify && data.spotify.track_id) {
             isListeningSpotify = true;
             songTitleEl.innerText = data.spotify.song;
@@ -397,6 +402,7 @@
               }
             }
 
+            // Hiển thị game hoặc hoạt động khác trên Discord
             if (data.activities && data.activities.length > 0) {
               const activeAct = data.activities.find(act => act.type !== 4) || data.activities[0];
               if (statusTitle && statusDesc) {
@@ -417,7 +423,7 @@
     }
 
     fetchDiscordData();
-    setInterval(fetchDiscordData, 3000);
+    setInterval(fetchDiscordData, 3000); // Quét liên tục mỗi 3 giây
 
     function createRain() {
       const rainContainer = document.getElementById('rain');
