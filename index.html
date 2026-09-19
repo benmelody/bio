@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -157,7 +155,7 @@
       transition: background-color 0.3s ease;
     }
 
-    .info-box { display: flex; flex-direction: column; color: #ffffff; width: 100%; }
+    .info-box { display: flex; flex-direction: column; color: #ffffff; width: 100%; overflow: hidden; }
     .username { font-family: 'Fredoka', sans-serif; font-size: 26px; font-weight: 700; color: #99f6e4; text-shadow: 0 0 12px rgba(153, 246, 228, 0.5); line-height: 1.1; margin-bottom: 4px; min-height: 30px; }
     .cursor { display: inline-block; width: 3px; background-color: #5eead4; margin-left: 2px; animation: blink 0.8s infinite; }
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
@@ -189,9 +187,10 @@
       border-radius: 14px;
       margin-bottom: 8px;
       border: 1px solid rgba(255, 255, 255, 0.1);
+      width: 100%;
     }
-    .status-icon { font-size: 22px; color: #5eead4; }
-    .status-info { display: flex; flex-direction: column; font-size: 11px; overflow: hidden; }
+    .status-icon { font-size: 20px; color: #5eead4; flex-shrink: 0; }
+    .status-info { display: flex; flex-direction: column; font-size: 11px; overflow: hidden; width: 100%; }
     .status-title { font-weight: 700; color: #f8fafc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .status-desc { color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
@@ -264,6 +263,7 @@
             <i class="fa-solid fa-bolt badge-icon" title="Discord Nitro"></i>
           </div>
 
+          <!-- Khung Discord Status đã được fix hiện chuẩn -->
           <div class="discord-status">
             <i class="fa-brands fa-discord status-icon"></i>
             <div class="status-info">
@@ -334,6 +334,7 @@
     let isListeningSpotify = false;
     let hasStartedAudio = false;
 
+    // Đếm view hệ thống
     const VIEW_KEY = "whynotben_bio_views_v1";
     fetch(`https://countapi.mileshilliard.com/api/v1/hit/${VIEW_KEY}`)
       .then(res => res.json())
@@ -346,9 +347,11 @@
         document.getElementById('viewCount').innerText = "1";
       });
 
-    const DISCORD_USER_ID = "1538207077728526456";
+    // NHẬP ID DISCORD CHUẨN CỦA ÔNG VÀO ĐÂY (Ví dụ chuỗi số khoảng 17-19 chữ số của tài khoản Discord)
+    const DISCORD_USER_ID = ""; // Nếu chưa có ID chuẩn thì để trống, hoặc điền ID thật vào đây
 
     async function fetchDiscordData() {
+      if (!DISCORD_USER_ID) return;
       try {
         const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`);
         const result = await res.json();
@@ -364,12 +367,20 @@
           const colors = { online: '#23a55a', idle: '#f0b232', dnd: '#f23f43', offline: '#80848e' };
           if (statusDot) statusDot.style.backgroundColor = colors[data.discord_status] || '#80848e';
 
+          // Hiển thị trạng thái text Discord hoặc Spotify
+          const statusTitle = document.getElementById('statusTitle');
+          const statusDesc = document.getElementById('statusDesc');
+
           if (data.spotify && data.spotify.track_id) {
             isListeningSpotify = true;
             songTitleEl.innerText = data.spotify.song;
             songArtistEl.innerText = data.spotify.artist;
             if (data.spotify.album_art_url) {
               songCoverEl.src = data.spotify.album_art_url;
+            }
+            if (statusTitle && statusDesc) {
+              statusTitle.textContent = "Đang nghe Spotify";
+              statusDesc.textContent = data.spotify.song + " - " + data.spotify.artist;
             }
             if (!audio.paused) {
               audio.pause();
@@ -387,20 +398,18 @@
                 playIcon.className = 'fa-solid fa-pause';
               }
             }
-          }
 
-          const statusTitle = document.getElementById('statusTitle');
-          const statusDesc = document.getElementById('statusDesc');
-          if (data.activities && data.activities.length > 0) {
-            const activeAct = data.activities.find(act => act.type !== 4) || data.activities[0];
-            if (statusTitle && statusDesc) {
-              statusTitle.textContent = activeAct.name;
-              statusDesc.textContent = activeAct.details || activeAct.state || "Đang hoạt động";
-            }
-          } else {
-            if (statusTitle && statusDesc) {
-              statusTitle.textContent = "Không có hoạt động";
-              statusDesc.textContent = "Đang rảnh rỗi";
+            if (data.activities && data.activities.length > 0) {
+              const activeAct = data.activities.find(act => act.type !== 4) || data.activities[0];
+              if (statusTitle && statusDesc) {
+                statusTitle.textContent = activeAct.name;
+                statusDesc.textContent = activeAct.details || activeAct.state || "Đang hoạt động";
+              }
+            } else {
+              if (statusTitle && statusDesc) {
+                statusTitle.textContent = "Không có hoạt động";
+                statusDesc.textContent = "Đang rảnh rỗi";
+              }
             }
           }
         }
@@ -409,9 +418,8 @@
       }
     }
 
-    // Ép gọi dữ liệu ngay khi vừa tải trang để quét Spotify nhanh nhất
     fetchDiscordData();
-    setInterval(fetchDiscordData, 3000); // Rút ngắn thời gian quét xuống mỗi 3 giây cho nhạy
+    setInterval(fetchDiscordData, 3000);
 
     function createRain() {
       const rainContainer = document.getElementById('rain');
@@ -447,7 +455,6 @@
         enterOverlay.style.display = 'none'; 
       }, 400);
 
-      // Kiểm tra ngay khi bấm vào nếu không có Spotify thì phát nhạc nền luôn
       fetchDiscordData().then(() => {
         if (!isListeningSpotify && audio) {
           audio.play().then(() => { 
