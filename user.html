@@ -8,8 +8,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    
-    /* Giao diện màu nền đại dương hệt như bio chính của ông */
     body { 
       background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #415a77 100%);
       min-height: 100vh; 
@@ -19,8 +17,6 @@
       color: #fff; 
       padding: 20px; 
     }
-
-    /* Thẻ bio bo tròn, hiệu ứng kính mờ và viền sáng hệt trang chính */
     .bio-card { 
       background: rgba(255, 255, 255, 0.05); 
       backdrop-filter: blur(20px); 
@@ -32,18 +28,17 @@
       max-width: 400px; 
       text-align: center; 
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); 
-      animation: fadeIn 0.8s ease-in-out;
     }
-    @keyframes fadeIn {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+    
+    .avatar-wrapper {
+      position: relative;
+      width: 110px;
+      height: 110px;
+      margin: 0 auto 20px;
     }
-
-    /* Avatar chuẩn phong cách trang chính */
     .avatar-container { 
-      width: 110px; 
-      height: 110px; 
-      margin: 0 auto 20px; 
+      width: 100%; 
+      height: 100%; 
       border-radius: 50%; 
       overflow: hidden; 
       border: 3px solid #5eead4; 
@@ -56,12 +51,43 @@
     .avatar-container img { width: 100%; height: 100%; object-fit: cover; }
     .avatar-placeholder { font-size: 42px; color: #5eead4; font-weight: bold; }
 
-    h1 { font-size: 24px; margin-bottom: 8px; color: #5eead4; font-weight: 700; }
-    p { font-size: 14px; color: #94a3b8; margin-bottom: 25px; line-height: 1.5; }
+    .status-badge {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 3px solid #1b263b;
+      background: #747f8d;
+    }
+    .status-online { background: #43b581; box-shadow: 0 0 10px #43b581; }
+    .status-idle { background: #faa61a; box-shadow: 0 0 10px #faa61a; }
+    .status-dnd { background: #f04747; box-shadow: 0 0 10px #f04747; }
+    .status-offline { background: #747f8d; }
 
-    /* Nút bấm liên kết mượt mà, hiệu ứng đổi màu khi rê chuột */
+    h1 { font-size: 24px; margin-bottom: 8px; color: #5eead4; font-weight: 700; }
+    p { font-size: 14px; color: #94a3b8; margin-bottom: 20px; line-height: 1.5; }
+
+    /* Hiển thị số lượt xem */
+    .view-counter {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      color: #5eead4;
+      margin-bottom: 20px;
+      border: 1px solid rgba(94, 234, 212, 0.2);
+    }
+
     .link-btn { 
-      display: block; 
+      display: flex; 
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
       width: 100%; 
       padding: 14px; 
       background: rgba(255, 255, 255, 0.08); 
@@ -70,7 +96,7 @@
       color: #fff; 
       text-decoration: none; 
       font-weight: 600; 
-      margin-bottom: 14px; 
+      margin-bottom: 12px; 
       transition: all 0.3s ease; 
     }
     .link-btn:hover { 
@@ -79,8 +105,8 @@
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(94, 234, 212, 0.4);
     }
+    .link-btn i { font-size: 18px; }
 
-    /* Thanh phát nhạc nền */
     .music-widget { 
       margin-top: 15px; 
       display: inline-flex; 
@@ -102,11 +128,21 @@
 <body>
 
   <div class="bio-card">
-    <div class="avatar-container" id="avatarBox">
-      <span class="avatar-placeholder" id="uAvatarText">B</span>
+    <div class="avatar-wrapper">
+      <div class="avatar-container" id="avatarBox">
+        <span class="avatar-placeholder" id="uAvatarText">B</span>
+      </div>
+      <div class="status-badge" id="discordStatus"></div>
     </div>
+    
     <h1 id="uName">Đang tải...</h1>
     <p id="uDesc">Đang cập nhật tiểu sử...</p>
+    
+    <!-- Khung số lượt xem -->
+    <div class="view-counter">
+      <i class="fa-solid fa-eye"></i> Lượt xem: <span id="viewCount">0</span>
+    </div>
+
     <div id="uLinks"></div>
     
     <!-- Widget nhạc nền -->
@@ -125,25 +161,63 @@
     const audio = document.getElementById('bgMusic');
 
     if (username) {
+      // Xử lý đếm view riêng cho từng user
+      let views = parseInt(localStorage.getItem("bio_views_" + username)) || 0;
+      // Tránh việc nhấn F5 liên tục tự tăng view ảo quá nhiều trong 1 phiên (chỉ tính 1 lần mỗi lần mở tab)
+      if (!sessionStorage.getItem("viewed_" + username)) {
+        views++;
+        localStorage.setItem("bio_views_" + username, views);
+        sessionStorage.setItem("viewed_" + username, "true");
+      }
+      document.getElementById('viewCount').innerText = views;
+
       const savedData = JSON.parse(localStorage.getItem("bio_data_" + username));
       if (savedData) {
         document.getElementById('uName').innerText = savedData.name || username;
         document.getElementById('uDesc').innerText = savedData.desc || "Chưa có tiểu sử.";
 
-        // Xử lý hiển thị Avatar
-        const avatarBox = document.getElementById('avatarBox');
-        if (savedData.avatar) {
-          avatarBox.innerHTML = `<img src="${savedData.avatar}" alt="Avatar">`;
+        // Xử lý Discord Avatar & Status
+        if (savedData.discordId) {
+          fetch(`https://api.lanyard.rest/v1/users/${savedData.discordId}`)
+            .then(res => res.json())
+            .then(response => {
+              if (response.success && response.data) {
+                const dcData = response.data;
+                const user = dcData.discord_user;
+
+                if (user.avatar) {
+                  const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
+                  document.getElementById('avatarBox').innerHTML = `<img src="${avatarUrl}" alt="Discord Avatar">`;
+                }
+
+                const statusBadge = document.getElementById('discordStatus');
+                statusBadge.className = "status-badge status-" + (dcData.discord_status || 'offline');
+              }
+            })
+            .catch(err => console.log("Không thể kết nối Discord API"));
         } else {
           document.getElementById('uAvatarText').innerText = (savedData.name || username).charAt(0).toUpperCase();
         }
 
-        // Xử lý Link Mạng Xã Hội
-        if (savedData.social) {
-          document.getElementById('uLinks').innerHTML = `<a href="${savedData.social}" class="link-btn" target="_blank"><i class="fa-solid fa-globe"></i> Mạng xã hội / Website</a>`;
+        // Tạo nút mạng xã hội & Discord
+        let linksHTML = "";
+        if (savedData.discordId) {
+          linksHTML += `<a href="https://discord.com/users/${savedData.discordId}" class="link-btn" target="_blank"><i class="fa-brands fa-discord" style="color: #5865F2;"></i> Discord Profile</a>`;
+        } else {
+          linksHTML += `<a href="https://discord.gg/lanyard" class="link-btn" target="_blank" style="border-color: #5865F2;"><i class="fa-brands fa-discord" style="color: #5865F2;"></i> Kết Nối Discord (Lấy Avatar & Status)</a>`;
         }
+        if (savedData.facebook) {
+          linksHTML += `<a href="${savedData.facebook}" class="link-btn" target="_blank"><i class="fa-brands fa-facebook" style="color: #1877F2;"></i> Facebook</a>`;
+        }
+        if (savedData.tiktok) {
+          linksHTML += `<a href="${savedData.tiktok}" class="link-btn" target="_blank"><i class="fa-brands fa-tiktok"></i> TikTok</a>`;
+        }
+        if (savedData.instagram) {
+          linksHTML += `<a href="${savedData.instagram}" class="link-btn" target="_blank"><i class="fa-brands fa-instagram" style="color: #E4405F;"></i> Instagram</a>`;
+        }
+        document.getElementById('uLinks').innerHTML = linksHTML;
 
-        // Xử lý Nhạc nền
+        // Nhạc nền
         if (savedData.music) {
           audio.src = savedData.music;
           document.getElementById('musicContainer').style.display = 'block';
