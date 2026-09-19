@@ -3,121 +3,148 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard - whynotben Bio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <title>Tạo Bio Cá Nhân Của Bạn</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    body { background: #0f172a; color: #fff; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
-    .card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 20px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); backdrop-filter: blur(10px); }
-    h2 { color: #5eead4; margin-bottom: 20px; text-align: center; font-size: 22px; }
+    * { box-sizing: border-box; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
+    body { background: #0f172a; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+    .card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 20px; width: 100%; max-width: 420px; backdrop-filter: blur(10px); }
+    h2 { margin-bottom: 20px; color: #5eead4; text-align: center; }
     .input-group { margin-bottom: 15px; }
-    label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 5px; }
-    input { width: 100%; padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; font-size: 14px; outline: none; }
-    input:focus { border-color: #5eead4; }
-    .btn { width: 100%; padding: 12px; border-radius: 10px; background: #5eead4; color: #0f172a; font-weight: 700; border: none; cursor: pointer; margin-top: 10px; transition: 0.2s; }
-    .btn:hover { background: #99f6e4; }
-    .switch-mode { text-align: center; margin-top: 15px; font-size: 13px; color: #94a3b8; cursor: pointer; }
-    .switch-mode span { color: #5eead4; font-weight: 600; }
-    .dashboard { display: none; }
-    .stat-box { background: rgba(94, 234, 212, 0.1); border: 1px solid rgba(94, 234, 212, 0.3); padding: 20px; border-radius: 14px; text-align: center; margin-bottom: 20px; }
-    .stat-box h3 { font-size: 32px; color: #5eead4; margin-top: 5px; }
-    #msg { text-align: center; font-size: 13px; margin-top: 10px; color: #ff4757; }
+    label { display: block; font-size: 13px; margin-bottom: 5px; color: #cbd5e1; }
+    input, textarea { width: 100%; padding: 10px 14px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,20%); border-radius: 10px; color: #fff; font-size: 14px; }
+    input:focus, textarea:focus { outline: none; border-color: #5eead4; }
+    button { width: 100%; padding: 12px; background: #5eead4; color: #0f172a; font-weight: 600; border: none; border-radius: 10px; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+    button:hover { background: #2dd4bf; }
+    .hidden { display: none !important; }
+    .msg { text-align: center; font-size: 13px; margin-top: 10px; }
+    .link-box { background: rgba(94, 234, 212, 0.1); padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-size: 13px; word-break: break-all; }
+    .link-box a { color: #5eead4; text-decoration: none; font-weight: 600; }
   </style>
 </head>
 <body>
 
-  <!-- Khung Đăng nhập / Đăng ký -->
-  <div class="card" id="authCard">
-    <h2 id="formTitle">Đăng Nhập Quản Trị</h2>
-    <div class="input-group">
-      <label>Email</label>
-      <input type="email" id="email" placeholder="Nhập email của bạn...">
+  <div class="card">
+    <div id="auth-section">
+      <h2>Tạo trang Bio của riêng bạn</h2>
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="Nhập email của bạn...">
+      </div>
+      <div class="input-group">
+        <label>Mật khẩu</label>
+        <input type="password" id="password" placeholder="Nhập mật khẩu...">
+      </div>
+      <button onclick="handleLogin()">Đăng Nhập</button>
+      <button onclick="handleSignUp()" style="background: transparent; border: 1px solid #5eead4; color: #5eead4; margin-top: 8px;">Đăng Ký Tài Khoản Mới</button>
+      <p id="auth-msg" class="msg" style="color: #f87171;"></p>
     </div>
-    <div class="input-group">
-      <label>Mật khẩu</label>
-      <input type="password" id="password" placeholder="Nhập mật khẩu...">
+
+    <div id="profile-section" class="hidden">
+      <h2>Cấu hình Bio</h2>
+      <div class="link-box" id="userLinkBox">Link của bạn: <a id="userLink" href="#" target="_blank">Đang tạo...</a></div>
+      
+      <div class="input-group">
+        <label>Username (Dùng làm đường dẫn, ví dụ: benmelody)</label>
+        <input type="text" id="username" placeholder="Nhập username không dấu, liền nhau...">
+      </div>
+      <div class="input-group">
+        <label>Discord User ID (để tự sync Avatar & Status)</label>
+        <input type="text" id="discord_id" placeholder="Ví dụ: 1538207077728526456">
+      </div>
+      <div class="input-group">
+        <label>Lời giới thiệu (Bio)</label>
+        <textarea id="bio" placeholder="Viết vài dòng giới thiệu về bạn..."></textarea>
+      </div>
+      <button onclick="saveProfile()">Lưu Lại Thay Đổi</button>
+      <button onclick="handleLogout()" style="background: #ef4444; color: white; margin-top: 10px;">Đăng Xuất</button>
+      <p id="save-msg" class="msg"></p>
     </div>
-    <button class="btn" id="authBtn" onclick="handleAuth()">Đăng Nhập</button>
-    <p id="msg"></p>
-    <p class="switch-mode" onclick="toggleMode()"><span id="switchText">Chưa có tài khoản? Đăng ký ngay</span></p>
   </div>
 
-  <!-- Bảng điều khiển sau khi đăng nhập -->
-  <div class="card dashboard" id="dashCard">
-    <h2>Trang Quản Trị Bio</h2>
-    <div class="stat-box">
-      <p>Tổng lượt truy cập (Views)</p>
-      <h3 id="adminViews">...</h3>
-    </div>
-    <button class="btn" style="background: #ff4757; color: #fff;" onclick="logout()">Đăng Xuất</button>
-  </div>
+  <script>
+    const SUPABASE_URL = 'https://akcrrvgmztzrhojdpivxm.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFrY3JydmdtenR6aG9qZHBpdnhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MTYwNTIsImV4cCI6MjEwNTM5MjA1Mn0.db7xQISPliMXcjnynFr5iAYh5HOxBy58XdF3n-uKZnE';
+    
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  <!-- Firebase SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-    // Cấu hình Firebase của ông (Thay thông tin từ dự án Firebase của ông vào đây)
-    const firebaseConfig = {
-      databaseURL: "DÁN_LINK_FIREBASE_CỦA_BẠN_VÀO_ĐÂY"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getDatabase(app);
-
-    let isSignUp = false;
-
-    window.toggleMode = function() {
-      isSignUp = !isSignUp;
-      document.getElementById('formTitle').innerText = isSignUp ? "Đăng Ký Tài Khoản Mới" : "Đăng Nhập Quản Trị";
-      document.getElementById('authBtn').innerText = isSignUp ? "Đăng Ký" : "Đăng Nhập";
-      document.getElementById('switchText').innerText = isSignUp ? "Đã có tài khoản? Đăng nhập" : "Chưa có tài khoản? Đăng ký ngay";
-    }
-
-    window.handleAuth = async function() {
+    async function handleSignUp() {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      const msg = document.getElementById('msg');
-      msg.innerText = "";
+      const { data, error } = await supabaseClient.auth.signUp({ email, password });
+      if (error) document.getElementById('auth-msg').innerText = error.message;
+      else alert('Đăng ký thành công! Hãy bấm Đăng nhập.');
+    }
 
-      try {
-        if (isSignUp) {
-          await createUserWithEmailAndPassword(auth, email, password);
-          alert("Đăng ký thành công!");
-        } else {
-          await signInWithEmailAndPassword(auth, email, password);
-        }
-      } catch (error) {
-        msg.innerText = "Lỗi: " + error.message;
+    async function handleLogin() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      if (error) document.getElementById('auth-msg').innerText = error.message;
+      else checkUser();
+    }
+
+    async function checkUser() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (session) {
+        document.getElementById('auth-section').classList.add('hidden');
+        document.getElementById('profile-section').classList.remove('hidden');
+        loadProfileData(session.user.id);
       }
     }
 
-    window.logout = function() {
-      signOut(auth);
-    }
-
-    // Kiểm tra trạng thái đăng nhập
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        document.getElementById('authCard').style.display = 'none';
-        document.getElementById('dashCard').style.display = 'block';
+    async function loadProfileData(userId) {
+      const { data, error } = await supabaseClient.from('profiles').select('*').eq('id', userId).single();
+      if (data) {
+        document.getElementById('username').value = data.username || '';
+        document.getElementById('discord_id').value = data.discord_id || '';
+        document.getElementById('bio').value = data.bio || '';
         
-        // Lấy dữ liệu view từ Database hiển thị lên bảng điều khiển
-        const dbRef = ref(db, 'whynotben/views');
-        const snapshot = await get(dbRef);
-        if (snapshot.exists()) {
-          document.getElementById('adminViews').innerText = snapshot.val();
-        } else {
-          document.getElementById('adminViews').innerText = "258";
+        if (data.username) {
+          const profileUrl = `${window.location.origin}${window.location.pathname.replace('admin.html', '')}?u=${data.username}`;
+          document.getElementById('userLink').href = profileUrl;
+          document.getElementById('userLink').innerText = profileUrl;
         }
-      } else {
-        document.getElementById('authCard').style.display = 'block';
-        document.getElementById('dashCard').style.display = 'none';
       }
-    });
+    }
+
+    async function saveProfile() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session) return;
+
+      const username = document.getElementById('username').value.trim().toLowerCase();
+      const discord_id = document.getElementById('discord_id').value.trim();
+      const bio = document.getElementById('bio').value;
+
+      if (!username) {
+        alert('Vui lòng nhập Username!');
+        return;
+      }
+
+      const { error } = await supabaseClient.from('profiles').upsert({
+        id: session.user.id,
+        username,
+        discord_id,
+        bio
+      });
+
+      if (error) {
+        document.getElementById('save-msg').style.color = '#f87171';
+        document.getElementById('save-msg').innerText = "Lỗi: " + error.message;
+      } else {
+        document.getElementById('save-msg').style.color = '#34d399';
+        document.getElementById('save-msg').innerText = "Đã lưu thành công!";
+        loadProfileData(session.user.id);
+      }
+    }
+
+    async function handleLogout() {
+      await supabaseClient.auth.signOut();
+      location.reload();
+    }
+
+    checkUser();
   </script>
 </body>
 </html>
