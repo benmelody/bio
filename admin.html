@@ -11,7 +11,7 @@
     body { background: #0f172a; min-height: 100vh; display: flex; justify-content: center; align-items: center; color: #fff; padding: 20px; }
     .card { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.15); padding: 30px; border-radius: 24px; width: 100%; max-width: 450px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
     h2 { font-family: 'Fredoka', sans-serif; color: #5eead4; margin-bottom: 20px; text-align: center; font-size: 24px; }
-    .form-group { margin-bottom: 12px; }
+    .form-group { margin-bottom: 14px; }
     label { display: block; font-size: 13px; color: #cbd5e1; margin-bottom: 4px; }
     input, textarea { width: 100%; padding: 10px 14px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; color: #fff; font-size: 14px; outline: none; }
     input:focus, textarea:focus { border-color: #5eead4; }
@@ -25,7 +25,7 @@
     .error { color: #f87171; }
     .link-result { background: rgba(94, 234, 212, 0.1); border: 1px solid rgba(94, 234, 212, 0.3); padding: 12px; border-radius: 12px; margin-top: 15px; text-align: center; word-break: break-all; font-size: 13px; display: none; }
     .link-result a { color: #5eead4; text-decoration: underline; font-weight: 600; }
-    .note { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+    .discord-connect-btn { display: inline-block; margin-top: 6px; padding: 6px 12px; background: #5865F2; color: #fff; font-size: 12px; border-radius: 8px; text-decoration: none; font-weight: 600; }
   </style>
 </head>
 <body>
@@ -58,9 +58,11 @@
       <textarea id="bioDesc" placeholder="Mô tả bản thân..."></textarea>
     </div>
     <div class="form-group">
-      <label><i class="fa-brands fa-discord"></i> Discord User ID (Để lấy Avatar & Status tự động)</label>
+      <label><i class="fa-brands fa-discord"></i> Discord User ID</label>
       <input type="text" id="bioDiscordId" placeholder="Ví dụ: 823456789012345678">
-      <div class="note">*Cách lấy: Bật Developer Mode trong Discord -> Bấm chuột phải vào tên bạn -> Copy User ID. (Phải tham gia server Lanyard: discord.gg/lanyard để hệ thống nhận diện).</div>
+      <a href="https://discord.gg/lanyard" target="_blank" class="discord-connect-btn">
+        <i class="fa-brands fa-discord"></i> Bấm vào đây để kết nối server Lanyard
+      </a>
     </div>
     <div class="form-group">
       <label>Link Nhạc Nền (.mp3)</label>
