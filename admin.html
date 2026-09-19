@@ -15,7 +15,7 @@
     label { display: block; font-size: 13px; color: #cbd5e1; margin-bottom: 6px; }
     input, textarea { width: 100%; padding: 12px 16px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; color: #fff; font-size: 14px; outline: none; }
     input:focus, textarea:focus { border-color: #5eead4; }
-    textarea { resize: vertical; height: 80px; }
+    textarea { resize: vertical; height: 70px; }
     .btn { width: 100%; padding: 12px; background: #5eead4; color: #0f172a; font-weight: 700; border: none; border-radius: 12px; font-size: 15px; cursor: pointer; margin-top: 10px; transition: transform 0.1s; }
     .btn:active { transform: scale(0.97); }
     .switch-text { text-align: center; font-size: 13px; margin-top: 16px; color: #94a3b8; }
@@ -47,17 +47,25 @@
 
   <!-- Bảng Thiết Kế Link Bio Cho Khách -->
   <div class="card" id="admin-panel" style="display: none;">
-    <h2>Thiết Kế Link Bio Của Bạn</h2>
+    <h2>Thiết Kế Bio Của Bạn</h2>
     <div class="form-group">
-      <label>Tên hiển thị (Name)</label>
+      <label>Tên hiển thị</label>
       <input type="text" id="bioName" placeholder="Ví dụ: Nguyễn Văn A">
     </div>
     <div class="form-group">
-      <label>Tiểu sử ngắn (Bio)</label>
+      <label>Tiểu sử ngắn</label>
       <textarea id="bioDesc" placeholder="Mô tả bản thân..."></textarea>
     </div>
     <div class="form-group">
-      <label>Link Facebook / Mạng xã hội</label>
+      <label>Link Ảnh Đại Diện (URL ảnh)</label>
+      <input type="text" id="bioAvatar" placeholder="https://i.imgur.com/xxxxxx.jpg">
+    </div>
+    <div class="form-group">
+      <label>Link Nhạc Nền (Link file MP3 trực tiếp)</label>
+      <input type="text" id="bioMusic" placeholder="https://example.com/nhac.mp3">
+    </div>
+    <div class="form-group">
+      <label>Link Mạng Xã Hội / Facebook</label>
       <input type="text" id="bioSocial" placeholder="https://facebook.com/...">
     </div>
     <button class="btn" onclick="saveBio()">Lưu & Tạo Link Riêng</button>
@@ -113,7 +121,6 @@
       } else {
         const savedPass = localStorage.getItem("user_" + user);
         if (!savedPass && user === "admin" && pass === "123456") {
-          // Tài khoản mặc định
           localStorage.setItem("current_logged_user", user);
           showPanel(user);
           return;
@@ -133,10 +140,11 @@
       document.getElementById('auth-box').style.display = 'none';
       document.getElementById('admin-panel').style.display = 'block';
 
-      // Load dữ liệu cũ nếu có
       const savedData = JSON.parse(localStorage.getItem("bio_data_" + user)) || {};
       document.getElementById('bioName').value = savedData.name || "";
       document.getElementById('bioDesc').value = savedData.desc || "";
+      document.getElementById('bioAvatar').value = savedData.avatar || "";
+      document.getElementById('bioMusic').value = savedData.music || "";
       document.getElementById('bioSocial').value = savedData.social || "";
 
       if (savedData.name) {
@@ -148,9 +156,11 @@
       const user = localStorage.getItem("current_logged_user");
       const name = document.getElementById('bioName').value;
       const desc = document.getElementById('bioDesc').value;
+      const avatar = document.getElementById('bioAvatar').value;
+      const music = document.getElementById('bioMusic').value;
       const social = document.getElementById('bioSocial').value;
 
-      const bioData = { name, desc, social };
+      const bioData = { name, desc, avatar, music, social };
       localStorage.setItem("bio_data_" + user, JSON.stringify(bioData));
 
       showGeneratedLink(user);
