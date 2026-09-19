@@ -8,87 +8,58 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    
+    /* Giao diện màu nền đại dương hệt như bio chính của ông */
     body { 
-      background: #0f172a; 
+      background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #415a77 100%);
       min-height: 100vh; 
       display: flex; 
       justify-content: center; 
       align-items: center; 
       color: #fff; 
       padding: 20px; 
-      overflow: hidden;
-      position: relative;
     }
 
-    /* Hiệu ứng nền bóng bay lơ lửng */
-    .bubbles {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      overflow: hidden;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-    }
-    .bubble {
-      position: absolute;
-      bottom: -50px;
-      background: rgba(94, 234, 212, 0.15);
-      border-radius: 50%;
-      animation: rise 10s infinite linear;
-    }
-    @keyframes rise {
-      0% { transform: translateY(0) scale(1); opacity: 0; }
-      50% { opacity: 0.8; }
-      100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
-    }
-
-    /* Thẻ Bio chính */
+    /* Thẻ bio bo tròn, hiệu ứng kính mờ và viền sáng hệt trang chính */
     .bio-card { 
       background: rgba(255, 255, 255, 0.05); 
       backdrop-filter: blur(20px); 
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.15); 
-      padding: 40px 20px; 
+      padding: 40px 25px; 
       border-radius: 30px; 
       width: 100%; 
       max-width: 400px; 
       text-align: center; 
-      box-shadow: 0 15px 35px rgba(0,0,0,0.5); 
-      z-index: 2;
-      position: relative;
-      animation: fadeIn 1s ease-in-out;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); 
+      animation: fadeIn 0.8s ease-in-out;
     }
     @keyframes fadeIn {
       from { transform: translateY(20px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
 
+    /* Avatar chuẩn phong cách trang chính */
     .avatar-container { 
-      width: 100px; 
-      height: 100px; 
+      width: 110px; 
+      height: 110px; 
       margin: 0 auto 20px; 
       border-radius: 50%; 
       overflow: hidden; 
       border: 3px solid #5eead4; 
-      box-shadow: 0 0 25px rgba(94, 234, 212, 0.6); 
+      box-shadow: 0 0 20px rgba(94, 234, 212, 0.5); 
       display: flex; 
       justify-content: center; 
       align-items: center; 
-      background: #1e293b; 
-      animation: pulseGlow 3s infinite alternate;
-    }
-    @keyframes pulseGlow {
-      0% { box-shadow: 0 0 15px rgba(94, 234, 212, 0.4); }
-      100% { box-shadow: 0 0 30px rgba(94, 234, 212, 0.8); }
+      background: #1b263b; 
     }
     .avatar-container img { width: 100%; height: 100%; object-fit: cover; }
-    .avatar-placeholder { font-size: 38px; color: #5eead4; font-weight: bold; }
+    .avatar-placeholder { font-size: 42px; color: #5eead4; font-weight: bold; }
 
-    h1 { font-size: 22px; margin-bottom: 10px; color: #5eead4; text-shadow: 0 0 10px rgba(94,234,212,0.3); }
-    p { font-size: 14px; color: #94a3b8; margin-bottom: 25px; min-height: 40px; }
+    h1 { font-size: 24px; margin-bottom: 8px; color: #5eead4; font-weight: 700; }
+    p { font-size: 14px; color: #94a3b8; margin-bottom: 25px; line-height: 1.5; }
 
+    /* Nút bấm liên kết mượt mà, hiệu ứng đổi màu khi rê chuột */
     .link-btn { 
       display: block; 
       width: 100%; 
@@ -99,24 +70,25 @@
       color: #fff; 
       text-decoration: none; 
       font-weight: 600; 
-      margin-bottom: 12px; 
+      margin-bottom: 14px; 
       transition: all 0.3s ease; 
     }
     .link-btn:hover { 
       background: #5eead4; 
-      color: #0f172a; 
+      color: #0d1b2a; 
       transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(94, 234, 212, 0.4);
+      box-shadow: 0 8px 20px rgba(94, 234, 212, 0.4);
     }
 
+    /* Thanh phát nhạc nền */
     .music-widget { 
-      margin-top: 20px; 
+      margin-top: 15px; 
       display: inline-flex; 
       align-items: center; 
       gap: 10px; 
       background: rgba(94, 234, 212, 0.1); 
       border: 1px solid rgba(94, 234, 212, 0.3); 
-      padding: 8px 18px; 
+      padding: 10px 20px; 
       border-radius: 50px; 
       cursor: pointer; 
       color: #5eead4; 
@@ -128,9 +100,6 @@
   </style>
 </head>
 <body>
-
-  <!-- Hiệu ứng bong bóng nền bay -->
-  <div class="bubbles" id="bubbles"></div>
 
   <div class="bio-card">
     <div class="avatar-container" id="avatarBox">
@@ -150,21 +119,6 @@
   </div>
 
   <script>
-    // Tạo hiệu ứng bong bóng ngẫu nhiên bay lên
-    const bubblesContainer = document.getElementById('bubbles');
-    for (let i = 0; i < 15; i++) {
-      const bubble = document.createElement('div');
-      bubble.classList.add('bubble');
-      const size = Math.random() * 20 + 10 + 'px';
-      bubble.style.width = size;
-      bubble.style.height = size;
-      bubble.style.left = Math.random() * 100 + '%';
-      bubble.style.animationDuration = (Math.random() * 5 + 5) + 's';
-      bubble.style.animationDelay = (Math.random() * 5) + 's';
-      bubblesContainer.appendChild(bubble);
-    }
-
-    // Đọc thông tin bio từ localStorage dựa theo URL (?u=tên)
     const urlParams = new URLSearchParams(window.location.search);
     const username = urlParams.get('u');
     let isPlaying = false;
@@ -176,7 +130,7 @@
         document.getElementById('uName').innerText = savedData.name || username;
         document.getElementById('uDesc').innerText = savedData.desc || "Chưa có tiểu sử.";
 
-        // Xử lý Avatar
+        // Xử lý hiển thị Avatar
         const avatarBox = document.getElementById('avatarBox');
         if (savedData.avatar) {
           avatarBox.innerHTML = `<img src="${savedData.avatar}" alt="Avatar">`;
