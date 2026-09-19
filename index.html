@@ -263,7 +263,6 @@
             <i class="fa-solid fa-bolt badge-icon" title="Discord Nitro"></i>
           </div>
 
-          <!-- Khung Discord Status đã được fix hiện chuẩn -->
           <div class="discord-status">
             <i class="fa-brands fa-discord status-icon"></i>
             <div class="status-info">
@@ -347,8 +346,8 @@
         document.getElementById('viewCount').innerText = "1";
       });
 
-    // NHẬP ID DISCORD CHUẨN CỦA ÔNG VÀO ĐÂY (Ví dụ chuỗi số khoảng 17-19 chữ số của tài khoản Discord)
-    const DISCORD_USER_ID = ""; // Nếu chưa có ID chuẩn thì để trống, hoặc điền ID thật vào đây
+    // ID Discord chuẩn của ông đã được gắn vào đây
+    const DISCORD_USER_ID = "1538207077728526456";
 
     async function fetchDiscordData() {
       if (!DISCORD_USER_ID) return;
@@ -367,7 +366,6 @@
           const colors = { online: '#23a55a', idle: '#f0b232', dnd: '#f23f43', offline: '#80848e' };
           if (statusDot) statusDot.style.backgroundColor = colors[data.discord_status] || '#80848e';
 
-          // Hiển thị trạng thái text Discord hoặc Spotify
           const statusTitle = document.getElementById('statusTitle');
           const statusDesc = document.getElementById('statusDesc');
 
