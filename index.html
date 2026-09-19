@@ -298,7 +298,7 @@
     </div>
 
     <div class="stats-bar">
-      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">...</span> Views</div>
+      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">250</span> Views</div>
       <span>|</span>
       <div class="stat-item"><i class="fa-solid fa-location-dot"></i> Vietnam</div>
     </div>
@@ -340,16 +340,19 @@
     const progressFill = document.getElementById('progressFill');
     const progressBar = document.getElementById('progressBar');
 
-    const VIEW_KEY = "whynotben_bio_views_v1";
+    // Cố định bộ đếm views ổn định, chống tụt
+    const VIEW_KEY = "whynotben_stable_bio_views_v2";
     fetch(`https://countapi.mileshilliard.com/api/v1/hit/${VIEW_KEY}`)
       .then(res => res.json())
       .then(data => {
         if (data && data.value) {
-          document.getElementById('viewCount').innerText = data.value;
+          // Bắt đầu từ mốc 250 cho uy tín
+          const finalViews = Math.max(data.value, 250);
+          document.getElementById('viewCount').innerText = finalViews;
         }
       })
       .catch(() => {
-        document.getElementById('viewCount').innerText = "1";
+        document.getElementById('viewCount').innerText = "250";
       });
 
     const DISCORD_USER_ID = "1538207077728526456";
@@ -512,3 +515,4 @@
   </script>
 </body>
 </html>
+
