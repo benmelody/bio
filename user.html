@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trang Bio Cá Nhân</title>
+  <title>whynotben - Bio</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -123,108 +123,43 @@
   <div class="bio-card">
     <div class="avatar-wrapper">
       <div class="avatar-container" id="avatarBox">
-        <span class="avatar-placeholder" id="uAvatarText">B</span>
+        <span class="avatar-placeholder" id="uAvatarText">W</span>
       </div>
-      <div class="status-badge" id="discordStatus"></div>
+      <div class="status-badge status-offline" id="discordStatus"></div>
     </div>
     
-    <h1 id="uName">Đang tải...</h1>
-    <p id="uDesc">Đang cập nhật tiểu sử...</p>
+    <h1 id="uName">whynotben</h1>
+    <p id="uDesc">Owner @benmelody</p>
     
     <div class="view-counter">
-      <i class="fa-solid fa-eye"></i> Lượt xem: <span id="viewCount">0</span>
+      <i class="fa-solid fa-eye"></i> Lượt xem: <span id="viewCount">1</span>
     </div>
 
-    <div id="uLinks"></div>
+    <div id="uLinks">
+      <a href="https://discord.gg/lanyard" class="link-btn" target="_blank" style="border-color: #5865F2;"><i class="fa-brands fa-discord" style="color: #5865F2;"></i> Kết Nối Discord</a>
+      <a href="https://facebook.com" class="link-btn" target="_blank"><i class="fa-brands fa-facebook" style="color: #1877F2;"></i> Facebook</a>
+      <a href="https://instagram.com" class="link-btn" target="_blank"><i class="fa-brands fa-instagram" style="color: #E4405F;"></i> Instagram</a>
+    </div>
     
-    <div id="musicContainer" style="display: none;">
+    <div id="musicContainer" style="display: block;">
       <div class="music-widget" onclick="toggleMusic()">
         <i class="fa-solid fa-music" id="musicIcon"></i> <span id="musicText">Bật nhạc nền</span>
       </div>
-      <audio id="bgMusic" loop></audio>
+      <audio id="bgMusic" loop src="https://files.catbox.moe/pm0gph.mp3"></audio>
     </div>
   </div>
 
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    let username = urlParams.get('u');
     let isPlaying = false;
     const audio = document.getElementById('bgMusic');
 
-    // Nếu không truyền param ?u= trên link, tự động nhận diện tài khoản đang đăng nhập hoặc lấy mặc định "admin"
-    if (!username) {
-      username = localStorage.getItem("current_logged_user") || "admin";
-    }
-
-    // Đếm view chuẩn theo từng user
-    let views = parseInt(localStorage.getItem("bio_views_" + username)) || 0;
-    if (!sessionStorage.getItem("viewed_" + username)) {
+    let views = parseInt(localStorage.getItem("bio_views_main")) || 1;
+    if (!sessionStorage.getItem("viewed_main")) {
       views++;
-      localStorage.setItem("bio_views_" + username, views);
-      sessionStorage.setItem("viewed_" + username, "true");
+      localStorage.setItem("bio_views_main", views);
+      sessionStorage.setItem("viewed_main", "true");
     }
     document.getElementById('viewCount').innerText = views;
-
-    // Lấy dữ liệu bio từ localStorage (hỗ trợ cả key thông thường lẫn key theo tên tài khoản)
-    let savedData = JSON.parse(localStorage.getItem("bio_data_" + username));
-    if (!savedData) {
-      savedData = JSON.parse(localStorage.getItem("bio_data_admin")) || {
-        name: username,
-        desc: "Chào mừng bạn đến với trang Bio của tôi!",
-        discordId: "",
-        music: "",
-        facebook: "",
-        tiktok: "",
-        instagram: ""
-      };
-    }
-
-    document.getElementById('uName').innerText = savedData.name || username;
-    document.getElementById('uDesc').innerText = savedData.desc || "Chưa có tiểu sử.";
-    document.getElementById('uAvatarText').innerText = (savedData.name || username).charAt(0).toUpperCase();
-
-    // Xử lý Lanyard Discord Avatar & Status
-    if (savedData.discordId) {
-      fetch(`https://api.lanyard.rest/v1/users/${savedData.discordId}`)
-        .then(res => res.json())
-        .then(response => {
-          if (response.success && response.data) {
-            const dcData = response.data;
-            const dcUser = dcData.discord_user;
-            if (dcUser.avatar) {
-              const avatarUrl = `https://cdn.discordapp.com/avatars/${dcUser.id}/${dcUser.avatar}.png?size=256`;
-              document.getElementById('avatarBox').innerHTML = `<img src="${avatarUrl}" alt="Discord Avatar">`;
-            }
-            const statusBadge = document.getElementById('discordStatus');
-            statusBadge.className = "status-badge status-" + (dcData.discord_status || 'offline');
-          }
-        })
-        .catch(err => console.log("Lỗi kết nối Lanyard API"));
-    }
-
-    // Tạo danh sách nút bấm mạng xã hội
-    let linksHTML = "";
-    if (savedData.discordId) {
-      linksHTML += `<a href="https://discord.com/users/${savedData.discordId}" class="link-btn" target="_blank"><i class="fa-brands fa-discord" style="color: #5865F2;"></i> Discord Profile</a>`;
-    } else {
-      linksHTML += `<a href="https://discord.gg/lanyard" class="link-btn" target="_blank" style="border-color: #5865F2;"><i class="fa-brands fa-discord" style="color: #5865F2;"></i> Kết Nối Discord (Lấy Avatar & Status)</a>`;
-    }
-    if (savedData.facebook) {
-      linksHTML += `<a href="${savedData.facebook}" class="link-btn" target="_blank"><i class="fa-brands fa-facebook" style="color: #1877F2;"></i> Facebook</a>`;
-    }
-    if (savedData.tiktok) {
-      linksHTML += `<a href="${savedData.tiktok}" class="link-btn" target="_blank"><i class="fa-brands fa-tiktok"></i> TikTok</a>`;
-    }
-    if (savedData.instagram) {
-      linksHTML += `<a href="${savedData.instagram}" class="link-btn" target="_blank"><i class="fa-brands fa-instagram" style="color: #E4405F;"></i> Instagram</a>`;
-    }
-    document.getElementById('uLinks').innerHTML = linksHTML;
-
-    // Kích hoạt nhạc nền nếu có
-    if (savedData.music) {
-      audio.src = savedData.music;
-      document.getElementById('musicContainer').style.display = 'block';
-    }
 
     function toggleMusic() {
       if (isPlaying) {
@@ -238,7 +173,7 @@
           document.getElementById('musicText').innerText = "Đang phát nhạc...";
           isPlaying = true;
         }).catch(e => {
-          alert("Không thể phát nhạc, vui lòng kiểm tra lại link MP3!");
+          alert("Hãy bấm vào màn hình để cho phép phát nhạc!");
         });
       }
     }
