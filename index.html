@@ -343,7 +343,6 @@
     const songArtistEl = document.getElementById('songArtist');
     const songCoverEl = document.getElementById('songCover');
 
-    // Cố định view chống tụt bằng mốc an toàn
     let currentViews = localStorage.getItem('whynotben_fixed_views');
     if (!currentViews) {
       currentViews = 288;
@@ -355,6 +354,7 @@
     document.getElementById('viewCount').innerText = currentViews;
 
     const DISCORD_USER_ID = "1538207077728526456";
+    let isUserInteracted = false;
 
     async function fetchDiscordData() {
       try {
@@ -399,12 +399,23 @@
             progressFill.style.width = `${progressPercent}%`;
             currentTimeEl.innerText = formatTimeMs(progress);
             durationTimeEl.innerText = formatTimeMs(duration);
+
+            // Nếu đang nghe Spotify thì tự động tắt nhạc nền mp3 đi để tránh bị đè tiếng
+            if (!audio.paused) {
+              audio.pause();
+              playIcon.className = 'fa-solid fa-play';
+            }
           } else {
             songTitleEl.textContent = "ben con mèo";
             songArtistEl.textContent = "Đang phát nhạc nền";
             songCoverEl.src = "https://files.catbox.moe/r770n8.jpeg";
             
-            if (audio.duration) {
+            if (isUserInteracted && audio.paused) {
+              audio.play().catch(() => {});
+              playIcon.className = 'fa-solid fa-pause';
+            }
+
+            if (audio.duration && !audio.paused) {
               progressFill.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
               currentTimeEl.innerText = formatTime(audio.currentTime);
               durationTimeEl.innerText = formatTime(audio.duration);
@@ -455,10 +466,9 @@
     createRain();
     setTimeout(triggerLightning, 3000);
 
-    let hasEntered = false;
     function handleEnter() {
-      if (hasEntered) return;
-      hasEntered = true;
+      if (isUserInteracted) return;
+      isUserInteracted = true;
 
       enterOverlay.style.opacity = '0';
       enterOverlay.style.pointerEvents = 'none';
@@ -494,8 +504,6 @@
       setTimeout(typeLoop, speed);
     }
     typeLoop();
-
-    audio.addEventListener('timeupdate', () => {});
 
     function togglePlay() {
       if (audio.paused) {
