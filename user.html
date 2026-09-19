@@ -29,7 +29,6 @@
       text-align: center; 
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); 
     }
-    
     .avatar-wrapper {
       position: relative;
       width: 110px;
@@ -50,7 +49,6 @@
     }
     .avatar-container img { width: 100%; height: 100%; object-fit: cover; }
     .avatar-placeholder { font-size: 42px; color: #5eead4; font-weight: bold; }
-
     .status-badge {
       position: absolute;
       bottom: 5px;
@@ -65,10 +63,8 @@
     .status-idle { background: #faa61a; box-shadow: 0 0 10px #faa61a; }
     .status-dnd { background: #f04747; box-shadow: 0 0 10px #f04747; }
     .status-offline { background: #747f8d; }
-
     h1 { font-size: 24px; margin-bottom: 8px; color: #5eead4; font-weight: 700; }
     p { font-size: 14px; color: #94a3b8; margin-bottom: 20px; line-height: 1.5; }
-
     .view-counter {
       display: inline-flex;
       align-items: center;
@@ -81,7 +77,6 @@
       margin-bottom: 20px;
       border: 1px solid rgba(94, 234, 212, 0.2);
     }
-
     .link-btn { 
       display: flex; 
       align-items: center;
@@ -105,7 +100,6 @@
       box-shadow: 0 8px 20px rgba(94, 234, 212, 0.4);
     }
     .link-btn i { font-size: 18px; }
-
     .music-widget { 
       margin-top: 15px; 
       display: inline-flex; 
@@ -153,79 +147,83 @@
 
   <script>
     const urlParams = new URLSearchParams(window.location.search);
-    const username = urlParams.get('u');
+    let username = urlParams.get('u');
     let isPlaying = false;
     const audio = document.getElementById('bgMusic');
 
-    if (username) {
-      // Đếm view
-      let views = parseInt(localStorage.getItem("bio_views_" + username)) || 0;
-      if (!sessionStorage.getItem("viewed_" + username)) {
-        views++;
-        localStorage.setItem("bio_views_" + username, views);
-        sessionStorage.setItem("viewed_" + username, "true");
-      }
-      document.getElementById('viewCount').innerText = views;
+    // Nếu không truyền param ?u= trên link, tự động nhận diện tài khoản đang đăng nhập hoặc lấy mặc định "admin"
+    if (!username) {
+      username = localStorage.getItem("current_logged_user") || "admin";
+    }
 
-      // Đọc đúng key dữ liệu bio
-      const savedData = JSON.parse(localStorage.getItem("bio_data_" + username));
-      
-      if (savedData) {
-        document.getElementById('uName').innerText = savedData.name || username;
-        document.getElementById('uDesc').innerText = savedData.desc || "Chưa có tiểu sử.";
+    // Đếm view chuẩn theo từng user
+    let views = parseInt(localStorage.getItem("bio_views_" + username)) || 0;
+    if (!sessionStorage.getItem("viewed_" + username)) {
+      views++;
+      localStorage.setItem("bio_views_" + username, views);
+      sessionStorage.setItem("viewed_" + username, "true");
+    }
+    document.getElementById('viewCount').innerText = views;
 
-        // Xử lý Avatar & Status Discord
-        if (savedData.discordId) {
-          fetch(`https://api.lanyard.rest/v1/users/${savedData.discordId}`)
-            .then(res => res.json())
-            .then(response => {
-              if (response.success && response.data) {
-                const dcData = response.data;
-                const user = dcData.discord_user;
-                if (user.avatar) {
-                  const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
-                  document.getElementById('avatarBox').innerHTML = `<img src="${avatarUrl}" alt="Discord Avatar">`;
-                }
-                const statusBadge = document.getElementById('discordStatus');
-                statusBadge.className = "status-badge status-" + (dcData.discord_status || 'offline');
-              }
-            })
-            .catch(err => console.log("Lỗi kết nối Lanyard API"));
-        } else {
-          document.getElementById('uAvatarText').innerText = (savedData.name || username).charAt(0).toUpperCase();
-        }
+    // Lấy dữ liệu bio từ localStorage (hỗ trợ cả key thông thường lẫn key theo tên tài khoản)
+    let savedData = JSON.parse(localStorage.getItem("bio_data_" + username));
+    if (!savedData) {
+      savedData = JSON.parse(localStorage.getItem("bio_data_admin")) || {
+        name: username,
+        desc: "Chào mừng bạn đến với trang Bio của tôi!",
+        discordId: "",
+        music: "",
+        facebook: "",
+        tiktok: "",
+        instagram: ""
+      };
+    }
 
-        // Tạo nút mạng xã hội
-        let linksHTML = "";
-        if (savedData.discordId) {
-          linksHTML += `<a href="https://discord.com/users/${savedData.discordId}" class="link-btn" target="_blank"><i class="fa-brands fa-discord" style="color: #5865F2;"></i> Discord Profile</a>`;
-        } else {
-          linksHTML += `<a href="https://discord.gg/lanyard" class="link-btn" target="_blank" style="border-color: #5865F2;"><i class="fa-brands fa-discord" style="color: #5865F2;"></i> Kết Nối Discord (Lấy Avatar & Status)</a>`;
-        }
-        if (savedData.facebook) {
-          linksHTML += `<a href="${savedData.facebook}" class="link-btn" target="_blank"><i class="fa-brands fa-facebook" style="color: #1877F2;"></i> Facebook</a>`;
-        }
-        if (savedData.tiktok) {
-          linksHTML += `<a href="${savedData.tiktok}" class="link-btn" target="_blank"><i class="fa-brands fa-tiktok"></i> TikTok</a>`;
-        }
-        if (savedData.instagram) {
-          linksHTML += `<a href="${savedData.instagram}" class="link-btn" target="_blank"><i class="fa-brands fa-instagram" style="color: #E4405F;"></i> Instagram</a>`;
-        }
-        document.getElementById('uLinks').innerHTML = linksHTML;
+    document.getElementById('uName').innerText = savedData.name || username;
+    document.getElementById('uDesc').innerText = savedData.desc || "Chưa có tiểu sử.";
+    document.getElementById('uAvatarText').innerText = (savedData.name || username).charAt(0).toUpperCase();
 
-        // Nhạc nền
-        if (savedData.music) {
-          audio.src = savedData.music;
-          document.getElementById('musicContainer').style.display = 'block';
-        }
-      } else {
-        document.getElementById('uName').innerText = username;
-        document.getElementById('uDesc').innerText = "Tài khoản này chưa thiết lập thông tin bio.";
-        document.getElementById('uAvatarText').innerText = username.charAt(0).toUpperCase();
-      }
+    // Xử lý Lanyard Discord Avatar & Status
+    if (savedData.discordId) {
+      fetch(`https://api.lanyard.rest/v1/users/${savedData.discordId}`)
+        .then(res => res.json())
+        .then(response => {
+          if (response.success && response.data) {
+            const dcData = response.data;
+            const dcUser = dcData.discord_user;
+            if (dcUser.avatar) {
+              const avatarUrl = `https://cdn.discordapp.com/avatars/${dcUser.id}/${dcUser.avatar}.png?size=256`;
+              document.getElementById('avatarBox').innerHTML = `<img src="${avatarUrl}" alt="Discord Avatar">`;
+            }
+            const statusBadge = document.getElementById('discordStatus');
+            statusBadge.className = "status-badge status-" + (dcData.discord_status || 'offline');
+          }
+        })
+        .catch(err => console.log("Lỗi kết nối Lanyard API"));
+    }
+
+    // Tạo danh sách nút bấm mạng xã hội
+    let linksHTML = "";
+    if (savedData.discordId) {
+      linksHTML += `<a href="https://discord.com/users/${savedData.discordId}" class="link-btn" target="_blank"><i class="fa-brands fa-discord" style="color: #5865F2;"></i> Discord Profile</a>`;
     } else {
-      document.getElementById('uName').innerText = "Lỗi đường dẫn!";
-      document.getElementById('uDesc').innerText = "Thiếu tên tài khoản trên URL.";
+      linksHTML += `<a href="https://discord.gg/lanyard" class="link-btn" target="_blank" style="border-color: #5865F2;"><i class="fa-brands fa-discord" style="color: #5865F2;"></i> Kết Nối Discord (Lấy Avatar & Status)</a>`;
+    }
+    if (savedData.facebook) {
+      linksHTML += `<a href="${savedData.facebook}" class="link-btn" target="_blank"><i class="fa-brands fa-facebook" style="color: #1877F2;"></i> Facebook</a>`;
+    }
+    if (savedData.tiktok) {
+      linksHTML += `<a href="${savedData.tiktok}" class="link-btn" target="_blank"><i class="fa-brands fa-tiktok"></i> TikTok</a>`;
+    }
+    if (savedData.instagram) {
+      linksHTML += `<a href="${savedData.instagram}" class="link-btn" target="_blank"><i class="fa-brands fa-instagram" style="color: #E4405F;"></i> Instagram</a>`;
+    }
+    document.getElementById('uLinks').innerHTML = linksHTML;
+
+    // Kích hoạt nhạc nền nếu có
+    if (savedData.music) {
+      audio.src = savedData.music;
+      document.getElementById('musicContainer').style.display = 'block';
     }
 
     function toggleMusic() {
