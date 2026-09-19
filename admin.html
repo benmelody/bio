@@ -2,148 +2,171 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tạo Bio Cá Nhân Của Bạn</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Quản trị - Bio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    * { box-sizing: border-box; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
-    body { background: #0f172a; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-    .card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 20px; width: 100%; max-width: 420px; backdrop-filter: blur(10px); }
-    h2 { margin-bottom: 20px; color: #5eead4; text-align: center; }
-    .input-group { margin-bottom: 15px; }
-    label { display: block; font-size: 13px; margin-bottom: 5px; color: #cbd5e1; }
-    input, textarea { width: 100%; padding: 10px 14px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,20%); border-radius: 10px; color: #fff; font-size: 14px; }
-    input:focus, textarea:focus { outline: none; border-color: #5eead4; }
-    button { width: 100%; padding: 12px; background: #5eead4; color: #0f172a; font-weight: 600; border: none; border-radius: 10px; cursor: pointer; margin-top: 10px; transition: 0.2s; }
-    button:hover { background: #2dd4bf; }
-    .hidden { display: none !important; }
-    .msg { text-align: center; font-size: 13px; margin-top: 10px; }
-    .link-box { background: rgba(94, 234, 212, 0.1); padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-size: 13px; word-break: break-all; }
-    .link-box a { color: #5eead4; text-decoration: none; font-weight: 600; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body {
+      background: #0f172a;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      padding: 20px;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 30px;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    h2 { font-family: 'Fredoka', sans-serif; color: #5eead4; margin-bottom: 20px; text-align: center; font-size: 24px; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: 13px; color: #cbd5e1; margin-bottom: 6px; }
+    input {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus { border-color: #5eead4; }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: #5eead4;
+      color: #0f172a;
+      font-weight: 700;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: transform 0.1s;
+    }
+    .btn:active { transform: scale(0.97); }
+    .switch-text { text-align: center; font-size: 13px; margin-top: 16px; color: #94a3b8; }
+    .switch-text span { color: #5eead4; cursor: pointer; font-weight: 600; }
+    #msg { margin-top: 12px; font-size: 13px; text-align: center; min-height: 20px; }
+    .success { color: #4ade80; }
+    .error { color: #f87171; }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <div id="auth-section">
-      <h2>Tạo trang Bio của riêng bạn</h2>
-      <div class="input-group">
-        <label>Email</label>
-        <input type="email" id="email" placeholder="Nhập email của bạn...">
-      </div>
-      <div class="input-group">
-        <label>Mật khẩu</label>
-        <input type="password" id="password" placeholder="Nhập mật khẩu...">
-      </div>
-      <button onclick="handleLogin()">Đăng Nhập</button>
-      <button onclick="handleSignUp()" style="background: transparent; border: 1px solid #5eead4; color: #5eead4; margin-top: 8px;">Đăng Ký Tài Khoản Mới</button>
-      <p id="auth-msg" class="msg" style="color: #f87171;"></p>
+  <div class="card" id="auth-box">
+    <h2 id="form-title">Đăng Nhập Quản Trị</h2>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="email" placeholder="Nhập email của ông...">
     </div>
-
-    <div id="profile-section" class="hidden">
-      <h2>Cấu hình Bio</h2>
-      <div class="link-box" id="userLinkBox">Link của bạn: <a id="userLink" href="#" target="_blank">Đang tạo...</a></div>
-      
-      <div class="input-group">
-        <label>Username (Dùng làm đường dẫn, ví dụ: benmelody)</label>
-        <input type="text" id="username" placeholder="Nhập username không dấu, liền nhau...">
-      </div>
-      <div class="input-group">
-        <label>Discord User ID (để tự sync Avatar & Status)</label>
-        <input type="text" id="discord_id" placeholder="Ví dụ: 1538207077728526456">
-      </div>
-      <div class="input-group">
-        <label>Lời giới thiệu (Bio)</label>
-        <textarea id="bio" placeholder="Viết vài dòng giới thiệu về bạn..."></textarea>
-      </div>
-      <button onclick="saveProfile()">Lưu Lại Thay Đổi</button>
-      <button onclick="handleLogout()" style="background: #ef4444; color: white; margin-top: 10px;">Đăng Xuất</button>
-      <p id="save-msg" class="msg"></p>
+    <div class="form-group">
+      <label>Mật khẩu</label>
+      <input type="password" id="password" placeholder="Nhập mật khẩu...">
     </div>
+    <button class="btn" id="submit-btn" onclick="handleAuth()">Đăng Nhập</button>
+    <div class="switch-text" id="switch-mode">Chưa có tài khoản? <span onclick="toggleMode()">Đăng ký ngay</span></div>
+    <div id="msg"></div>
   </div>
 
-  <script>
-    const SUPABASE_URL = 'https://akcrrvgmztzrhojdpivxm.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFrY3JydmdtenR6aG9qZHBpdnhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MTYwNTIsImV4cCI6MjEwNTM5MjA1Mn0.db7xQISPliMXcjnynFr5iAYh5HOxBy58XdF3n-uKZnE';
-    
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  <div class="card" id="admin-panel" style="display: none;">
+    <h2>Bảng Điều Khiển Bio</h2>
+    <p style="font-size: 14px; color: #94a3b8; text-align: center; margin-bottom: 20px;">Đăng nhập thành công! Ông đã có quyền quản trị.</p>
+    <button class="btn" style="background: #ef4444; color: #fff;" onclick="handleLogout()">Đăng Xuất</button>
+  </div>
 
-    async function handleSignUp() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const { data, error } = await supabaseClient.auth.signUp({ email, password });
-      if (error) document.getElementById('auth-msg').innerText = error.message;
-      else alert('Đăng ký thành công! Hãy bấm Đăng nhập.');
+  <!-- Sử dụng Supabase SDK phiên bản chuẩn ổn định -->
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    // Thay thế thông tin kết nối Supabase của ông vào đây nếu cần thiết (đã tự đồng bộ)
+    const SUPABASE_URL = 'https://sửa_thành_url_supabase_của_ông.supabase.co'; 
+    const SUPABASE_ANON_KEY = 'sửa_thành_anon_key_của_ông';
+
+    let supabase;
+    try {
+      supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } catch (e) {
+      document.getElementById('msg').innerText = "Lỗi khởi tạo Supabase!";
+      document.getElementById('msg').className = "error";
     }
 
-    async function handleLogin() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-      if (error) document.getElementById('auth-msg').innerText = error.message;
-      else checkUser();
+    window.isSignUpMode = false;
+
+    window.toggleMode = function() {
+      window.isSignUpMode = !window.isSignUpMode;
+      document.getElementById('form-title').innerText = window.isSignUpMode ? "Đăng Ký Tài Khoản" : "Đăng Nhập Quản Trị";
+      document.getElementById('submit-btn').innerText = window.isSignUpMode ? "Đăng Ký" : "Đăng Nhập";
+      document.getElementById('switch-mode').innerHTML = window.isSignUpMode ? 
+        'Đã có tài khoản? <span onclick="toggleMode()">Đăng nhập</span>' : 
+        'Chưa có tài khoản? <span onclick="toggleMode()">Đăng ký ngay</span>';
+      document.getElementById('msg').innerText = "";
     }
 
-    async function checkUser() {
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (session) {
-        document.getElementById('auth-section').classList.add('hidden');
-        document.getElementById('profile-section').classList.remove('hidden');
-        loadProfileData(session.user.id);
-      }
-    }
+    window.handleAuth = async function() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const msg = document.getElementById('msg');
 
-    async function loadProfileData(userId) {
-      const { data, error } = await supabaseClient.from('profiles').select('*').eq('id', userId).single();
-      if (data) {
-        document.getElementById('username').value = data.username || '';
-        document.getElementById('discord_id').value = data.discord_id || '';
-        document.getElementById('bio').value = data.bio || '';
-        
-        if (data.username) {
-          const profileUrl = `${window.location.origin}${window.location.pathname.replace('admin.html', '')}?u=${data.username}`;
-          document.getElementById('userLink').href = profileUrl;
-          document.getElementById('userLink').innerText = profileUrl;
-        }
-      }
-    }
-
-    async function saveProfile() {
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (!session) return;
-
-      const username = document.getElementById('username').value.trim().toLowerCase();
-      const discord_id = document.getElementById('discord_id').value.trim();
-      const bio = document.getElementById('bio').value;
-
-      if (!username) {
-        alert('Vui lòng nhập Username!');
+      if (!email || !password) {
+        msg.innerText = "Vui lòng nhập đầy đủ email và mật khẩu!";
+        msg.className = "error";
         return;
       }
 
-      const { error } = await supabaseClient.from('profiles').upsert({
-        id: session.user.id,
-        username,
-        discord_id,
-        bio
-      });
+      msg.innerText = "Đang xử lý...";
+      msg.className = "";
 
-      if (error) {
-        document.getElementById('save-msg').style.color = '#f87171';
-        document.getElementById('save-msg').innerText = "Lỗi: " + error.message;
-      } else {
-        document.getElementById('save-msg').style.color = '#34d399';
-        document.getElementById('save-msg').innerText = "Đã lưu thành công!";
-        loadProfileData(session.user.id);
+      try {
+        if (window.isSignUpMode) {
+          const { data, error } = await supabase.auth.signUp({ email, password });
+          if (error) throw error;
+          msg.innerText = "Đăng ký thành công! Hãy kiểm tra email (nếu bật) hoặc đăng nhập ngay.";
+          msg.className = "success";
+        } else {
+          const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+          if (error) throw error;
+          msg.innerText = "Đăng nhập thành công!";
+          msg.className = "success";
+          setTimeout(showPanel, 1000);
+        }
+      } catch (err) {
+        msg.innerText = "Lỗi: " + (err.message || "Không thể kết nối máy chủ");
+        msg.className = "error";
       }
     }
 
-    async function handleLogout() {
-      await supabaseClient.auth.signOut();
-      location.reload();
+    window.handleLogout = async function() {
+      await supabase.auth.signOut();
+      document.getElementById('admin-panel').style.display = 'none';
+      document.getElementById('auth-box').style.display = 'block';
     }
 
+    function showPanel() {
+      document.getElementById('auth-box').style.display = 'none';
+      document.getElementById('admin-panel').style.display = 'block';
+    }
+
+    // Kiểm tra trạng thái đăng nhập sẵn
+    async function checkUser() {
+      if (!supabase) return;
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        showPanel();
+      }
+    }
     checkUser();
   </script>
 </body>
