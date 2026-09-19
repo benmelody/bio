@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Quản trị - Bio</title>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
     body {
@@ -70,8 +69,8 @@
   <div class="card" id="auth-box">
     <h2 id="form-title">Đăng Nhập Quản Trị</h2>
     <div class="form-group">
-      <label>Tài khoản / Email</label>
-      <input type="text" id="username" placeholder="Nhập tài khoản...">
+      <label>Email hoặc Tài khoản</label>
+      <input type="text" id="username" placeholder="Nhập thông tin...">
     </div>
     <div class="form-group">
       <label>Mật khẩu</label>
@@ -92,7 +91,6 @@
   <script>
     let isSignUpMode = false;
 
-    // Kiểm tra xem đã đăng nhập từ trước chưa
     window.onload = function() {
       if (localStorage.getItem("isLoggedIn") === "true") {
         showPanel();
@@ -121,27 +119,16 @@
       }
 
       if (isSignUpMode) {
-        // Lưu thông tin đăng ký vào bộ nhớ máy
         localStorage.setItem("admin_user", user);
         localStorage.setItem("admin_pass", pass);
         msg.innerText = "Đăng ký thành công! Hãy chuyển sang đăng nhập.";
         msg.className = "success";
         setTimeout(toggleMode, 1500);
       } else {
-        // Kiểm tra thông tin đăng nhập
-        const savedUser = localStorage.getItem("admin_user");
-        const savedPass = localStorage.getItem("admin_pass");
+        const savedUser = localStorage.getItem("admin_user") || "admin";
+        const savedPass = localStorage.getItem("admin_pass") || "123456";
 
-        // Nếu chưa từng đăng ký tài khoản nào, mặc định cho phép tài khoản: admin / 123456
-        if (!savedUser) {
-          localStorage.setItem("admin_user", "admin");
-          localStorage.setItem("admin_pass", "123456");
-        }
-
-        const targetUser = localStorage.getItem("admin_user");
-        const targetPass = localStorage.getItem("admin_pass");
-
-        if (user === targetUser && pass === targetPass) {
+        if (user === savedUser && pass === savedPass) {
           localStorage.setItem("isLoggedIn", "true");
           msg.innerText = "Đăng nhập thành công!";
           msg.className = "success";
