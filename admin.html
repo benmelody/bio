@@ -3,59 +3,121 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tạo Bio Cá Nhân - Creator Studio</title>
+  <title>Admin Dashboard - whynotben Bio</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    * { box-sizing: border-box; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
-    body { background: #0f172a; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-    .card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 20px; width: 100%; max-width: 420px; backdrop-filter: blur(10px); }
-    h2 { text-align: center; margin-bottom: 20px; color: #5eead4; }
-    .form-group { margin-bottom: 15px; }
-    label { display: block; font-size: 13px; color: #cbd5e1; margin-bottom: 5px; }
-    input { width: 100%; padding: 10px 14px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; color: #fff; font-size: 14px; }
-    input:focus { border-color: #5eead4; outline: none; }
-    button { width: 100%; padding: 12px; background: #5eead4; color: #0f172a; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; margin-top: 10px; transition: 0.2s; }
-    button:hover { background: #99f6e4; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { background: #0f172a; color: #fff; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+    .card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 20px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); backdrop-filter: blur(10px); }
+    h2 { color: #5eead4; margin-bottom: 20px; text-align: center; font-size: 22px; }
+    .input-group { margin-bottom: 15px; }
+    label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 5px; }
+    input { width: 100%; padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; font-size: 14px; outline: none; }
+    input:focus { border-color: #5eead4; }
+    .btn { width: 100%; padding: 12px; border-radius: 10px; background: #5eead4; color: #0f172a; font-weight: 700; border: none; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+    .btn:hover { background: #99f6e4; }
+    .switch-mode { text-align: center; margin-top: 15px; font-size: 13px; color: #94a3b8; cursor: pointer; }
+    .switch-mode span { color: #5eead4; font-weight: 600; }
+    .dashboard { display: none; }
+    .stat-box { background: rgba(94, 234, 212, 0.1); border: 1px solid rgba(94, 234, 212, 0.3); padding: 20px; border-radius: 14px; text-align: center; margin-bottom: 20px; }
+    .stat-box h3 { font-size: 32px; color: #5eead4; margin-top: 5px; }
+    #msg { text-align: center; font-size: 13px; margin-top: 10px; color: #ff4757; }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <h2>Trình Tạo Bio Của Bạn</h2>
-    <div class="form-group">
-      <label>Tên tài khoản (Username):</label>
-      <input type="text" id="username" value="whynotben">
+  <!-- Khung Đăng nhập / Đăng ký -->
+  <div class="card" id="authCard">
+    <h2 id="formTitle">Đăng Nhập Quản Trị</h2>
+    <div class="input-group">
+      <label>Email</label>
+      <input type="email" id="email" placeholder="Nhập email của bạn...">
     </div>
-    <div class="form-group">
-      <label>Tiểu sử (Bio text):</label>
-      <input type="text" id="bio" value="Owner @benmelody">
+    <div class="input-group">
+      <label>Mật khẩu</label>
+      <input type="password" id="password" placeholder="Nhập mật khẩu...">
     </div>
-    <div class="form-group">
-      <label>Link Ảnh đại diện (Avatar URL):</label>
-      <input type="text" id="avatar" value="https://files.catbox.moe/6iewk3.jpeg">
-    </div>
-    <div class="form-group">
-      <label>Link Nhạc Nền (.mp3):</label>
-      <input type="text" id="music" value="https://files.catbox.moe/pm0gph.mp3">
-    </div>
-    <button onclick="saveAndPublish()">Lưu & Xem Trang Bio</button>
+    <button class="btn" id="authBtn" onclick="handleAuth()">Đăng Nhập</button>
+    <p id="msg"></p>
+    <p class="switch-mode" onclick="toggleMode()"><span id="switchText">Chưa có tài khoản? Đăng ký ngay</span></p>
   </div>
 
-  <script>
-    function saveAndPublish() {
-      const data = {
-        username: document.getElementById('username').value,
-        bio: document.getElementById('bio').value,
-        avatar: document.getElementById('avatar').value,
-        music: document.getElementById('music').value
-      };
-      
-      // Lưu vào trình duyệt
-      localStorage.setItem('bio_config', JSON.stringify(data));
-      
-      // Chuyển hướng sang trang hiển thị bio (index.html)
-      window.location.href = 'index.html';
+  <!-- Bảng điều khiển sau khi đăng nhập -->
+  <div class="card dashboard" id="dashCard">
+    <h2>Trang Quản Trị Bio</h2>
+    <div class="stat-box">
+      <p>Tổng lượt truy cập (Views)</p>
+      <h3 id="adminViews">...</h3>
+    </div>
+    <button class="btn" style="background: #ff4757; color: #fff;" onclick="logout()">Đăng Xuất</button>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    // Cấu hình Firebase của ông (Thay thông tin từ dự án Firebase của ông vào đây)
+    const firebaseConfig = {
+      databaseURL: "DÁN_LINK_FIREBASE_CỦA_BẠN_VÀO_ĐÂY"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    let isSignUp = false;
+
+    window.toggleMode = function() {
+      isSignUp = !isSignUp;
+      document.getElementById('formTitle').innerText = isSignUp ? "Đăng Ký Tài Khoản Mới" : "Đăng Nhập Quản Trị";
+      document.getElementById('authBtn').innerText = isSignUp ? "Đăng Ký" : "Đăng Nhập";
+      document.getElementById('switchText').innerText = isSignUp ? "Đã có tài khoản? Đăng nhập" : "Chưa có tài khoản? Đăng ký ngay";
     }
+
+    window.handleAuth = async function() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const msg = document.getElementById('msg');
+      msg.innerText = "";
+
+      try {
+        if (isSignUp) {
+          await createUserWithEmailAndPassword(auth, email, password);
+          alert("Đăng ký thành công!");
+        } else {
+          await signInWithEmailAndPassword(auth, email, password);
+        }
+      } catch (error) {
+        msg.innerText = "Lỗi: " + error.message;
+      }
+    }
+
+    window.logout = function() {
+      signOut(auth);
+    }
+
+    // Kiểm tra trạng thái đăng nhập
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        document.getElementById('authCard').style.display = 'none';
+        document.getElementById('dashCard').style.display = 'block';
+        
+        // Lấy dữ liệu view từ Database hiển thị lên bảng điều khiển
+        const dbRef = ref(db, 'whynotben/views');
+        const snapshot = await get(dbRef);
+        if (snapshot.exists()) {
+          document.getElementById('adminViews').innerText = snapshot.val();
+        } else {
+          document.getElementById('adminViews').innerText = "258";
+        }
+      } else {
+        document.getElementById('authCard').style.display = 'block';
+        document.getElementById('dashCard').style.display = 'none';
+      }
+    });
   </script>
 </body>
 </html>
