@@ -66,11 +66,12 @@
 </head>
 <body>
 
+  <!-- Khung Đăng Nhập / Đăng Ký -->
   <div class="card" id="auth-box">
     <h2 id="form-title">Đăng Nhập Quản Trị</h2>
     <div class="form-group">
-      <label>Email</label>
-      <input type="email" id="email" placeholder="Nhập email của ông...">
+      <label>Tài khoản / Email</label>
+      <input type="text" id="username" placeholder="Nhập tài khoản...">
     </div>
     <div class="form-group">
       <label>Mật khẩu</label>
@@ -81,77 +82,75 @@
     <div id="msg"></div>
   </div>
 
+  <!-- Bảng Quản Trị Sau Khi Đăng Nhập -->
   <div class="card" id="admin-panel" style="display: none;">
     <h2>Bảng Điều Khiển Bio</h2>
-    <p style="font-size: 14px; color: #94a3b8; text-align: center; margin-bottom: 20px;">Đăng nhập thành công! Ông đã có quyền quản trị.</p>
+    <p style="font-size: 14px; color: #94a3b8; text-align: center; margin-bottom: 20px;">Đăng nhập thành công! Ông đã vào được trang quản trị.</p>
     <button class="btn" style="background: #ef4444; color: #fff;" onclick="handleLogout()">Đăng Xuất</button>
   </div>
 
-  <!-- Sử dụng Supabase SDK phiên bản chuẩn ổn định -->
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+  <script>
+    let isSignUpMode = false;
 
-    // Thay thế thông tin kết nối Supabase của ông vào đây nếu cần thiết (đã tự đồng bộ)
-    const SUPABASE_URL = 'https://sửa_thành_url_supabase_của_ông.supabase.co'; 
-    const SUPABASE_ANON_KEY = 'sửa_thành_anon_key_của_ông';
+    // Kiểm tra xem đã đăng nhập từ trước chưa
+    window.onload = function() {
+      if (localStorage.getItem("isLoggedIn") === "true") {
+        showPanel();
+      }
+    };
 
-    let supabase;
-    try {
-      supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    } catch (e) {
-      document.getElementById('msg').innerText = "Lỗi khởi tạo Supabase!";
-      document.getElementById('msg').className = "error";
-    }
-
-    window.isSignUpMode = false;
-
-    window.toggleMode = function() {
-      window.isSignUpMode = !window.isSignUpMode;
-      document.getElementById('form-title').innerText = window.isSignUpMode ? "Đăng Ký Tài Khoản" : "Đăng Nhập Quản Trị";
-      document.getElementById('submit-btn').innerText = window.isSignUpMode ? "Đăng Ký" : "Đăng Nhập";
-      document.getElementById('switch-mode').innerHTML = window.isSignUpMode ? 
+    function toggleMode() {
+      isSignUpMode = !isSignUpMode;
+      document.getElementById('form-title').innerText = isSignUpMode ? "Đăng Ký Tài Khoản" : "Đăng Nhập Quản Trị";
+      document.getElementById('submit-btn').innerText = isSignUpMode ? "Đăng Ký" : "Đăng Nhập";
+      document.getElementById('switch-mode').innerHTML = isSignUpMode ? 
         'Đã có tài khoản? <span onclick="toggleMode()">Đăng nhập</span>' : 
         'Chưa có tài khoản? <span onclick="toggleMode()">Đăng ký ngay</span>';
       document.getElementById('msg').innerText = "";
     }
 
-    window.handleAuth = async function() {
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
+    function handleAuth() {
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value.trim();
       const msg = document.getElementById('msg');
 
-      if (!email || !password) {
-        msg.innerText = "Vui lòng nhập đầy đủ email và mật khẩu!";
+      if (!user || !pass) {
+        msg.innerText = "Vui lòng nhập đầy đủ thông tin!";
         msg.className = "error";
         return;
       }
 
-      msg.innerText = "Đang xử lý...";
-      msg.className = "";
+      if (isSignUpMode) {
+        // Lưu thông tin đăng ký vào bộ nhớ máy
+        localStorage.setItem("admin_user", user);
+        localStorage.setItem("admin_pass", pass);
+        msg.innerText = "Đăng ký thành công! Hãy chuyển sang đăng nhập.";
+        msg.className = "success";
+        setTimeout(toggleMode, 1500);
+      } else {
+        // Kiểm tra thông tin đăng nhập
+        const savedUser = localStorage.getItem("admin_user");
+        const savedPass = localStorage.getItem("admin_pass");
 
-      try {
-        if (window.isSignUpMode) {
-          const { data, error } = await supabase.auth.signUp({ email, password });
-          if (error) throw error;
-          msg.innerText = "Đăng ký thành công! Hãy kiểm tra email (nếu bật) hoặc đăng nhập ngay.";
-          msg.className = "success";
-        } else {
-          const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-          if (error) throw error;
+        // Nếu chưa từng đăng ký tài khoản nào, mặc định cho phép tài khoản: admin / 123456
+        if (!savedUser) {
+          localStorage.setItem("admin_user", "admin");
+          localStorage.setItem("admin_pass", "123456");
+        }
+
+        const targetUser = localStorage.getItem("admin_user");
+        const targetPass = localStorage.getItem("admin_pass");
+
+        if (user === targetUser && pass === targetPass) {
+          localStorage.setItem("isLoggedIn", "true");
           msg.innerText = "Đăng nhập thành công!";
           msg.className = "success";
-          setTimeout(showPanel, 1000);
+          setTimeout(showPanel, 800);
+        } else {
+          msg.innerText = "Sai tài khoản hoặc mật khẩu!";
+          msg.className = "error";
         }
-      } catch (err) {
-        msg.innerText = "Lỗi: " + (err.message || "Không thể kết nối máy chủ");
-        msg.className = "error";
       }
-    }
-
-    window.handleLogout = async function() {
-      await supabase.auth.signOut();
-      document.getElementById('admin-panel').style.display = 'none';
-      document.getElementById('auth-box').style.display = 'block';
     }
 
     function showPanel() {
@@ -159,15 +158,14 @@
       document.getElementById('admin-panel').style.display = 'block';
     }
 
-    // Kiểm tra trạng thái đăng nhập sẵn
-    async function checkUser() {
-      if (!supabase) return;
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        showPanel();
-      }
+    function handleLogout() {
+      localStorage.removeItem("isLoggedIn");
+      document.getElementById('admin-panel').style.display = 'none';
+      document.getElementById('auth-box').style.display = 'block';
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+      document.getElementById('msg').innerText = '';
     }
-    checkUser();
   </script>
 </body>
 </html>
