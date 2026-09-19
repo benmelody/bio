@@ -8,46 +8,216 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    body { background: #0f172a; min-height: 100vh; display: flex; justify-content: center; align-items: center; color: #fff; padding: 20px; }
-    .bio-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 40px 20px; border-radius: 30px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
-    .avatar { width: 90px; height: 90px; background: #5eead4; border-radius: 50%; margin: 0 auto 20px; display: flex; justify-content: center; align-items: center; font-size: 36px; color: #0f172a; font-weight: bold; }
-    h1 { font-size: 22px; margin-bottom: 10px; color: #5eead4; }
-    p { font-size: 14px; color: #94a3b8; margin-bottom: 25px; }
-    .link-btn { display: block; width: 100%; padding: 14px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; color: #fff; text-decoration: none; font-weight: 600; margin-bottom: 12px; transition: 0.2s; }
-    .link-btn:hover { background: #5eead4; color: #0f172a; }
+    body { 
+      background: #0f172a; 
+      min-height: 100vh; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      color: #fff; 
+      padding: 20px; 
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Hiệu ứng nền bóng bay lơ lửng */
+    .bubbles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      overflow: hidden;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+    .bubble {
+      position: absolute;
+      bottom: -50px;
+      background: rgba(94, 234, 212, 0.15);
+      border-radius: 50%;
+      animation: rise 10s infinite linear;
+    }
+    @keyframes rise {
+      0% { transform: translateY(0) scale(1); opacity: 0; }
+      50% { opacity: 0.8; }
+      100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+    }
+
+    /* Thẻ Bio chính */
+    .bio-card { 
+      background: rgba(255, 255, 255, 0.05); 
+      backdrop-filter: blur(20px); 
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.15); 
+      padding: 40px 20px; 
+      border-radius: 30px; 
+      width: 100%; 
+      max-width: 400px; 
+      text-align: center; 
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5); 
+      z-index: 2;
+      position: relative;
+      animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .avatar-container { 
+      width: 100px; 
+      height: 100px; 
+      margin: 0 auto 20px; 
+      border-radius: 50%; 
+      overflow: hidden; 
+      border: 3px solid #5eead4; 
+      box-shadow: 0 0 25px rgba(94, 234, 212, 0.6); 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      background: #1e293b; 
+      animation: pulseGlow 3s infinite alternate;
+    }
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 15px rgba(94, 234, 212, 0.4); }
+      100% { box-shadow: 0 0 30px rgba(94, 234, 212, 0.8); }
+    }
+    .avatar-container img { width: 100%; height: 100%; object-fit: cover; }
+    .avatar-placeholder { font-size: 38px; color: #5eead4; font-weight: bold; }
+
+    h1 { font-size: 22px; margin-bottom: 10px; color: #5eead4; text-shadow: 0 0 10px rgba(94,234,212,0.3); }
+    p { font-size: 14px; color: #94a3b8; margin-bottom: 25px; min-height: 40px; }
+
+    .link-btn { 
+      display: block; 
+      width: 100%; 
+      padding: 14px; 
+      background: rgba(255, 255, 255, 0.08); 
+      border: 1px solid rgba(255, 255, 255, 0.15); 
+      border-radius: 16px; 
+      color: #fff; 
+      text-decoration: none; 
+      font-weight: 600; 
+      margin-bottom: 12px; 
+      transition: all 0.3s ease; 
+    }
+    .link-btn:hover { 
+      background: #5eead4; 
+      color: #0f172a; 
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(94, 234, 212, 0.4);
+    }
+
+    .music-widget { 
+      margin-top: 20px; 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 10px; 
+      background: rgba(94, 234, 212, 0.1); 
+      border: 1px solid rgba(94, 234, 212, 0.3); 
+      padding: 8px 18px; 
+      border-radius: 50px; 
+      cursor: pointer; 
+      color: #5eead4; 
+      font-size: 13px; 
+      font-weight: 600; 
+      transition: 0.2s;
+    }
+    .music-widget:hover { background: rgba(94, 234, 212, 0.2); }
   </style>
 </head>
 <body>
 
+  <!-- Hiệu ứng bong bóng nền bay -->
+  <div class="bubbles" id="bubbles"></div>
+
   <div class="bio-card">
-    <div class="avatar" id="uAvatar">B</div>
+    <div class="avatar-container" id="avatarBox">
+      <span class="avatar-placeholder" id="uAvatarText">B</span>
+    </div>
     <h1 id="uName">Đang tải...</h1>
     <p id="uDesc">Đang cập nhật tiểu sử...</p>
     <div id="uLinks"></div>
+    
+    <!-- Widget nhạc nền -->
+    <div id="musicContainer" style="display: none;">
+      <div class="music-widget" onclick="toggleMusic()">
+        <i class="fa-solid fa-music" id="musicIcon"></i> <span id="musicText">Bật nhạc nền</span>
+      </div>
+      <audio id="bgMusic" loop></audio>
+    </div>
   </div>
 
   <script>
+    // Tạo hiệu ứng bong bóng ngẫu nhiên bay lên
+    const bubblesContainer = document.getElementById('bubbles');
+    for (let i = 0; i < 15; i++) {
+      const bubble = document.createElement('div');
+      bubble.classList.add('bubble');
+      const size = Math.random() * 20 + 10 + 'px';
+      bubble.style.width = size;
+      bubble.style.height = size;
+      bubble.style.left = Math.random() * 100 + '%';
+      bubble.style.animationDuration = (Math.random() * 5 + 5) + 's';
+      bubble.style.animationDelay = (Math.random() * 5) + 's';
+      bubblesContainer.appendChild(bubble);
+    }
+
+    // Đọc thông tin bio từ localStorage dựa theo URL (?u=tên)
     const urlParams = new URLSearchParams(window.location.search);
     const username = urlParams.get('u');
+    let isPlaying = false;
+    const audio = document.getElementById('bgMusic');
 
     if (username) {
       const savedData = JSON.parse(localStorage.getItem("bio_data_" + username));
       if (savedData) {
         document.getElementById('uName').innerText = savedData.name || username;
         document.getElementById('uDesc').innerText = savedData.desc || "Chưa có tiểu sử.";
-        document.getElementById('uAvatar').innerText = (savedData.name || username).charAt(0).toUpperCase();
 
+        // Xử lý Avatar
+        const avatarBox = document.getElementById('avatarBox');
+        if (savedData.avatar) {
+          avatarBox.innerHTML = `<img src="${savedData.avatar}" alt="Avatar">`;
+        } else {
+          document.getElementById('uAvatarText').innerText = (savedData.name || username).charAt(0).toUpperCase();
+        }
+
+        // Xử lý Link Mạng Xã Hội
         if (savedData.social) {
-          const linksDiv = document.getElementById('uLinks');
-          linksDiv.innerHTML = `<a href="${savedData.social}" class="link-btn" target="_blank"><i class="fa-solid fa-globe"></i> Mạng xã hội / Website</a>`;
+          document.getElementById('uLinks').innerHTML = `<a href="${savedData.social}" class="link-btn" target="_blank"><i class="fa-solid fa-globe"></i> Mạng xã hội / Website</a>`;
+        }
+
+        // Xử lý Nhạc nền
+        if (savedData.music) {
+          audio.src = savedData.music;
+          document.getElementById('musicContainer').style.display = 'block';
         }
       } else {
         document.getElementById('uName').innerText = "Không tìm thấy!";
-        document.getElementById('uDesc').innerText = "Trang bio này không tồn tại hoặc chưa được thiết kế.";
+        document.getElementById('uDesc').innerText = "Trang bio này không tồn tại.";
       }
     } else {
       document.getElementById('uName').innerText = "Lỗi đường dẫn!";
       document.getElementById('uDesc').innerText = "Thiếu thông tin tài khoản người dùng.";
+    }
+
+    function toggleMusic() {
+      if (isPlaying) {
+        audio.pause();
+        document.getElementById('musicIcon').className = "fa-solid fa-music";
+        document.getElementById('musicText').innerText = "Bật nhạc nền";
+        isPlaying = false;
+      } else {
+        audio.play().then(() => {
+          document.getElementById('musicIcon').className = "fa-solid fa-compact-disc fa-spin";
+          document.getElementById('musicText').innerText = "Đang phát nhạc...";
+          isPlaying = true;
+        }).catch(e => {
+          alert("Không thể phát nhạc, vui lòng kiểm tra lại link MP3!");
+        });
+      }
     }
   </script>
 </body>
