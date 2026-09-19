@@ -236,7 +236,8 @@
     .progress-bar { flex: 1; height: 4px; background: rgba(255, 255, 255, 0.2); border-radius: 4px; position: relative; overflow: hidden; }
     .progress-fill { width: 0%; height: 100%; background: #5eead4; border-radius: 4px; transition: width 0.3s linear; }
     .controls-btns { display: flex; align-items: center; gap: 10px; }
-    .btn-play { width: 34px; height: 34px; border-radius: 50%; background: #99f6e4; color: #0f172a; display: flex; justify-content: center; align-items: center; font-size: 12px; cursor: pointer; }
+    .btn-play { width: 34px; height: 34px; border-radius: 50%; background: #99f6e4; color: #0f172a; display: flex; justify-content: center; align-items: center; font-size: 12px; cursor: pointer; transition: transform 0.2s; }
+    .btn-play:active { transform: scale(0.9); }
     
     #toast {
       position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.95);
@@ -317,7 +318,7 @@
         </div>
       </div>
       <div class="controls-btns">
-        <div class="btn-play" onclick="togglePlay()"><i class="fa-solid fa-pause" id="playIcon"></i></div>
+        <div class="btn-play" onclick="togglePlay()"><i class="fa-solid fa-play" id="playIcon"></i></div>
       </div>
     </div>
   </div>
@@ -337,7 +338,6 @@
     const currentTimeEl = document.getElementById('currentTime');
     const durationTimeEl = document.getElementById('durationTime');
     const progressFill = document.getElementById('progressFill');
-    const progressBar = document.getElementById('progressBar');
     
     const songTitleEl = document.getElementById('songTitle');
     const songArtistEl = document.getElementById('songArtist');
@@ -355,6 +355,7 @@
 
     const DISCORD_USER_ID = "1538207077728526456";
     let isUserInteracted = false;
+    let isSpotifyActive = false;
 
     async function fetchDiscordData() {
       try {
@@ -385,6 +386,7 @@
           }
 
           if (data.listening_to_spotify && data.spotify) {
+            isSpotifyActive = true;
             const spotify = data.spotify;
             songTitleEl.textContent = spotify.song;
             songArtistEl.textContent = spotify.artist;
@@ -400,22 +402,19 @@
             currentTimeEl.innerText = formatTimeMs(progress);
             durationTimeEl.innerText = formatTimeMs(duration);
 
-            // Nếu đang nghe Spotify thì tự động tắt nhạc nền mp3 đi để tránh bị đè tiếng
+            // Đang nghe Spotify thì tạm dừng nhạc nền cục bộ của web để không bị đè tiếng
             if (!audio.paused) {
               audio.pause();
               playIcon.className = 'fa-solid fa-play';
             }
           } else {
+            isSpotifyActive = false;
             songTitleEl.textContent = "ben con mèo";
             songArtistEl.textContent = "Đang phát nhạc nền";
             songCoverEl.src = "https://files.catbox.moe/r770n8.jpeg";
-            
-            if (isUserInteracted && audio.paused) {
-              audio.play().catch(() => {});
-              playIcon.className = 'fa-solid fa-pause';
-            }
 
-            if (audio.duration && !audio.paused) {
+            // Không nghe Spotify thì cập nhật thanh thời gian của nhạc nền cục bộ nếu đang phát
+            if (!audio.paused && audio.duration) {
               progressFill.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
               currentTimeEl.innerText = formatTime(audio.currentTime);
               durationTimeEl.innerText = formatTime(audio.duration);
@@ -451,7 +450,6 @@
         drop.style.left = `${Math.random() * 100}vw`;
         drop.style.animationDuration = `${Math.random() * 0.8 + 0.6}s`;
         drop.style.animationDelay = `${Math.random() * 2}s`;
-        drop.style.opacity = Math.random() * 0.4 + 0.2;
         rainContainer.appendChild(drop);
       }
     }
@@ -474,7 +472,8 @@
       enterOverlay.style.pointerEvents = 'none';
       setTimeout(() => { enterOverlay.style.display = 'none'; }, 300);
 
-      if (audio) {
+      // Nếu không bật Spotify thì cho phép phát nhạc nền khi click vào web
+      if (audio && !isSpotifyActive) {
         audio.play().then(() => { playIcon.className = 'fa-solid fa-pause'; }).catch(() => {});
       }
     }
@@ -505,15 +504,29 @@
     }
     typeLoop();
 
+    // Nút phát/dừng nhạc cục bộ linh hoạt khi KHÔNG bật Spotify
     function togglePlay() {
+      if (isSpotifyActive) {
+        showToast("Đang phát nhạc trực tiếp từ Spotify!");
+        return;
+      }
       if (audio.paused) {
-        audio.play();
-        playIcon.className = 'fa-solid fa-pause';
+        audio.play().then(() => {
+          playIcon.className = 'fa-solid fa-pause';
+        }).catch(() => {});
       } else {
         audio.pause();
         playIcon.className = 'fa-solid fa-play';
       }
     }
+
+    audio.addEventListener('timeupdate', () => {
+      if (!isSpotifyActive && audio.duration) {
+        progressFill.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
+        currentTimeEl.innerText = formatTime(audio.currentTime);
+        durationTimeEl.innerText = formatTime(audio.duration);
+      }
+    });
 
     function toggleMute() {
       audio.muted = !audio.muted;
