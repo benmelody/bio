@@ -69,7 +69,6 @@
     h1 { font-size: 24px; margin-bottom: 8px; color: #5eead4; font-weight: 700; }
     p { font-size: 14px; color: #94a3b8; margin-bottom: 20px; line-height: 1.5; }
 
-    /* Hiển thị số lượt xem */
     .view-counter {
       display: inline-flex;
       align-items: center;
@@ -138,14 +137,12 @@
     <h1 id="uName">Đang tải...</h1>
     <p id="uDesc">Đang cập nhật tiểu sử...</p>
     
-    <!-- Khung số lượt xem -->
     <div class="view-counter">
       <i class="fa-solid fa-eye"></i> Lượt xem: <span id="viewCount">0</span>
     </div>
 
     <div id="uLinks"></div>
     
-    <!-- Widget nhạc nền -->
     <div id="musicContainer" style="display: none;">
       <div class="music-widget" onclick="toggleMusic()">
         <i class="fa-solid fa-music" id="musicIcon"></i> <span id="musicText">Bật nhạc nền</span>
@@ -161,9 +158,8 @@
     const audio = document.getElementById('bgMusic');
 
     if (username) {
-      // Xử lý đếm view riêng cho từng user
+      // Đếm view
       let views = parseInt(localStorage.getItem("bio_views_" + username)) || 0;
-      // Tránh việc nhấn F5 liên tục tự tăng view ảo quá nhiều trong 1 phiên (chỉ tính 1 lần mỗi lần mở tab)
       if (!sessionStorage.getItem("viewed_" + username)) {
         views++;
         localStorage.setItem("bio_views_" + username, views);
@@ -171,12 +167,14 @@
       }
       document.getElementById('viewCount').innerText = views;
 
+      // Đọc đúng key dữ liệu bio
       const savedData = JSON.parse(localStorage.getItem("bio_data_" + username));
+      
       if (savedData) {
         document.getElementById('uName').innerText = savedData.name || username;
         document.getElementById('uDesc').innerText = savedData.desc || "Chưa có tiểu sử.";
 
-        // Xử lý Discord Avatar & Status
+        // Xử lý Avatar & Status Discord
         if (savedData.discordId) {
           fetch(`https://api.lanyard.rest/v1/users/${savedData.discordId}`)
             .then(res => res.json())
@@ -184,22 +182,20 @@
               if (response.success && response.data) {
                 const dcData = response.data;
                 const user = dcData.discord_user;
-
                 if (user.avatar) {
                   const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
                   document.getElementById('avatarBox').innerHTML = `<img src="${avatarUrl}" alt="Discord Avatar">`;
                 }
-
                 const statusBadge = document.getElementById('discordStatus');
                 statusBadge.className = "status-badge status-" + (dcData.discord_status || 'offline');
               }
             })
-            .catch(err => console.log("Không thể kết nối Discord API"));
+            .catch(err => console.log("Lỗi kết nối Lanyard API"));
         } else {
           document.getElementById('uAvatarText').innerText = (savedData.name || username).charAt(0).toUpperCase();
         }
 
-        // Tạo nút mạng xã hội & Discord
+        // Tạo nút mạng xã hội
         let linksHTML = "";
         if (savedData.discordId) {
           linksHTML += `<a href="https://discord.com/users/${savedData.discordId}" class="link-btn" target="_blank"><i class="fa-brands fa-discord" style="color: #5865F2;"></i> Discord Profile</a>`;
@@ -223,12 +219,13 @@
           document.getElementById('musicContainer').style.display = 'block';
         }
       } else {
-        document.getElementById('uName').innerText = "Không tìm thấy!";
-        document.getElementById('uDesc').innerText = "Trang bio này không tồn tại.";
+        document.getElementById('uName').innerText = username;
+        document.getElementById('uDesc').innerText = "Tài khoản này chưa thiết lập thông tin bio.";
+        document.getElementById('uAvatarText').innerText = username.charAt(0).toUpperCase();
       }
     } else {
       document.getElementById('uName').innerText = "Lỗi đường dẫn!";
-      document.getElementById('uDesc').innerText = "Thiếu thông tin tài khoản người dùng.";
+      document.getElementById('uDesc').innerText = "Thiếu tên tài khoản trên URL.";
     }
 
     function toggleMusic() {
