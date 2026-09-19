@@ -300,7 +300,7 @@
     </div>
 
     <div class="stats-bar">
-      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">288</span> Views</div>
+      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">...</span> Views</div>
       <span>|</span>
       <div class="stat-item"><i class="fa-solid fa-location-dot"></i> Vietnam</div>
     </div>
@@ -332,7 +332,7 @@
 
   <script>
     const SUPABASE_URL = 'https://akcrrvgmztzrhojdpivxm.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFrY3JydmdtenR6aG9qZHBpdnhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MTYwNTIsImV4cCI6MjEwNTM5MjA1Mn0.db7xQISPliMXcjnynFr5iAYh5HOxBy58XdF3n-uKZnE';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFrY3JydmdtenR6aG9qZHBpdnhtIxlcm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MTYwNTIsImV4cCI6MjEwNTM5MjA1Mn0.db7xQISPliMXcjnynFr5iAYh5HOxBy58XdF3n-uKZnE';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     let DISCORD_USER_ID = "1538207077728526456"; 
@@ -349,8 +349,24 @@
           if (data.discord_id) DISCORD_USER_ID = data.discord_id;
           if (data.bio) document.getElementById('bioText').innerText = data.bio;
           document.getElementById('pageTitle').innerText = `${data.username} - Bio`;
+
+          // Tự động tăng view +1 trên database cho đúng user này
+          const newViews = (data.views || 0) + 1;
+          document.getElementById('viewCount').innerText = newViews;
+          await supabaseClient.from('profiles').update({ views: newViews }).eq('username', targetUser);
         } else {
           document.getElementById('bioText').innerText = "Không tìm thấy người dùng này!";
+          document.getElementById('viewCount').innerText = "0";
+        }
+      } else {
+        // Mặc định trang chủ chính của ông
+        const { data } = await supabaseClient.from('profiles').select('*').eq('username', 'whynotben').single();
+        if (data) {
+          const newViews = (data.views || 0) + 1;
+          document.getElementById('viewCount').innerText = newViews;
+          await supabaseClient.from('profiles').update({ views: newViews }).eq('username', 'whynotben');
+        } else {
+          document.getElementById('viewCount').innerText = "1";
         }
       }
       fetchDiscordData();
@@ -372,9 +388,6 @@
     const songTitleEl = document.getElementById('songTitle');
     const songArtistEl = document.getElementById('songArtist');
     const songCoverEl = document.getElementById('songCover');
-
-    let currentViews = localStorage.getItem('whynotben_fixed_views') || 288;
-    document.getElementById('viewCount').innerText = currentViews;
 
     let isUserInteracted = false;
     let isSpotifyActive = false;
