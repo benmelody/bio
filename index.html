@@ -236,7 +236,6 @@
     .progress-bar { flex: 1; height: 4px; background: rgba(255, 255, 255, 0.2); border-radius: 4px; position: relative; overflow: hidden; }
     .progress-fill { width: 0%; height: 100%; background: #5eead4; border-radius: 4px; transition: width 0.3s linear; }
     .controls-btns { display: flex; align-items: center; gap: 10px; }
-    .btn-step { color: #99f6e4; font-size: 13px; cursor: pointer; }
     .btn-play { width: 34px; height: 34px; border-radius: 50%; background: #99f6e4; color: #0f172a; display: flex; justify-content: center; align-items: center; font-size: 12px; cursor: pointer; }
     
     #toast {
@@ -299,12 +298,11 @@
     </div>
 
     <div class="stats-bar">
-      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">250</span> Views</div>
+      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">288</span> Views</div>
       <span>|</span>
       <div class="stat-item"><i class="fa-solid fa-location-dot"></i> Vietnam</div>
     </div>
 
-    <!-- SPOTIFY REALTIME MUSIC PLAYER -->
     <div class="music-player">
       <img class="song-cover" id="songCover" src="https://files.catbox.moe/r770n8.jpeg" alt="Song Cover">
       <div class="player-controls">
@@ -345,17 +343,16 @@
     const songArtistEl = document.getElementById('songArtist');
     const songCoverEl = document.getElementById('songCover');
 
-    const VIEW_KEY = "whynotben_stable_bio_views_v2";
-    fetch(`https://countapi.mileshilliard.com/api/v1/hit/${VIEW_KEY}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.value) {
-          document.getElementById('viewCount').innerText = Math.max(data.value, 250);
-        }
-      })
-      .catch(() => {
-        document.getElementById('viewCount').innerText = "250";
-      });
+    // Cố định view chống tụt bằng mốc an toàn
+    let currentViews = localStorage.getItem('whynotben_fixed_views');
+    if (!currentViews) {
+      currentViews = 288;
+      localStorage.setItem('whynotben_fixed_views', currentViews);
+    } else {
+      currentViews = parseInt(currentViews) + 1;
+      localStorage.setItem('whynotben_fixed_views', currentViews);
+    }
+    document.getElementById('viewCount').innerText = currentViews;
 
     const DISCORD_USER_ID = "1538207077728526456";
 
@@ -367,12 +364,10 @@
         if (result.success && result.data) {
           const data = result.data;
           
-          // Trạng thái online
           const statusDot = document.getElementById('statusDot');
           const colors = { online: '#23a55a', idle: '#f0b232', dnd: '#f23f43', offline: '#80848e' };
           if (statusDot) statusDot.style.backgroundColor = colors[data.discord_status] || '#80848e';
 
-          // Hoạt động Discord chung
           const statusTitle = document.getElementById('statusTitle');
           const statusDesc = document.getElementById('statusDesc');
 
@@ -389,14 +384,12 @@
             }
           }
 
-          // KÉO DỮ LIỆU SPOTIFY THẬT QUA LANYARD API
           if (data.listening_to_spotify && data.spotify) {
             const spotify = data.spotify;
             songTitleEl.textContent = spotify.song;
             songArtistEl.textContent = spotify.artist;
             songCoverEl.src = spotify.album_art_url;
 
-            // Xử lý thanh thời gian bài hát Spotify
             const timestamps = spotify.timestamps;
             const now = Date.now();
             const progress = now - timestamps.start;
@@ -407,7 +400,6 @@
             currentTimeEl.innerText = formatTimeMs(progress);
             durationTimeEl.innerText = formatTimeMs(duration);
           } else {
-            // Nếu không nghe Spotify, giữ nguyên trình phát nhạc nền mặc định của web
             songTitleEl.textContent = "ben con mèo";
             songArtistEl.textContent = "Đang phát nhạc nền";
             songCoverEl.src = "https://files.catbox.moe/r770n8.jpeg";
@@ -420,12 +412,12 @@
           }
         }
       } catch (e) {
-        console.log("Không thể tải trạng thái Lanyard");
+        console.log("Lỗi kết nối Lanyard");
       }
     }
 
     fetchDiscordData();
-    setInterval(fetchDiscordData, 3000); // Cập nhật liên tục mỗi 3 giây theo nhạc Spotify
+    setInterval(fetchDiscordData, 3000);
 
     function formatTimeMs(ms) {
       const seconds = Math.floor(ms / 1000);
@@ -503,10 +495,7 @@
     }
     typeLoop();
 
-    audio.addEventListener('timeupdate', () => {
-      // Chỉ chạy progress mặc định nếu không nghe Spotify
-      const res = fetch(`https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`).then(r => r.json()).catch(() => {});
-    });
+    audio.addEventListener('timeupdate', () => {});
 
     function togglePlay() {
       if (audio.paused) {
