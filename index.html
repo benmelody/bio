@@ -228,12 +228,13 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
     .song-cover { width: 55px; height: 55px; border-radius: 14px; object-fit: cover; border: 1px solid rgba(255, 255, 255, 0.2); }
-    .player-controls { flex: 1; display: flex; flex-direction: column; gap: 6px; }
-    .song-title { font-size: 15px; font-weight: 700; color: #5eead4; }
+    .player-controls { flex: 1; display: flex; flex-direction: column; gap: 6px; overflow: hidden; }
+    .song-title { font-size: 14px; font-weight: 700; color: #5eead4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .song-artist { font-size: 11px; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
     .progress-container { display: flex; align-items: center; gap: 8px; }
-    .time { font-size: 11px; color: #94a3b8; min-width: 26px; }
-    .progress-bar { flex: 1; height: 5px; background: rgba(255, 255, 255, 0.2); border-radius: 4px; position: relative; cursor: pointer; }
-    .progress-fill { width: 0%; height: 100%; background: #5eead4; border-radius: 4px; }
+    .time { font-size: 10px; color: #94a3b8; min-width: 26px; }
+    .progress-bar { flex: 1; height: 4px; background: rgba(255, 255, 255, 0.2); border-radius: 4px; position: relative; overflow: hidden; }
+    .progress-fill { width: 0%; height: 100%; background: #5eead4; border-radius: 4px; transition: width 0.3s linear; }
     .controls-btns { display: flex; align-items: center; gap: 10px; }
     .btn-step { color: #99f6e4; font-size: 13px; cursor: pointer; }
     .btn-play { width: 34px; height: 34px; border-radius: 50%; background: #99f6e4; color: #0f172a; display: flex; justify-content: center; align-items: center; font-size: 12px; cursor: pointer; }
@@ -303,22 +304,22 @@
       <div class="stat-item"><i class="fa-solid fa-location-dot"></i> Vietnam</div>
     </div>
 
+    <!-- SPOTIFY REALTIME MUSIC PLAYER -->
     <div class="music-player">
-      <img class="song-cover" src="https://files.catbox.moe/r770n8.jpeg" alt="Song Cover">
+      <img class="song-cover" id="songCover" src="https://files.catbox.moe/r770n8.jpeg" alt="Song Cover">
       <div class="player-controls">
-        <div class="song-title">ben con mèo</div>
+        <div class="song-title" id="songTitle">ben con mèo</div>
+        <div class="song-artist" id="songArtist">Đang phát nhạc nền</div>
         <div class="progress-container">
           <span class="time" id="currentTime">0:00</span>
-          <div class="progress-bar" id="progressBar" onclick="seekMusic(event)">
+          <div class="progress-bar" id="progressBar">
             <div class="progress-fill" id="progressFill"></div>
           </div>
           <span class="time" id="durationTime">0:00</span>
         </div>
       </div>
       <div class="controls-btns">
-        <i class="fa-solid fa-backward-step btn-step" onclick="restartMusic()"></i>
         <div class="btn-play" onclick="togglePlay()"><i class="fa-solid fa-pause" id="playIcon"></i></div>
-        <i class="fa-solid fa-forward-step btn-step" onclick="restartMusic()"></i>
       </div>
     </div>
   </div>
@@ -339,16 +340,17 @@
     const durationTimeEl = document.getElementById('durationTime');
     const progressFill = document.getElementById('progressFill');
     const progressBar = document.getElementById('progressBar');
+    
+    const songTitleEl = document.getElementById('songTitle');
+    const songArtistEl = document.getElementById('songArtist');
+    const songCoverEl = document.getElementById('songCover');
 
-    // Cố định bộ đếm views ổn định, chống tụt
     const VIEW_KEY = "whynotben_stable_bio_views_v2";
     fetch(`https://countapi.mileshilliard.com/api/v1/hit/${VIEW_KEY}`)
       .then(res => res.json())
       .then(data => {
         if (data && data.value) {
-          // Bắt đầu từ mốc 250 cho uy tín
-          const finalViews = Math.max(data.value, 250);
-          document.getElementById('viewCount').innerText = finalViews;
+          document.getElementById('viewCount').innerText = Math.max(data.value, 250);
         }
       })
       .catch(() => {
@@ -357,7 +359,7 @@
 
     const DISCORD_USER_ID = "1538207077728526456";
 
-    async function fetchDiscordStatus() {
+    async function fetchDiscordData() {
       try {
         const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`);
         const result = await res.json();
@@ -365,23 +367,17 @@
         if (result.success && result.data) {
           const data = result.data;
           
+          // Trạng thái online
           const statusDot = document.getElementById('statusDot');
-          const colors = {
-            online: '#23a55a',
-            idle: '#f0b232',
-            dnd: '#f23f43',
-            offline: '#80848e'
-          };
-          if (statusDot) {
-            statusDot.style.backgroundColor = colors[data.discord_status] || '#80848e';
-          }
+          const colors = { online: '#23a55a', idle: '#f0b232', dnd: '#f23f43', offline: '#80848e' };
+          if (statusDot) statusDot.style.backgroundColor = colors[data.discord_status] || '#80848e';
 
+          // Hoạt động Discord chung
           const statusTitle = document.getElementById('statusTitle');
           const statusDesc = document.getElementById('statusDesc');
 
           if (data.activities && data.activities.length > 0) {
             const activeAct = data.activities.find(act => act.type !== 4) || data.activities[0];
-            
             if (statusTitle && statusDesc) {
               statusTitle.textContent = activeAct.name;
               statusDesc.textContent = activeAct.details || activeAct.state || "Đang hoạt động";
@@ -392,14 +388,57 @@
               statusDesc.textContent = "Đang rảnh rỗi";
             }
           }
+
+          // KÉO DỮ LIỆU SPOTIFY THẬT QUA LANYARD API
+          if (data.listening_to_spotify && data.spotify) {
+            const spotify = data.spotify;
+            songTitleEl.textContent = spotify.song;
+            songArtistEl.textContent = spotify.artist;
+            songCoverEl.src = spotify.album_art_url;
+
+            // Xử lý thanh thời gian bài hát Spotify
+            const timestamps = spotify.timestamps;
+            const now = Date.now();
+            const progress = now - timestamps.start;
+            const duration = timestamps.end - timestamps.start;
+            const progressPercent = Math.min(Math.max((progress / duration) * 100, 0), 100);
+
+            progressFill.style.width = `${progressPercent}%`;
+            currentTimeEl.innerText = formatTimeMs(progress);
+            durationTimeEl.innerText = formatTimeMs(duration);
+          } else {
+            // Nếu không nghe Spotify, giữ nguyên trình phát nhạc nền mặc định của web
+            songTitleEl.textContent = "ben con mèo";
+            songArtistEl.textContent = "Đang phát nhạc nền";
+            songCoverEl.src = "https://files.catbox.moe/r770n8.jpeg";
+            
+            if (audio.duration) {
+              progressFill.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
+              currentTimeEl.innerText = formatTime(audio.currentTime);
+              durationTimeEl.innerText = formatTime(audio.duration);
+            }
+          }
         }
       } catch (e) {
-        console.log("Không thể tải trạng thái Discord");
+        console.log("Không thể tải trạng thái Lanyard");
       }
     }
 
-    fetchDiscordStatus();
-    setInterval(fetchDiscordStatus, 10000);
+    fetchDiscordData();
+    setInterval(fetchDiscordData, 3000); // Cập nhật liên tục mỗi 3 giây theo nhạc Spotify
+
+    function formatTimeMs(ms) {
+      const seconds = Math.floor(ms / 1000);
+      const min = Math.floor(seconds / 60);
+      const sec = Math.floor(seconds % 60);
+      return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+    }
+
+    function formatTime(seconds) {
+      const min = Math.floor(seconds / 60);
+      const sec = Math.floor(seconds % 60);
+      return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+    }
 
     function createRain() {
       const rainContainer = document.getElementById('rain');
@@ -464,26 +503,10 @@
     }
     typeLoop();
 
-    function formatTime(seconds) {
-      const min = Math.floor(seconds / 60);
-      const sec = Math.floor(seconds % 60);
-      return `${min}:${sec < 10 ? '0' : ''}${sec}`;
-    }
-
     audio.addEventListener('timeupdate', () => {
-      if (audio.duration) {
-        progressFill.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
-        currentTimeEl.innerText = formatTime(audio.currentTime);
-        durationTimeEl.innerText = formatTime(audio.duration);
-      }
+      // Chỉ chạy progress mặc định nếu không nghe Spotify
+      const res = fetch(`https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`).then(r => r.json()).catch(() => {});
     });
-
-    function seekMusic(e) {
-      const rect = progressBar.getBoundingClientRect();
-      audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
-    }
-
-    function restartMusic() { audio.currentTime = 0; }
 
     function togglePlay() {
       if (audio.paused) {
@@ -515,4 +538,3 @@
   </script>
 </body>
 </html>
-
