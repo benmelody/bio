@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tạo Bio Cá Nhân - Creator Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
+    body { background: #0f172a; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+    .card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 20px; width: 100%; max-width: 420px; backdrop-filter: blur(10px); }
+    h2 { text-align: center; margin-bottom: 20px; color: #5eead4; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; font-size: 13px; color: #cbd5e1; margin-bottom: 5px; }
+    input { width: 100%; padding: 10px 14px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; color: #fff; font-size: 14px; }
+    input:focus { border-color: #5eead4; outline: none; }
+    button { width: 100%; padding: 12px; background: #5eead4; color: #0f172a; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+    button:hover { background: #99f6e4; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Trình Tạo Bio Của Bạn</h2>
+    <div class="form-group">
+      <label>Tên tài khoản (Username):</label>
+      <input type="text" id="username" value="whynotben">
+    </div>
+    <div class="form-group">
+      <label>Tiểu sử (Bio text):</label>
+      <input type="text" id="bio" value="Owner @benmelody">
+    </div>
+    <div class="form-group">
+      <label>Link Ảnh đại diện (Avatar URL):</label>
+      <input type="text" id="avatar" value="https://files.catbox.moe/6iewk3.jpeg">
+    </div>
+    <div class="form-group">
+      <label>Link Nhạc Nền (.mp3):</label>
+      <input type="text" id="music" value="https://files.catbox.moe/pm0gph.mp3">
+    </div>
+    <button onclick="saveAndPublish()">Lưu & Xem Trang Bio</button>
+  </div>
+
+  <script>
+    function saveAndPublish() {
+      const data = {
+        username: document.getElementById('username').value,
+        bio: document.getElementById('bio').value,
+        avatar: document.getElementById('avatar').value,
+        music: document.getElementById('music').value
+      };
+      
+      // Lưu vào trình duyệt
+      localStorage.setItem('bio_config', JSON.stringify(data));
+      
+      // Chuyển hướng sang trang hiển thị bio (index.html)
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>
