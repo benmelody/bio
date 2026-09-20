@@ -332,17 +332,15 @@
     let isListeningSpotify = false;
     let hasStartedAudio = false;
 
-    // Cập nhật bộ đếm View mới sử dụng CounterAPI
-    const NAMESPACE = "whynotben_bio";
-    const KEY = "views";
-    fetch(`https://api.counterapi.dev/v1/${NAMESPACE}/${KEY}/up`)
+    // Sử dụng api thay thế ổn định cho bộ đếm view
+    fetch('https://api.apicounter.dev/counter/whynotben_bio_views')
       .then(res => res.json())
       .then(data => {
-        if (data && typeof data.count !== 'undefined') {
-          document.getElementById('viewCount').innerText = data.count;
-        }
+        const views = data.value !== undefined ? data.value : (data.count !== undefined ? data.count : 1);
+        document.getElementById('viewCount').innerText = views;
       })
       .catch(() => {
+        // Fallback dự phòng nếu api lỗi thì hiện mặc định 1
         document.getElementById('viewCount').innerText = "1";
       });
 
