@@ -23,80 +23,35 @@
     }
 
     .bg-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      z-index: 1;
-      pointer-events: none;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      z-index: 1; pointer-events: none;
     }
 
     .lightning-flash {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(255, 255, 255, 0.15);
-      z-index: 2;
-      pointer-events: none;
-      opacity: 0;
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(255, 255, 255, 0.15); z-index: 2; pointer-events: none; opacity: 0;
     }
+    @keyframes flashAnim { 0% { opacity: 0; } 10% { opacity: 0.25; } 15% { opacity: 0.05; } 20% { opacity: 0.35; } 30% { opacity: 0; } 100% { opacity: 0; } }
+    .flash-active { animation: flashAnim 0.7s ease-out; }
 
-    @keyframes flashAnim {
-      0% { opacity: 0; }
-      10% { opacity: 0.25; }
-      15% { opacity: 0.05; }
-      20% { opacity: 0.35; }
-      30% { opacity: 0; }
-      100% { opacity: 0; }
-    }
-
-    .flash-active {
-      animation: flashAnim 0.7s ease-out;
-    }
-
-    .rain-container {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      z-index: 3;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
+    .rain-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 3; pointer-events: none; overflow: hidden; }
     .drop {
-      position: absolute;
-      background: linear-gradient(transparent, rgba(255, 255, 255, 0.6));
-      width: 1px;
-      height: 25px;
-      opacity: 0.5;
-      animation: fall linear infinite;
+      position: absolute; background: linear-gradient(transparent, rgba(255, 255, 255, 0.6));
+      width: 1px; height: 25px; opacity: 0.5; animation: fall linear infinite;
     }
-
-    @keyframes fall {
-      0% { transform: translateY(-50px) translateX(0); }
-      100% { transform: translateY(105vh) translateX(-20px); }
-    }
+    @keyframes fall { 0% { transform: translateY(-50px) translateX(0); } 100% { transform: translateY(105vh) translateX(-20px); } }
 
     #enter-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(2, 6, 23, 0.96);
-      display: flex; justify-content: center; align-items: center;
-      z-index: 999999;
-      cursor: pointer;
-      transition: opacity 0.4s ease, visibility 0.4s ease;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(2, 6, 23, 0.96); display: flex; justify-content: center; align-items: center;
+      z-index: 999999; cursor: pointer; transition: opacity 0.4s ease, visibility 0.4s ease;
     }
-
     #enter-overlay h2 {
-      color: #5eead4;
-      font-family: 'Fredoka', sans-serif;
-      font-size: 26px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      text-shadow: 0 0 15px rgba(94, 234, 212, 0.6);
-      animation: pulse 1.5s infinite ease-in-out;
-      pointer-events: none;
+      color: #5eead4; font-family: 'Fredoka', sans-serif; font-size: 26px; letter-spacing: 2px;
+      text-transform: uppercase; text-shadow: 0 0 15px rgba(94, 234, 212, 0.6);
+      animation: pulse 1.5s infinite ease-in-out; pointer-events: none;
     }
-
     @keyframes pulse { 0%, 100% { opacity: 0.6; transform: scale(0.98); } 50% { opacity: 1; transform: scale(1.02); } }
     
     .top-buttons { position: fixed; top: 25px; left: 20px; display: flex; gap: 12px; z-index: 10; }
@@ -111,48 +66,19 @@
     .container { position: relative; z-index: 10; width: 100%; max-width: 380px; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
     
     .profile-card {
-      padding: 20px;
-      border-radius: 28px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      padding: 20px; border-radius: 28px; background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
 
     .profile-section { display: flex; align-items: center; gap: 18px; }
     
-    .avatar-wrapper { 
-      position: relative; 
-      width: 86px; 
-      height: 86px; 
-      flex-shrink: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .avatar { 
-      width: 100%; 
-      height: 100%; 
-      border-radius: 50%; 
-      object-fit: cover; 
-      border: 2px solid #5eead4;
-      box-shadow: 0 0 15px rgba(94, 234, 212, 0.4);
-      z-index: 2;
-    }
+    .avatar-wrapper { position: relative; width: 86px; height: 86px; flex-shrink: 0; display: flex; justify-content: center; align-items: center; }
+    .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #5eead4; box-shadow: 0 0 15px rgba(94, 234, 212, 0.4); z-index: 2; }
 
     .status-dot {
-      position: absolute;
-      bottom: 2px;
-      right: 2px;
-      width: 16px;
-      height: 16px;
-      background-color: #80848e;
-      border: 3px solid #1e293b;
-      border-radius: 50%;
-      z-index: 10;
-      transition: background-color 0.3s ease;
+      position: absolute; bottom: 2px; right: 2px; width: 16px; height: 16px;
+      background-color: #80848e; border: 3px solid #1e293b; border-radius: 50%; z-index: 10;
     }
 
     .info-box { display: flex; flex-direction: column; color: #ffffff; width: 100%; overflow: hidden; }
@@ -161,15 +87,8 @@
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
     .badges-container {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(0, 0, 0, 0.25);
-      padding: 4px 10px;
-      border-radius: 12px;
-      width: fit-content;
-      margin-bottom: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex; align-items: center; gap: 8px; background: rgba(0, 0, 0, 0.25);
+      padding: 4px 10px; border-radius: 12px; width: fit-content; margin-bottom: 8px; border: 1px solid rgba(255, 255, 255, 0.1);
     }
     .badge-icon { font-size: 14px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
     .badge-icon:nth-child(1) { color: #9b59b6; }
@@ -178,17 +97,9 @@
     .badge-icon:nth-child(4) { color: #5865F2; }
     .badge-icon:nth-child(5) { color: #ff73fa; }
 
-    /* Khung Discord Status động */
     .discord-status {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(0, 0, 0, 0.35);
-      padding: 8px 12px;
-      border-radius: 14px;
-      margin-bottom: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      width: 100%;
+      display: flex; align-items: center; gap: 10px; background: rgba(0, 0, 0, 0.35);
+      padding: 8px 12px; border-radius: 14px; margin-bottom: 8px; border: 1px solid rgba(255, 255, 255, 0.1); width: 100%;
     }
     .status-icon { font-size: 20px; color: #5eead4; flex-shrink: 0; }
     .status-info { display: flex; flex-direction: column; font-size: 11px; overflow: hidden; width: 100%; }
@@ -205,13 +116,9 @@
     .stat-item i { color: #5eead4; font-size: 14px; }
     
     .music-player {
-      display: flex; align-items: center; gap: 14px;
-      padding: 14px 18px; border-radius: 24px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 24px;
+      background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
     .song-cover { width: 55px; height: 55px; border-radius: 14px; object-fit: cover; border: 1px solid rgba(255, 255, 255, 0.2); }
     .player-controls { flex: 1; display: flex; flex-direction: column; gap: 6px; overflow: hidden; }
@@ -264,7 +171,6 @@
             <i class="fa-solid fa-bolt badge-icon" title="Discord Nitro"></i>
           </div>
 
-          <!-- Khung Discord Status Real-time -->
           <div class="discord-status">
             <i class="fa-brands fa-discord status-icon"></i>
             <div class="status-info">
@@ -274,18 +180,18 @@
           </div>
 
           <p class="bio-text" id="bioText">Owner @benmelody</p>
-          <div class="social-icons">
-            <a href="javascript:void(0)" onclick="copyText('1538207077728526456')"><i class="fa-brands fa-discord"></i></a>
-            <a href="https://facebook.com" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="https://instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://telegram.org" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+          <div class="social-icons" id="socialLinks">
+            <a href="javascript:void(0)" id="discordLink"><i class="fa-brands fa-discord"></i></a>
+            <a href="https://facebook.com" id="fbLink" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://instagram.com" id="instaLink" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://telegram.org" id="teleLink" target="_blank"><i class="fa-brands fa-telegram"></i></a>
           </div>
         </div>
       </div>
     </div>
 
     <div class="stats-bar">
-      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">...</span> Views</div>
+      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">200</span> Views</div>
       <span>|</span>
       <div class="stat-item"><i class="fa-solid fa-location-dot"></i> Vietnam</div>
     </div>
@@ -314,50 +220,35 @@
   <div id="toast">Copied Discord ID!</div>
 
   <audio id="bg-audio" loop preload="auto">
-    <source src="https://files.catbox.moe/pm0gph.mp3" type="audio/mpeg">
+    <source id="audioSource" src="https://files.catbox.moe/pm0gph.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Thêm thư viện Supabase JS để quét dữ liệu khách -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Cấu hình Supabase của ông ở đây
     const SUPABASE_URL = 'https://akcrrvgmztzhojdpivxm.supabase.co';
     const SUPABASE_ANON_KEY = 'ĐIỀN_MÃ_PUBLISHABLE_KEY_VÀO_ĐÂY';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Lấy tên user từ đường dẫn URL (vd: ?user=tenkhach)
     const urlParams = new URLSearchParams(window.location.search);
-    const targetUsername = urlParams.get('user') || 'whynotben'; // Mặc định là whynotben nếu vào trang chính
+    const targetUsername = urlParams.get('user') || 'whynotben';
 
     let textToType = "whynotben";
+    let DISCORD_USER_ID = "1538207077728526456";
 
-    async function loadDynamicProfile() {
-      try {
-        const { data, error } = await supabaseClient
-          .from('profiles')
-          .select('*')
-          .eq('username', targetUsername)
-          .single();
-
+    async function loadProfileFromSupabase() {
+      if (targetUsername !== 'whynotben') {
+        const { data } = await supabaseClient.from('profiles').select('*').eq('username', targetUsername).single();
         if (data) {
-          if (data.username) {
-            textToType = data.username;
-            document.title = data.display_name || data.username;
-          }
-          if (data.bio) {
-            document.getElementById('bioText').innerText = data.bio;
-          }
-          if (data.avatar_url) {
-            document.getElementById('discordAvatar').src = data.avatar_url;
-          }
+          textToType = data.username;
+          document.title = `${data.username} - Bio`;
+          if (data.bio) document.getElementById('bioText').innerText = data.bio;
+          if (data.avatar_url) document.getElementById('discordAvatar').src = data.avatar_url;
+          if (data.discord_id) DISCORD_USER_ID = data.discord_id;
         }
-      } catch (err) {
-        console.log("Đang chạy chế độ mặc định cá nhân.");
       }
       typeLoop();
+      fetchDiscordData();
     }
-
-    loadDynamicProfile();
 
     const audio = document.getElementById('bg-audio');
     const playIcon = document.getElementById('playIcon');
@@ -376,22 +267,6 @@
     let isListeningSpotify = false;
     let hasStartedAudio = false;
 
-    // Đếm view hệ thống
-    const VIEW_KEY = "whynotben_bio_views_v1";
-    fetch(`https://countapi.mileshilliard.com/api/v1/hit/${VIEW_KEY}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.value) {
-          document.getElementById('viewCount').innerText = data.value;
-        }
-      })
-      .catch(() => {
-        document.getElementById('viewCount').innerText = "1";
-      });
-
-    // ID Discord chuẩn của mày
-    const DISCORD_USER_ID = "1538207077728526456";
-
     async function fetchDiscordData() {
       if (!DISCORD_USER_ID) return;
       try {
@@ -400,8 +275,6 @@
         
         if (result.success && result.data) {
           const data = result.data;
-          
-          // Chỉ cập nhật avatar tự động nếu khách không tự đổi avatar riêng trong db
           if (targetUsername === 'whynotben' && data.discord_user && data.discord_user.avatar) {
             document.getElementById('discordAvatar').src = `https://cdn.discordapp.com/avatars/${DISCORD_USER_ID}/${data.discord_user.avatar}.png?size=256`;
           }
@@ -417,9 +290,7 @@
             isListeningSpotify = true;
             songTitleEl.innerText = data.spotify.song;
             songArtistEl.innerText = data.spotify.artist;
-            if (data.spotify.album_art_url) {
-              songCoverEl.src = data.spotify.album_art_url;
-            }
+            if (data.spotify.album_art_url) songCoverEl.src = data.spotify.album_art_url;
             if (statusTitle && statusDesc) {
               statusTitle.textContent = "Đang nghe Spotify";
               statusDesc.textContent = data.spotify.song + " - " + data.spotify.artist;
@@ -434,7 +305,6 @@
               songTitleEl.innerText = "ben con mèo";
               songArtistEl.innerText = "Background Music";
               songCoverEl.src = "https://files.catbox.moe/r770n8.jpeg";
-              
               if (hasStartedAudio && audio.paused) {
                 audio.play().catch(() => {});
                 playIcon.className = 'fa-solid fa-pause';
@@ -455,12 +325,9 @@
             }
           }
         }
-      } catch (e) {
-        console.log("Lỗi tải API Discord");
-      }
+      } catch (e) {}
     }
 
-    fetchDiscordData();
     setInterval(fetchDiscordData, 3000);
 
     function createRain() {
@@ -493,17 +360,11 @@
 
       enterOverlay.style.opacity = '0';
       enterOverlay.style.visibility = 'hidden';
-      setTimeout(() => { 
-        enterOverlay.style.display = 'none'; 
-      }, 400);
+      setTimeout(() => { enterOverlay.style.display = 'none'; }, 400);
 
-      fetchDiscordData().then(() => {
-        if (!isListeningSpotify && audio) {
-          audio.play().then(() => { 
-            playIcon.className = 'fa-solid fa-pause'; 
-          }).catch(() => {});
-        }
-      });
+      if (!isListeningSpotify && audio) {
+        audio.play().then(() => { playIcon.className = 'fa-solid fa-pause'; }).catch(() => {});
+      }
     }
 
     let charIndex = 0;
@@ -550,9 +411,7 @@
       }
     }
 
-    function restartMusic() { 
-      if (!isListeningSpotify) audio.currentTime, 0; 
-    }
+    function restartMusic() { if (!isListeningSpotify) audio.currentTime = 0; }
 
     function togglePlay() {
       if (!isListeningSpotify) {
@@ -583,6 +442,8 @@
       toast.style.opacity = '1';
       setTimeout(() => { toast.style.opacity = '0'; }, 2000);
     }
+
+    loadProfileFromSupabase();
   </script>
 </body>
 </html>
