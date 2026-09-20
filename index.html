@@ -63,17 +63,19 @@
     }
     .top-btn:active { transform: scale(0.9); }
     
-    .container { position: relative; z-index: 10; width: 100%; max-width: 380px; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
+    .container { position: relative; z-index: 10; width: 100%; max-width: 380px; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
     
     .profile-card {
-      padding: 20px; border-radius: 28px; background: rgba(255, 255, 255, 0.08);
+      padding: 24px 20px; border-radius: 24px; background: rgba(255, 255, 255, 0.08);
       backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
       border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      display: flex; flex-direction: column; align-items: center; text-align: center;
     }
 
-    .profile-section { display: flex; align-items: center; gap: 18px; }
-    
-    .avatar-wrapper { position: relative; width: 86px; height: 86px; flex-shrink: 0; display: flex; justify-content: center; align-items: center; }
+    .avatar-wrapper { 
+      position: relative; width: 86px; height: 86px; margin-bottom: 12px;
+      display: flex; justify-content: center; align-items: center;
+    }
     .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #5eead4; box-shadow: 0 0 15px rgba(94, 234, 212, 0.4); z-index: 2; }
 
     .status-dot {
@@ -81,14 +83,13 @@
       background-color: #80848e; border: 3px solid #1e293b; border-radius: 50%; z-index: 10;
     }
 
-    .info-box { display: flex; flex-direction: column; color: #ffffff; width: 100%; overflow: hidden; }
-    .username { font-family: 'Fredoka', sans-serif; font-size: 26px; font-weight: 700; color: #99f6e4; text-shadow: 0 0 12px rgba(153, 246, 228, 0.5); line-height: 1.1; margin-bottom: 4px; min-height: 30px; }
+    .username { font-family: 'Fredoka', sans-serif; font-size: 26px; font-weight: 700; color: #99f6e4; text-shadow: 0 0 12px rgba(153, 246, 228, 0.5); line-height: 1.1; margin-bottom: 8px; }
     .cursor { display: inline-block; width: 3px; background-color: #5eead4; margin-left: 2px; animation: blink 0.8s infinite; }
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
     .badges-container {
-      display: flex; align-items: center; gap: 8px; background: rgba(0, 0, 0, 0.25);
-      padding: 4px 10px; border-radius: 12px; width: fit-content; margin-bottom: 8px; border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(0, 0, 0, 0.25);
+      padding: 6px 14px; border-radius: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.1);
     }
     .badge-icon { font-size: 14px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
     .badge-icon:nth-child(1) { color: #9b59b6; }
@@ -99,19 +100,19 @@
 
     .discord-status {
       display: flex; align-items: center; gap: 10px; background: rgba(0, 0, 0, 0.35);
-      padding: 8px 12px; border-radius: 14px; margin-bottom: 8px; border: 1px solid rgba(255, 255, 255, 0.1); width: 100%;
+      padding: 10px 14px; border-radius: 14px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.1); width: 100%; text-align: left;
     }
-    .status-icon { font-size: 20px; color: #5eead4; flex-shrink: 0; }
+    .status-icon { font-size: 22px; color: #5eead4; flex-shrink: 0; }
     .status-info { display: flex; flex-direction: column; font-size: 11px; overflow: hidden; width: 100%; }
     .status-title { font-weight: 700; color: #f8fafc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .status-desc { color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    .bio-text { font-size: 13px; color: #cbd5e1; margin-bottom: 8px; opacity: 0.9; }
-    .social-icons { display: flex; gap: 14px; }
+    .bio-text { font-size: 13px; color: #cbd5e1; margin-bottom: 14px; opacity: 0.9; }
+    .social-icons { display: flex; justify-content: center; gap: 18px; width: 100%; }
     .social-icons a { color: #99f6e4; font-size: 20px; text-decoration: none; filter: drop-shadow(0 0 6px rgba(153, 246, 228, 0.4)); transition: transform 0.2s ease; }
     .social-icons a:active { transform: scale(0.85); }
     
-    .stats-bar { display: flex; align-items: center; gap: 14px; color: #94a3b8; font-size: 13px; font-weight: 500; padding-left: 6px; }
+    .stats-bar { display: flex; justify-content: center; align-items: center; gap: 14px; color: #94a3b8; font-size: 13px; font-weight: 500; }
     .stat-item { display: flex; align-items: center; gap: 6px; color: #cbd5e1; }
     .stat-item i { color: #5eead4; font-size: 14px; }
     
@@ -155,38 +156,36 @@
 
   <div class="container">
     <div class="profile-card">
-      <div class="profile-section">
-        <div class="avatar-wrapper">
-          <img class="avatar" id="discordAvatar" src="https://files.catbox.moe/bl3khq.jpeg" alt="Avatar">
-          <div class="status-dot" id="statusDot"></div>
-        </div>
-        <div class="info-box">
-          <h1 class="username"><span id="typewriter"></span><span class="cursor">&nbsp;</span></h1>
-          
-          <div class="badges-container">
-            <i class="fa-solid fa-shield-halved badge-icon" title="HypeSquad Bravery"></i>
-            <i class="fa-solid fa-fire badge-icon" title="HypeSquad Brilliance"></i>
-            <i class="fa-solid fa-gem badge-icon" title="HypeSquad Balance"></i>
-            <i class="fa-solid fa-code badge-icon" title="Active Developer"></i>
-            <i class="fa-solid fa-bolt badge-icon" title="Discord Nitro"></i>
-          </div>
+      <div class="avatar-wrapper">
+        <img class="avatar" id="discordAvatar" src="https://files.catbox.moe/bl3khq.jpeg" alt="Avatar">
+        <div class="status-dot" id="statusDot"></div>
+      </div>
 
-          <div class="discord-status">
-            <i class="fa-brands fa-discord status-icon"></i>
-            <div class="status-info">
-              <span class="status-title" id="statusTitle">Đang ngoại tuyến</span>
-              <span class="status-desc" id="statusDesc">Đang cập nhật trạng thái...</span>
-            </div>
-          </div>
+      <h1 class="username"><span id="typewriter"></span><span class="cursor">&nbsp;</span></h1>
+      
+      <div class="badges-container">
+        <i class="fa-solid fa-shield-halved badge-icon" title="HypeSquad Bravery"></i>
+        <i class="fa-solid fa-fire badge-icon" title="HypeSquad Brilliance"></i>
+        <i class="fa-solid fa-gem badge-icon" title="HypeSquad Balance"></i>
+        <i class="fa-solid fa-code badge-icon" title="Active Developer"></i>
+        <i class="fa-solid fa-bolt badge-icon" title="Discord Nitro"></i>
+      </div>
 
-          <p class="bio-text" id="bioText">Owner @benmelody</p>
-          <div class="social-icons" id="socialLinks">
-            <a href="javascript:void(0)" id="discordLink"><i class="fa-brands fa-discord"></i></a>
-            <a href="https://facebook.com" id="fbLink" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="https://instagram.com" id="instaLink" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://telegram.org" id="teleLink" target="_blank"><i class="fa-brands fa-telegram"></i></a>
-          </div>
+      <div class="discord-status">
+        <i class="fa-brands fa-discord status-icon"></i>
+        <div class="status-info">
+          <span class="status-title" id="statusTitle">Đang ngoại tuyến</span>
+          <span class="status-desc" id="statusDesc">Đang cập nhật trạng thái...</span>
         </div>
+      </div>
+
+      <p class="bio-text" id="bioText">Owner @benmelody</p>
+      
+      <div class="social-icons">
+        <a href="javascript:void(0)" onclick="copyText('1538207077728526456')"><i class="fa-brands fa-discord"></i></a>
+        <a href="https://facebook.com" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="https://instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://telegram.org" target="_blank"><i class="fa-brands fa-telegram"></i></a>
       </div>
     </div>
 
@@ -220,13 +219,13 @@
   <div id="toast">Copied Discord ID!</div>
 
   <audio id="bg-audio" loop preload="auto">
-    <source id="audioSource" src="https://files.catbox.moe/pm0gph.mp3" type="audio/mpeg">
+    <source src="https://files.catbox.moe/pm0gph.mp3" type="audio/mpeg">
   </audio>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL = 'https://akcrrvgmztzhojdpivxm.supabase.co';
-    const SUPABASE_ANON_KEY = 'ĐIỀN_MÃ_PUBLISHABLE_KEY_VÀO_ĐÂY';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFrY3JydmdtenR6aG9qZHBpdnhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyMzg2NzYsImV4cCI6MjA1NjgxNDY3Nn0.2yF6WkUfT_Gz83Vn2F6t2Zk5T9Z83Vn2F6t2Zk5T9Z8';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -236,7 +235,7 @@
     let DISCORD_USER_ID = "1538207077728526456";
 
     async function loadProfileFromSupabase() {
-      if (targetUsername !== 'whynotben') {
+      if (targetUsername) {
         const { data } = await supabaseClient.from('profiles').select('*').eq('username', targetUsername).single();
         if (data) {
           textToType = data.username;
