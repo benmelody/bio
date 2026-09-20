@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>whynotben - Bio</title>
+  <title id="pageTitle">whynotben - Bio</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -273,7 +273,7 @@
             </div>
           </div>
 
-          <p class="bio-text">Owner @benmelody</p>
+          <p class="bio-text" id="bioText">Owner @benmelody</p>
           <div class="social-icons">
             <a href="javascript:void(0)" onclick="copyText('1538207077728526456')"><i class="fa-brands fa-discord"></i></a>
             <a href="https://facebook.com" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
@@ -317,7 +317,48 @@
     <source src="https://files.catbox.moe/pm0gph.mp3" type="audio/mpeg">
   </audio>
 
+  <!-- Thêm thư viện Supabase JS để quét dữ liệu khách -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+    // Cấu hình Supabase của ông ở đây
+    const SUPABASE_URL = 'https://akcrrvgmztzhojdpivxm.supabase.co';
+    const SUPABASE_ANON_KEY = 'ĐIỀN_MÃ_PUBLISHABLE_KEY_VÀO_ĐÂY';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Lấy tên user từ đường dẫn URL (vd: ?user=tenkhach)
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetUsername = urlParams.get('user') || 'whynotben'; // Mặc định là whynotben nếu vào trang chính
+
+    let textToType = "whynotben";
+
+    async function loadDynamicProfile() {
+      try {
+        const { data, error } = await supabaseClient
+          .from('profiles')
+          .select('*')
+          .eq('username', targetUsername)
+          .single();
+
+        if (data) {
+          if (data.username) {
+            textToType = data.username;
+            document.title = data.display_name || data.username;
+          }
+          if (data.bio) {
+            document.getElementById('bioText').innerText = data.bio;
+          }
+          if (data.avatar_url) {
+            document.getElementById('discordAvatar').src = data.avatar_url;
+          }
+        }
+      } catch (err) {
+        console.log("Đang chạy chế độ mặc định cá nhân.");
+      }
+      typeLoop();
+    }
+
+    loadDynamicProfile();
+
     const audio = document.getElementById('bg-audio');
     const playIcon = document.getElementById('playIcon');
     const volumeIcon = document.getElementById('volumeIcon');
@@ -360,12 +401,11 @@
         if (result.success && result.data) {
           const data = result.data;
           
-          // Tự động thay đổi Avatar theo Discord
-          if (data.discord_user && data.discord_user.avatar) {
+          // Chỉ cập nhật avatar tự động nếu khách không tự đổi avatar riêng trong db
+          if (targetUsername === 'whynotben' && data.discord_user && data.discord_user.avatar) {
             document.getElementById('discordAvatar').src = `https://cdn.discordapp.com/avatars/${DISCORD_USER_ID}/${data.discord_user.avatar}.png?size=256`;
           }
 
-          // Thay đổi màu chấm trạng thái (online, idle, dnd, offline)
           const statusDot = document.getElementById('statusDot');
           const colors = { online: '#23a55a', idle: '#f0b232', dnd: '#f23f43', offline: '#80848e' };
           if (statusDot) statusDot.style.backgroundColor = colors[data.discord_status] || '#80848e';
@@ -373,7 +413,6 @@
           const statusTitle = document.getElementById('statusTitle');
           const statusDesc = document.getElementById('statusDesc');
 
-          // Kiểm tra nếu đang nghe Spotify
           if (data.spotify && data.spotify.track_id) {
             isListeningSpotify = true;
             songTitleEl.innerText = data.spotify.song;
@@ -402,7 +441,6 @@
               }
             }
 
-            // Hiển thị game hoặc hoạt động khác trên Discord
             if (data.activities && data.activities.length > 0) {
               const activeAct = data.activities.find(act => act.type !== 4) || data.activities[0];
               if (statusTitle && statusDesc) {
@@ -423,7 +461,7 @@
     }
 
     fetchDiscordData();
-    setInterval(fetchDiscordData, 3000); // Quét liên tục mỗi 3 giây
+    setInterval(fetchDiscordData, 3000);
 
     function createRain() {
       const rainContainer = document.getElementById('rain');
@@ -468,7 +506,6 @@
       });
     }
 
-    const textToType = "whynotben";
     let charIndex = 0;
     let isDeleting = false;
 
@@ -491,7 +528,6 @@
       }
       setTimeout(typeLoop, speed);
     }
-    typeLoop();
 
     function formatTime(seconds) {
       const min = Math.floor(seconds / 60);
@@ -515,7 +551,7 @@
     }
 
     function restartMusic() { 
-      if (!isListeningSpotify) audio.currentTime = 0; 
+      if (!isListeningSpotify) audio.currentTime, 0; 
     }
 
     function togglePlay() {
