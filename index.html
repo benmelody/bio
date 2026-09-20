@@ -1,9 +1,11 @@
+
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title id="pageTitle">whynotben - Bio</title>
+  <title>whynotben - Bio</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -23,35 +25,80 @@
     }
 
     .bg-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-      z-index: 1; pointer-events: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 1;
+      pointer-events: none;
     }
 
     .lightning-flash {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(255, 255, 255, 0.15); z-index: 2; pointer-events: none; opacity: 0;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(255, 255, 255, 0.15);
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0;
     }
-    @keyframes flashAnim { 0% { opacity: 0; } 10% { opacity: 0.25; } 15% { opacity: 0.05; } 20% { opacity: 0.35; } 30% { opacity: 0; } 100% { opacity: 0; } }
-    .flash-active { animation: flashAnim 0.7s ease-out; }
 
-    .rain-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 3; pointer-events: none; overflow: hidden; }
-    .drop {
-      position: absolute; background: linear-gradient(transparent, rgba(255, 255, 255, 0.6));
-      width: 1px; height: 25px; opacity: 0.5; animation: fall linear infinite;
+    @keyframes flashAnim {
+      0% { opacity: 0; }
+      10% { opacity: 0.25; }
+      15% { opacity: 0.05; }
+      20% { opacity: 0.35; }
+      30% { opacity: 0; }
+      100% { opacity: 0; }
     }
-    @keyframes fall { 0% { transform: translateY(-50px) translateX(0); } 100% { transform: translateY(105vh) translateX(-20px); } }
+
+    .flash-active {
+      animation: flashAnim 0.7s ease-out;
+    }
+
+    .rain-container {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: 3;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .drop {
+      position: absolute;
+      background: linear-gradient(transparent, rgba(255, 255, 255, 0.6));
+      width: 1px;
+      height: 25px;
+      opacity: 0.5;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-50px) translateX(0); }
+      100% { transform: translateY(105vh) translateX(-20px); }
+    }
 
     #enter-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(2, 6, 23, 0.96); display: flex; justify-content: center; align-items: center;
-      z-index: 999999; cursor: pointer; transition: opacity 0.4s ease, visibility 0.4s ease;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(2, 6, 23, 0.96);
+      display: flex; justify-content: center; align-items: center;
+      z-index: 999999;
+      cursor: pointer;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
     }
+
     #enter-overlay h2 {
-      color: #5eead4; font-family: 'Fredoka', sans-serif; font-size: 26px; letter-spacing: 2px;
-      text-transform: uppercase; text-shadow: 0 0 15px rgba(94, 234, 212, 0.6);
-      animation: pulse 1.5s infinite ease-in-out; pointer-events: none;
+      color: #5eead4;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 26px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 0 0 15px rgba(94, 234, 212, 0.6);
+      animation: pulse 1.5s infinite ease-in-out;
+      pointer-events: none;
     }
+
     @keyframes pulse { 0%, 100% { opacity: 0.6; transform: scale(0.98); } 50% { opacity: 1; transform: scale(1.02); } }
     
     .top-buttons { position: fixed; top: 25px; left: 20px; display: flex; gap: 12px; z-index: 10; }
@@ -63,33 +110,68 @@
     }
     .top-btn:active { transform: scale(0.9); }
     
-    .container { position: relative; z-index: 10; width: 100%; max-width: 380px; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+    .container { position: relative; z-index: 10; width: 100%; max-width: 380px; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
     
     .profile-card {
-      padding: 24px 20px; border-radius: 24px; background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      display: flex; flex-direction: column; align-items: center; text-align: center;
+      padding: 20px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
 
+    .profile-section { display: flex; align-items: center; gap: 18px; }
+    
     .avatar-wrapper { 
-      position: relative; width: 86px; height: 86px; margin-bottom: 12px;
-      display: flex; justify-content: center; align-items: center;
+      position: relative; 
+      width: 86px; 
+      height: 86px; 
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-    .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #5eead4; box-shadow: 0 0 15px rgba(94, 234, 212, 0.4); z-index: 2; }
+
+    .avatar { 
+      width: 100%; 
+      height: 100%; 
+      border-radius: 50%; 
+      object-fit: cover; 
+      border: 2px solid #5eead4;
+      box-shadow: 0 0 15px rgba(94, 234, 212, 0.4);
+      z-index: 2;
+    }
 
     .status-dot {
-      position: absolute; bottom: 2px; right: 2px; width: 16px; height: 16px;
-      background-color: #80848e; border: 3px solid #1e293b; border-radius: 50%; z-index: 10;
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 16px;
+      height: 16px;
+      background-color: #80848e;
+      border: 3px solid #1e293b;
+      border-radius: 50%;
+      z-index: 10;
+      transition: background-color 0.3s ease;
     }
 
-    .username { font-family: 'Fredoka', sans-serif; font-size: 26px; font-weight: 700; color: #99f6e4; text-shadow: 0 0 12px rgba(153, 246, 228, 0.5); line-height: 1.1; margin-bottom: 8px; }
+    .info-box { display: flex; flex-direction: column; color: #ffffff; width: 100%; }
+    .username { font-family: 'Fredoka', sans-serif; font-size: 26px; font-weight: 700; color: #99f6e4; text-shadow: 0 0 12px rgba(153, 246, 228, 0.5); line-height: 1.1; margin-bottom: 4px; min-height: 30px; }
     .cursor { display: inline-block; width: 3px; background-color: #5eead4; margin-left: 2px; animation: blink 0.8s infinite; }
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
     .badges-container {
-      display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(0, 0, 0, 0.25);
-      padding: 6px 14px; border-radius: 12px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 4px 10px;
+      border-radius: 12px;
+      width: fit-content;
+      margin-bottom: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
     .badge-icon { font-size: 14px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
     .badge-icon:nth-child(1) { color: #9b59b6; }
@@ -99,27 +181,37 @@
     .badge-icon:nth-child(5) { color: #ff73fa; }
 
     .discord-status {
-      display: flex; align-items: center; gap: 10px; background: rgba(0, 0, 0, 0.35);
-      padding: 10px 14px; border-radius: 14px; margin-bottom: 12px; border: 1px solid rgba(255, 255, 255, 0.1); width: 100%; text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 8px 12px;
+      border-radius: 14px;
+      margin-bottom: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .status-icon { font-size: 22px; color: #5eead4; flex-shrink: 0; }
-    .status-info { display: flex; flex-direction: column; font-size: 11px; overflow: hidden; width: 100%; }
+    .status-icon { font-size: 22px; color: #5eead4; }
+    .status-info { display: flex; flex-direction: column; font-size: 11px; overflow: hidden; }
     .status-title { font-weight: 700; color: #f8fafc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .status-desc { color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    .bio-text { font-size: 13px; color: #cbd5e1; margin-bottom: 14px; opacity: 0.9; }
-    .social-icons { display: flex; justify-content: center; gap: 18px; width: 100%; }
+    .bio-text { font-size: 13px; color: #cbd5e1; margin-bottom: 8px; opacity: 0.9; }
+    .social-icons { display: flex; gap: 14px; }
     .social-icons a { color: #99f6e4; font-size: 20px; text-decoration: none; filter: drop-shadow(0 0 6px rgba(153, 246, 228, 0.4)); transition: transform 0.2s ease; }
     .social-icons a:active { transform: scale(0.85); }
     
-    .stats-bar { display: flex; justify-content: center; align-items: center; gap: 14px; color: #94a3b8; font-size: 13px; font-weight: 500; }
+    .stats-bar { display: flex; align-items: center; gap: 14px; color: #94a3b8; font-size: 13px; font-weight: 500; padding-left: 6px; }
     .stat-item { display: flex; align-items: center; gap: 6px; color: #cbd5e1; }
     .stat-item i { color: #5eead4; font-size: 14px; }
     
     .music-player {
-      display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-radius: 24px;
-      background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.15); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 18px; border-radius: 24px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
     .song-cover { width: 55px; height: 55px; border-radius: 14px; object-fit: cover; border: 1px solid rgba(255, 255, 255, 0.2); }
     .player-controls { flex: 1; display: flex; flex-direction: column; gap: 6px; overflow: hidden; }
@@ -156,41 +248,43 @@
 
   <div class="container">
     <div class="profile-card">
-      <div class="avatar-wrapper">
-        <img class="avatar" id="discordAvatar" src="https://files.catbox.moe/bl3khq.jpeg" alt="Avatar">
-        <div class="status-dot" id="statusDot"></div>
-      </div>
-
-      <h1 class="username"><span id="typewriter"></span><span class="cursor">&nbsp;</span></h1>
-      
-      <div class="badges-container">
-        <i class="fa-solid fa-shield-halved badge-icon" title="HypeSquad Bravery"></i>
-        <i class="fa-solid fa-fire badge-icon" title="HypeSquad Brilliance"></i>
-        <i class="fa-solid fa-gem badge-icon" title="HypeSquad Balance"></i>
-        <i class="fa-solid fa-code badge-icon" title="Active Developer"></i>
-        <i class="fa-solid fa-bolt badge-icon" title="Discord Nitro"></i>
-      </div>
-
-      <div class="discord-status">
-        <i class="fa-brands fa-discord status-icon"></i>
-        <div class="status-info">
-          <span class="status-title" id="statusTitle">Đang ngoại tuyến</span>
-          <span class="status-desc" id="statusDesc">Đang cập nhật trạng thái...</span>
+      <div class="profile-section">
+        <div class="avatar-wrapper">
+          <img class="avatar" id="discordAvatar" src="https://files.catbox.moe/bl3khq.jpeg" alt="Avatar">
+          <div class="status-dot" id="statusDot"></div>
         </div>
-      </div>
+        <div class="info-box">
+          <h1 class="username"><span id="typewriter"></span><span class="cursor">&nbsp;</span></h1>
+          
+          <div class="badges-container">
+            <i class="fa-solid fa-shield-halved badge-icon" title="HypeSquad Bravery"></i>
+            <i class="fa-solid fa-fire badge-icon" title="HypeSquad Brilliance"></i>
+            <i class="fa-solid fa-gem badge-icon" title="HypeSquad Balance"></i>
+            <i class="fa-solid fa-code badge-icon" title="Active Developer"></i>
+            <i class="fa-solid fa-bolt badge-icon" title="Discord Nitro"></i>
+          </div>
 
-      <p class="bio-text" id="bioText">Owner @benmelody</p>
-      
-      <div class="social-icons">
-        <a href="javascript:void(0)" onclick="copyText('1538207077728526456')"><i class="fa-brands fa-discord"></i></a>
-        <a href="https://facebook.com" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
-        <a href="https://instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-        <a href="https://telegram.org" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+          <div class="discord-status">
+            <i class="fa-brands fa-discord status-icon"></i>
+            <div class="status-info">
+              <span class="status-title" id="statusTitle">Đang ngoại tuyến</span>
+              <span class="status-desc" id="statusDesc">Chưa có hoạt động</span>
+            </div>
+          </div>
+
+          <p class="bio-text">Designer by @benmelody</p>
+          <div class="social-icons">
+            <a href="javascript:void(0)" onclick="copyText('whynotben#0000')"><i class="fa-brands fa-discord"></i></a>
+            <a href="https://facebook.com" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://telegram.org" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="stats-bar">
-      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">200</span> Views</div>
+      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">...</span> Views</div>
       <span>|</span>
       <div class="stat-item"><i class="fa-solid fa-location-dot"></i> Vietnam</div>
     </div>
@@ -222,33 +316,7 @@
     <source src="https://files.catbox.moe/pm0gph.mp3" type="audio/mpeg">
   </audio>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const SUPABASE_URL = 'https://akcrrvgmztzhojdpivxm.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFrY3JydmdtenR6aG9qZHBpdnhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyMzg2NzYsImV4cCI6MjA1NjgxNDY3Nn0.2yF6WkUfT_Gz83Vn2F6t2Zk5T9Z83Vn2F6t2Zk5T9Z8';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const targetUsername = urlParams.get('user') || 'whynotben';
-
-    let textToType = "whynotben";
-    let DISCORD_USER_ID = "1538207077728526456";
-
-    async function loadProfileFromSupabase() {
-      if (targetUsername) {
-        const { data } = await supabaseClient.from('profiles').select('*').eq('username', targetUsername).single();
-        if (data) {
-          textToType = data.username;
-          document.title = `${data.username} - Bio`;
-          if (data.bio) document.getElementById('bioText').innerText = data.bio;
-          if (data.avatar_url) document.getElementById('discordAvatar').src = data.avatar_url;
-          if (data.discord_id) DISCORD_USER_ID = data.discord_id;
-        }
-      }
-      typeLoop();
-      fetchDiscordData();
-    }
-
     const audio = document.getElementById('bg-audio');
     const playIcon = document.getElementById('playIcon');
     const volumeIcon = document.getElementById('volumeIcon');
@@ -266,15 +334,29 @@
     let isListeningSpotify = false;
     let hasStartedAudio = false;
 
+    const VIEW_KEY = "whynotben_bio_views_v1";
+    fetch(`https://countapi.mileshilliard.com/api/v1/hit/${VIEW_KEY}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.value) {
+          document.getElementById('viewCount').innerText = data.value;
+        }
+      })
+      .catch(() => {
+        document.getElementById('viewCount').innerText = "1";
+      });
+
+    const DISCORD_USER_ID = "1538207077728526456";
+
     async function fetchDiscordData() {
-      if (!DISCORD_USER_ID) return;
       try {
         const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`);
         const result = await res.json();
         
         if (result.success && result.data) {
           const data = result.data;
-          if (targetUsername === 'whynotben' && data.discord_user && data.discord_user.avatar) {
+          
+          if (data.discord_user && data.discord_user.avatar) {
             document.getElementById('discordAvatar').src = `https://cdn.discordapp.com/avatars/${DISCORD_USER_ID}/${data.discord_user.avatar}.png?size=256`;
           }
 
@@ -282,17 +364,12 @@
           const colors = { online: '#23a55a', idle: '#f0b232', dnd: '#f23f43', offline: '#80848e' };
           if (statusDot) statusDot.style.backgroundColor = colors[data.discord_status] || '#80848e';
 
-          const statusTitle = document.getElementById('statusTitle');
-          const statusDesc = document.getElementById('statusDesc');
-
           if (data.spotify && data.spotify.track_id) {
             isListeningSpotify = true;
             songTitleEl.innerText = data.spotify.song;
             songArtistEl.innerText = data.spotify.artist;
-            if (data.spotify.album_art_url) songCoverEl.src = data.spotify.album_art_url;
-            if (statusTitle && statusDesc) {
-              statusTitle.textContent = "Đang nghe Spotify";
-              statusDesc.textContent = data.spotify.song + " - " + data.spotify.artist;
+            if (data.spotify.album_art_url) {
+              songCoverEl.src = data.spotify.album_art_url;
             }
             if (!audio.paused) {
               audio.pause();
@@ -304,30 +381,37 @@
               songTitleEl.innerText = "ben con mèo";
               songArtistEl.innerText = "Background Music";
               songCoverEl.src = "https://files.catbox.moe/r770n8.jpeg";
+              
               if (hasStartedAudio && audio.paused) {
                 audio.play().catch(() => {});
                 playIcon.className = 'fa-solid fa-pause';
               }
             }
+          }
 
-            if (data.activities && data.activities.length > 0) {
-              const activeAct = data.activities.find(act => act.type !== 4) || data.activities[0];
-              if (statusTitle && statusDesc) {
-                statusTitle.textContent = activeAct.name;
-                statusDesc.textContent = activeAct.details || activeAct.state || "Đang hoạt động";
-              }
-            } else {
-              if (statusTitle && statusDesc) {
-                statusTitle.textContent = "Không có hoạt động";
-                statusDesc.textContent = "Đang rảnh rỗi";
-              }
+          const statusTitle = document.getElementById('statusTitle');
+          const statusDesc = document.getElementById('statusDesc');
+          if (data.activities && data.activities.length > 0) {
+            const activeAct = data.activities.find(act => act.type !== 4) || data.activities[0];
+            if (statusTitle && statusDesc) {
+              statusTitle.textContent = activeAct.name;
+              statusDesc.textContent = activeAct.details || activeAct.state || "Đang hoạt động";
+            }
+          } else {
+            if (statusTitle && statusDesc) {
+              statusTitle.textContent = "Không có hoạt động";
+              statusDesc.textContent = "Đang rảnh rỗi";
             }
           }
         }
-      } catch (e) {}
+      } catch (e) {
+        console.log("Lỗi tải API Discord");
+      }
     }
 
-    setInterval(fetchDiscordData, 3000);
+    // Ép gọi dữ liệu ngay khi vừa tải trang để quét Spotify nhanh nhất
+    fetchDiscordData();
+    setInterval(fetchDiscordData, 3000); // Rút ngắn thời gian quét xuống mỗi 3 giây cho nhạy
 
     function createRain() {
       const rainContainer = document.getElementById('rain');
@@ -359,13 +443,21 @@
 
       enterOverlay.style.opacity = '0';
       enterOverlay.style.visibility = 'hidden';
-      setTimeout(() => { enterOverlay.style.display = 'none'; }, 400);
+      setTimeout(() => { 
+        enterOverlay.style.display = 'none'; 
+      }, 400);
 
-      if (!isListeningSpotify && audio) {
-        audio.play().then(() => { playIcon.className = 'fa-solid fa-pause'; }).catch(() => {});
-      }
+      // Kiểm tra ngay khi bấm vào nếu không có Spotify thì phát nhạc nền luôn
+      fetchDiscordData().then(() => {
+        if (!isListeningSpotify && audio) {
+          audio.play().then(() => { 
+            playIcon.className = 'fa-solid fa-pause'; 
+          }).catch(() => {});
+        }
+      });
     }
 
+    const textToType = "whynotben";
     let charIndex = 0;
     let isDeleting = false;
 
@@ -388,6 +480,7 @@
       }
       setTimeout(typeLoop, speed);
     }
+    typeLoop();
 
     function formatTime(seconds) {
       const min = Math.floor(seconds / 60);
@@ -410,7 +503,9 @@
       }
     }
 
-    function restartMusic() { if (!isListeningSpotify) audio.currentTime = 0; }
+    function restartMusic() { 
+      if (!isListeningSpotify) audio.currentTime = 0; 
+    }
 
     function togglePlay() {
       if (!isListeningSpotify) {
@@ -441,8 +536,6 @@
       toast.style.opacity = '1';
       setTimeout(() => { toast.style.opacity = '0'; }, 2000);
     }
-
-    loadProfileFromSupabase();
   </script>
 </body>
 </html>
