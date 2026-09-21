@@ -282,7 +282,7 @@
     </div>
 
     <div class="stats-bar">
-      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">...</span> Views</div>
+      <div class="stat-item"><i class="fa-regular fa-eye"></i> <span id="viewCount">2.4k</span> Views</div>
       <span>|</span>
       <div class="stat-item"><i class="fa-solid fa-location-dot"></i> Vietnam</div>
     </div>
@@ -331,18 +331,6 @@
 
     let isListeningSpotify = false;
     let hasStartedAudio = false;
-
-    // Sử dụng api thay thế ổn định cho bộ đếm view
-    fetch('https://api.apicounter.dev/counter/whynotben_bio_views')
-      .then(res => res.json())
-      .then(data => {
-        const views = data.value !== undefined ? data.value : (data.count !== undefined ? data.count : '2.4k');
-        document.getElementById('viewCount').innerText = views;
-      })
-      .catch(() => {
-        // Fallback dự phòng nếu api lỗi thì hiện mặc định 2.4k
-        document.getElementById('viewCount').innerText = "2.4k";
-      });
 
     const DISCORD_USER_ID = "1538207077728526456";
 
