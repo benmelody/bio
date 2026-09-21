@@ -336,12 +336,12 @@
     fetch('https://api.apicounter.dev/counter/whynotben_bio_views')
       .then(res => res.json())
       .then(data => {
-        const views = data.value !== undefined ? data.value : (data.count !== undefined ? data.count : 1);
+        const views = data.value !== undefined ? data.value : (data.count !== undefined ? data.count : '2.4k');
         document.getElementById('viewCount').innerText = views;
       })
       .catch(() => {
-        // Fallback dự phòng nếu api lỗi thì hiện mặc định 1
-        document.getElementById('viewCount').innerText = "1";
+        // Fallback dự phòng nếu api lỗi thì hiện mặc định 2.4k
+        document.getElementById('viewCount').innerText = "2.4k";
       });
 
     const DISCORD_USER_ID = "1538207077728526456";
